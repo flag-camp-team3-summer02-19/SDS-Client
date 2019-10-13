@@ -14,6 +14,7 @@ class Register extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                console.log(values);
                 let username = values.username;
                 let password = md5(username + md5(values.password));
                 /* TODO 1: add http request log in here */
@@ -22,7 +23,7 @@ class Register extends Component {
                 this.props.onSuccessRegister({
                     userid: 1,
                     session: 2,
-                    username: values.username
+                    username: values.email
                 });
             }
         });

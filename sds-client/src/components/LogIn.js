@@ -20,6 +20,7 @@ class LogIn extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                console.log(values);
                 let username = values.username;
                 let password = md5(username + md5(values.password));
                 /* TODO 1: add http request log in here */
@@ -28,7 +29,7 @@ class LogIn extends Component {
                 this.props.onSuccessLogIn({
                     userid: 1,
                     session: 2,
-                    username: values.username
+                    username: values.email
                 });
             }
         });
