@@ -1,4 +1,9 @@
+@import '~antd/dist/antd.css';
+
 @import './styles/App.css';
+@import './styles/LogIn.css';
+@import './styles/DashBoard.css';
+@import './styles/BottomNavBar.css';
 
 body {
   margin: 0;

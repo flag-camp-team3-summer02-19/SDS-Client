@@ -1,0 +1,19 @@
+.login {
+    padding-bottom: 20px;
+    background-color: rgb(245, 245, 245);
+}
+
+.login-form {
+    margin: auto;
+    width: 75%;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: white;
+    box-shadow: 10px 5px 5px rgb(211, 211, 211);
+}
+ .login-form-forgot {
+    float: right;
+}
+ .login-form-button {
+    width: 100%;
+}

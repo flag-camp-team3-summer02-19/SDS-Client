@@ -1,15 +1,3 @@
 .App {
   text-align: center;
 }
-
-footer {
-  background-color: darkgray;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
-
-ul {
-  list-style-type:none;
-}
