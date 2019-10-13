@@ -3,11 +3,12 @@ import {
     Route,
     Redirect
 } from 'react-router-dom';
+import history from '../history';
 import BottomNavBar from './BottomNavBar';
 import LogIn from './LogIn';
 import Register from './Register';
 import DashBoard from './DashBoard';
-import history from '../history';
+import NewOrder from './NewOrder';
 
 class App extends React.Component {
     state = {
@@ -41,13 +42,9 @@ class App extends React.Component {
                 <Route path="/dashboard">
                     <DashBoard userInfo={this.state.userInfo}/>
                 </Route>
-                <Route path="/newOrder" exact>
-                    <Redirect to="/newOrder/packageInfo" />
+                <Route path="/newOrder">
+                    <NewOrder userInfo={this.state.userInfo} />
                 </Route>
-                <Route path="/newOrder/packageInfo">
-                    <p>this is package info page</p>
-                </Route>
-                {/* Add more end points here */}
                 <BottomNavBar />
             </div>
         );

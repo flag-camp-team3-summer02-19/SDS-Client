@@ -5,6 +5,10 @@ import history from '../history';
 /* TODO 3: add <SearchPanel /> in control-panel */
 /* TODO 4: add <OrderList /> under control-panel */
 class DashBoard extends Component {
+    state = {
+        userInfo: this.props.userInfo
+    }
+
     render() {
         return (
             <div id="dashboard">

@@ -5,6 +5,7 @@
 @import './styles/DashBoard.css';
 @import './styles/BottomNavBar.css';
 @import './styles/Register.css';
+@import './styles/NewOrder.css';
 
 body {
   margin: 0;
