@@ -33,7 +33,6 @@ class App extends React.Component {
                         <Redirect to="/login" />}
                 </Route>
                 <Route path="/login" exact>
-                    {console.log(1)}
                     <LogIn onSuccessLogIn={this.onSuccessLogIn} />
                 </Route>
                 <Route path="/register" exact>
