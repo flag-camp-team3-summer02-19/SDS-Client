@@ -32,15 +32,22 @@ class App extends React.Component {
                         <Redirect to="/dashboard" /> :
                         <Redirect to="/login" />}
                 </Route>
-                <Route path="/login" exact>
+                <Route path="/login">
                     <LogIn onSuccessLogIn={this.onSuccessLogIn} />
                 </Route>
-                <Route path="/register" exact>
+                <Route path="/register">
                     <Register onSuccessRegister={this.onSuccessLogIn} />
                 </Route>
-                <Route path="/dashboard" exact>
+                <Route path="/dashboard">
                     <DashBoard userInfo={this.state.userInfo}/>
                 </Route>
+                <Route path="/newOrder" exact>
+                    <Redirect to="/newOrder/packageInfo" />
+                </Route>
+                <Route path="/newOrder/packageInfo">
+                    <p>this is package info page</p>
+                </Route>
+                {/* Add more end points here */}
                 <BottomNavBar />
             </div>
         );

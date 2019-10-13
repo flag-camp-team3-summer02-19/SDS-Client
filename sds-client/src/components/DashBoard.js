@@ -1,17 +1,19 @@
 import React, {Component} from 'react';
+import history from '../history';
 
 /* TODO 1: add <UserPanel /> in control-panel */
-/* TODO 2: add button make new delivery in control-panel */
-/* TODO 3: add <Filter /> in control-panel */
-/* TODO 4: add <DeliveryList /> under control-panel */
+/* TODO 3: add <SearchPanel /> in control-panel */
+/* TODO 4: add <OrderList /> under control-panel */
 class DashBoard extends Component {
     render() {
         return (
             <div id="dashboard">
                 <section id="control-panel">
-
+                    <p>this is user panel</p>
+                    <button onClick={() => {history.push('/newOrder')}}> Make New Order </button>
+                    <p>this is search panel</p>
                 </section>
-                this is dashboard
+                <p>this is order list</p>
             </div>
         );
     }
