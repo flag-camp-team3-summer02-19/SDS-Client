@@ -6,6 +6,9 @@
 @import './styles/BottomNavBar.css';
 @import './styles/Register.css';
 @import './styles/NewOrder.css';
+@import './styles/PackageInfo.css';
+@import './styles/SelectMethod.css';
+@import './styles/PaymentMethod.css';
 
 body {
   margin: 0;

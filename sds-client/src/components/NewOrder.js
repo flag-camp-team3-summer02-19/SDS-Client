@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import { Route } from 'react-router-dom';
 import history from '../history';
+import PackageInfo from './PackageInfo'
+import SelectMethod from './SelectMethod'
+import PaymentMethod from './PaymentMethod'
 
 class NewOrder extends Component {
     state = {
@@ -15,39 +18,45 @@ class NewOrder extends Component {
             "packageInfo",
             "selectMethod",
             "paymentMethod"
-        ],
-        pathname: history.location.pathname
+        ]
     }
 
     /* this method will be called only when sub-components each on success state*/
     updateOrder = order => {
-        this.setState(prev => ({
-            order: order,
-            stepIdx: prev.stepIdx + 1
-        }));
+        this.setState(prev => {
+            if (prev.stepIdx + 1 < prev.stepRoutes.length) {
+                history.replace(this.props.pathname + "/"
+                    + prev.stepRoutes[prev.stepIdx + 1]);
+            } else {
+                /* TODO 1: newOrder is made successfully
+                    handle any onSuccessful callback to update dashboard
+                    and redirect to dashboard */
+                history.push("/");
+            }
 
-        if (this.state.stepIdx < this.state.stepRoutes.length) {
-            history.push(this.state.pathname + "/"
-                + this.state.stepRoutes[this.state.stepIdx]);
-        } else {
-            /* TODO 1: newOrder is made successfully
-                handle onSuccessful callback to update dashboard
-                and redirect to dashboard */
-            history.push("/");
-        }
+            return {
+                order: order,
+                stepIdx: prev.stepIdx + 1
+            };
+        });
+    }
+
+    componentDidMount() {
+        /* initialize the steps */
+        history.replace(this.props.pathname + "/" + this.state.stepRoutes[0]);
     }
 
     render() {
         return (
             <div id="newOrder">
-                <Route path={this.state.pathname + "/packageInfo"}>
-                    <Dummy />
+                <Route path={this.props.pathname + "/packageInfo"} exact>
+                    <PackageInfo updateOrder={this.updateOrder}/>
                 </Route>
-                <Route path={this.state.pathname + "/selectMethod"}>
-                    <Dummy />
+                <Route path={this.props.pathname + "/selectMethod"} exact>
+                    <SelectMethod updateOrder={this.updateOrder}/>
                 </Route>
-                <Route path={this.state.pathname + "/paymentMethod"}>
-                    <Dummy />
+                <Route path={this.props.pathname + "/paymentMethod"} exact>
+                    <PaymentMethod updateOrder={this.updateOrder}/>
                 </Route>
             </div>
         );

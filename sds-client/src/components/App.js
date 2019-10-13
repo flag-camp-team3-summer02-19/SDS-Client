@@ -43,7 +43,10 @@ class App extends React.Component {
                     <DashBoard userInfo={this.state.userInfo}/>
                 </Route>
                 <Route path="/newOrder">
-                    <NewOrder userInfo={this.state.userInfo} />
+                    <NewOrder
+                        userInfo={this.state.userInfo}
+                        pathname="/newOrder"
+                    />
                 </Route>
                 <BottomNavBar />
             </div>
