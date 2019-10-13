@@ -34,7 +34,6 @@ class LogIn extends Component {
         });
     };
 
-    /* TODO 3: fill in hyper-ref in <a href=""> register now </a> */
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
