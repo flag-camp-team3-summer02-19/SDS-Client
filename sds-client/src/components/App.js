@@ -3,11 +3,11 @@ import {
     Route,
     Redirect
 } from 'react-router-dom';
-import history from '../history';
 import BottomNavBar from './BottomNavBar';
 import LogIn from './LogIn';
 import Register from './Register';
 import DashBoard from './DashBoard';
+import history from '../history';
 
 class App extends React.Component {
     state = {
@@ -20,7 +20,7 @@ class App extends React.Component {
             loggedIn: true,
             userInfo: values
         });
-        /* TODO *: how to get back to dashboard*/
+        history.push('/');
     }
 
     render() {
@@ -33,6 +33,7 @@ class App extends React.Component {
                         <Redirect to="/login" />}
                 </Route>
                 <Route path="/login" exact>
+                    {console.log(1)}
                     <LogIn onSuccessLogIn={this.onSuccessLogIn} />
                 </Route>
                 <Route path="/register" exact>

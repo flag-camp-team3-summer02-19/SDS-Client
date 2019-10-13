@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 
 /* ref https://ant.design/components/form/ */
 import {Form, Input, Button, Icon} from 'antd';
-import md5 from 'md5'
+import md5 from 'md5';
+import { Link } from 'react-router-dom';
 
 class Register extends Component {
     state = {
@@ -106,7 +107,7 @@ class Register extends Component {
                         <Button type="primary" htmlType="submit" className="register-form-button">
                             Submit
                         </Button>
-                        Or <a href="/">back to login!</a>
+                        Or <Link to="/">back to login!</Link>
                     </Form.Item>
                 </Form>
             </div>

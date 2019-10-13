@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 import md5 from 'md5';
-import history from '../history'
+import { Link } from 'react-router-dom';
 
 /* More Features to consider:
  *   1. remember me box:
@@ -76,7 +76,7 @@ class LogIn extends Component {
                         <Button type="primary" htmlType="submit" className="login-form-button">
                             Log in
                         </Button>
-                        Or <a href="/register">register now!</a>
+                        Or <Link to="/register">register now!</Link>
                     </Form.Item>
                 </Form>
             </div>
