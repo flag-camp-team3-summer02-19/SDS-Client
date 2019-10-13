@@ -13,7 +13,11 @@ class DashBoard extends Component {
         return (
             <div id="dashboard">
                 <section id="control-panel">
-                    <p>this is user panel</p>
+                    <p>
+                        this is user panel
+                        <button onClick={() => {history.push('/login')}}> Logout </button>
+                    </p>
+
                     <button onClick={() => {history.push('/newOrder')}}> Make New Order </button>
                     <p>this is search panel</p>
                 </section>
