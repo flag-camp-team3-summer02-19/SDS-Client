@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button } from 'antd';
 import md5 from 'md5';
+import history from '../history'
 
 /* More Features to consider:
  *   1. remember me box:
@@ -37,26 +38,37 @@ class LogIn extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="login">
+            <div id="login">
                 <h1>Super Delivery Service</h1>
                 <Form onSubmit={this.handleLogIn} className="login-form">
                     <Form.Item>
-                        {getFieldDecorator('username', {
-                            rules: [{ required: true, message: 'Please input your username!' }],
-                        })(
-                            <Input
-                                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                placeholder="Username"
-                            />,
-                        )}
+                        {getFieldDecorator('email', {
+                            rules: [
+                                {
+                                    type: 'email',
+                                    message: 'The input is not valid E-mail!',
+                                },
+                                {
+                                    required: true,
+                                    message: 'Please input your E-mail!',
+                                },
+                            ],
+                        })(<Input
+                            prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>}
+                            placeholder="E-mail"
+                        />)}
                     </Form.Item>
                     <Form.Item>
                         {getFieldDecorator('password', {
-                            rules: [{ required: true, message: 'Please input your Password!' }],
+                            rules: [
+                                {
+                                    required: true,
+                                    message: 'Please input your Password!'
+                                }
+                            ],
                         })(
-                            <Input
+                            <Input.Password
                                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                type="password"
                                 placeholder="Password"
                             />,
                         )}
@@ -65,7 +77,7 @@ class LogIn extends Component {
                         <Button type="primary" htmlType="submit" className="login-form-button">
                             Log in
                         </Button>
-                        Or <a href="">register now!</a>
+                        Or <a href="/register">register now!</a>
                     </Form.Item>
                 </Form>
             </div>
@@ -73,4 +85,4 @@ class LogIn extends Component {
     }
 }
 
-export default Form.create({ name: 'normal_login' })(LogIn);
+export default Form.create({ name: 'LogIn' })(LogIn);

@@ -4,6 +4,7 @@
 @import './styles/LogIn.css';
 @import './styles/DashBoard.css';
 @import './styles/BottomNavBar.css';
+@import './styles/Register.css';
 
 body {
   margin: 0;

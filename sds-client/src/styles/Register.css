@@ -1,9 +1,9 @@
-#login {
+#register {
     padding-bottom: 20px;
     background-color: rgb(245, 245, 245);
 }
 
-.login-form {
+.register-form {
     margin: auto;
     width: 75%;
     border-radius: 5px;
@@ -12,6 +12,6 @@
     box-shadow: 10px 5px 5px rgb(211, 211, 211);
 }
 
-.login-form-button {
+.register-form-button {
     width: 100%;
 }
