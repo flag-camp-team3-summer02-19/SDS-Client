@@ -33,13 +33,13 @@ class App extends React.Component {
                         <Redirect to="/dashboard" /> :
                         <Redirect to="/login" />}
                 </Route>
-                <Route path="/login">
+                <Route path="/login" exact>
                     <LogIn onSuccessLogIn={this.onSuccessLogIn} />
                 </Route>
-                <Route path="/register">
+                <Route path="/register" exact>
                     <Register onSuccessRegister={this.onSuccessLogIn} />
                 </Route>
-                <Route path="/dashboard">
+                <Route path="/dashboard" exact>
                     <DashBoard userInfo={this.state.userInfo}/>
                 </Route>
                 <Route path="/newOrder">
