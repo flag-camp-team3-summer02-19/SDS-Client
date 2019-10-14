@@ -1,0 +1,39 @@
+#packageInfo {
+    display: flex;
+
+}
+
+#title {
+    float: top;
+}
+
+#packageDetail {
+    padding-left: 10px;
+    float: left;
+    padding-top: 50px;
+    padding-bottom: 60px;
+}
+
+#mapDetail {
+    padding-right: 10px;
+    float: right;
+    padding-top: 50px;
+    padding-bottom: 60px;
+    padding-left: 50px;
+}
+
+#length {
+    width: 100px;
+}
+
+#width {
+    width: 100px;
+}
+
+#height {
+    width: 100px;
+}
+
+#weight {
+    width: 100px;
+}
