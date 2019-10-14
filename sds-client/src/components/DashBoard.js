@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import history from '../history';
 import UserPanel from "./UserPanel";
+import SearchPanel from "./SearchPanel";
+import OrderList from "./OrderList";
 
 /* TODO 3: add <SearchPanel /> in control-panel */
 /* TODO 4: add <OrderList /> under control-panel */
@@ -15,9 +17,9 @@ class DashBoard extends Component {
                 <section id="control-panel">
                     <UserPanel userId={this.state.userInfo.username}/>
                     <button onClick={() => {history.push('/newOrder')}}> Make New Order </button>
-                    <p>this is search panel</p>
+                    <SearchPanel/>
                 </section>
-                <p>this is order list</p>
+                <OrderList/>
             </div>
         );
     }
