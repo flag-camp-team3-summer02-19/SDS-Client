@@ -1,0 +1,16 @@
+.simple-item-img {
+    width: 100px;
+    height: 100px;
+    flex-grow:2;
+}
+.simple-item {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.simple-item-address {
+    flex-grow:1;
+}
+.map-thumbnail {
+    width: 185px;
+}

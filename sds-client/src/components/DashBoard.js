@@ -3,13 +3,19 @@ import history from '../history';
 import UserPanel from "./UserPanel";
 import SearchPanel from "./SearchPanel";
 import OrderList from "./OrderList";
+import {FakeData} from '../Constants'
 
+;
 /* TODO 3: add <SearchPanel /> in control-panel */
 /* TODO 4: add <OrderList /> under control-panel */
 class DashBoard extends Component {
     state = {
-        userInfo: this.props.userInfo
+        userInfo: this.props.userInfo,
+        listData:FakeData
     };
+
+    //TODO: do ajax call to fetch Order data from server
+
 
     render() {
         return (
@@ -19,7 +25,7 @@ class DashBoard extends Component {
                     <button onClick={() => {history.push('/newOrder')}}> Make New Order </button>
                     <SearchPanel/>
                 </section>
-                <OrderList/>
+                <OrderList listData={this.state.listData}/>
             </div>
         );
     }
