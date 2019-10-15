@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {List, Avatar, Icon, Col, Row, Drawer, Divider} from 'antd';
+import {List, Col, Row, Drawer, BackTop} from 'antd';
 import {ShipMethod, ShipStatus, MapThumbnail_prefix, MapThumbnail_suffix, MapApiKey} from "../Constants";
 import drone from '../images/drone.png';
 import mobile from '../images/auto_mobile.png';
@@ -19,7 +19,6 @@ class OrderList extends Component {
     selectedItem = undefined;
 
     showDrawer = (item) => {
-        console.log(item); // TODO: remove it
         this.selectedItem = item;
         this.setState({
             visible: true,
