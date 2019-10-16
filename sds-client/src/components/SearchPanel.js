@@ -22,14 +22,14 @@ class SearchPanel extends Component {
         // });
     };
 
-    onSelect = (orderId) => {
-        console.log("onSelect", orderId);
-        //this.props.openDrawer(orderId);
+    onSelect = (value, option) => {
+        // console.log(option);
+        this.props.openDrawer(option.props.item);
     };
 
 
     options = this.props.listData.map(item => (
-        <Option key={item.OrderId} value={item.OrderId} className="search-item-option">
+        <Option key={item.OrderId} value={item.OrderNote} className="search-item-option" item={item}>
             {item.ShipMethod === ShipMethod.Mobile ?
                 <img alt='AutoMobile' src={mobile} className='simple-item-img'/> :
                 <img alt='Drone' src={drone} className='simple-item-img'/>}

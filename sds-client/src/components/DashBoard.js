@@ -10,16 +10,47 @@ import {FakeData} from '../Constants'
 
 /* TODO 4: add <OrderList /> under control-panel */
 class DashBoard extends Component {
-    state = {
-        userInfo: this.props.userInfo,
-        listData: FakeData
-    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            userInfo: this.props.userInfo,
+            listData: FakeData,
+            selectedItem: undefined,
+            showSelectedItem: false,
+        };
+        // this.showSelectedItem = false;
+    }
+
 
     //TODO: do ajax call to fetch Order data from server
 
-    openDrawer = (orderId) => {
+    openDrawer = (item) => {
+        this.setState((prevState) => {
+            return {selectedItem: item,
 
+            };
+        });
+        this.showSelectedItem = true;
     };
+
+    onItemSelected = () => {
+        // if (this.state.showSelectedItem) {
+        //     this.setState({showSelectedItem: false});
+        // }
+        this.showSelectedItem = false;
+        console.log('DashBoard: onItemSelected: ');
+        console.log(this.refs);
+    };
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        console.log('DashBoard: shouldComponentUpdate');
+        return true;
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log('DashBoard: componentDidUpdate');
+    }
 
     render() {
         return (
@@ -31,7 +62,11 @@ class DashBoard extends Component {
                 </section>
                 <section>
                     <SearchPanel listData={this.state.listData} openDrawer={this.openDrawer}/>
-                    <OrderList listData={this.state.listData}/>
+                    <OrderList listData={this.state.listData}
+                               selectedItem={this.state.selectedItem}
+                               showSelectedItem={this.showSelectedItem}
+                               onItemSelected={this.onItemSelected}
+                    />
                 </section>
             </div>
         );

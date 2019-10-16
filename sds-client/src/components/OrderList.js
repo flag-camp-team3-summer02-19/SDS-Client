@@ -12,11 +12,28 @@ const convertAddressToUrl = (address) => {
 };
 
 class OrderList extends Component {
-    state = {
-        visible: false,
-    };
 
-    selectedItem = undefined;
+    constructor(props) {
+        super(props);
+        this.selectedItem = this.props.selectedItem;
+        this.state = {
+            visible: false,
+        };
+        // console.log('In OrderList: ', this.state.visible);
+    }
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        console.log('OrderList: shouldComponentUpdate');
+        if (nextProps.showSelectedItem && !nextState.visible) {
+            this.showDrawer(nextProps.selectedItem)
+        }
+        return true;
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log('OrderList: componentDidUpdate');
+        this.props.onItemSelected();
+    }
 
     showDrawer = (item) => {
         this.selectedItem = item;
