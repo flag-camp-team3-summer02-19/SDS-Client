@@ -4,11 +4,13 @@
   "private": true,
   "dependencies": {
     "antd": "^3.23.6",
+    "geocode": "0.0.3",
     "google-maps-react": "^2.0.2",
     "history": "^4.10.1",
     "md5": "^2.2.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
+    "react-geocode": "^0.2.0",
     "react-google-maps": "^9.4.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
