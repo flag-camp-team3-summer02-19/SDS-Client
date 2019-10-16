@@ -1,31 +1,40 @@
 import React from 'react';
+import { Input } from 'antd';
 import { withGoogleMap, withScriptjs, GoogleMap, Polyline, Marker } from 'react-google-maps';
 
+const { TextArea } = Input;
 
+const IconWarehouse = {
+    url: 'https://img.pngio.com/warehouse-free-buildings-icons-warehouse-icon-png-512_512.png',
+    scaledSize: new window.google.maps.Size(30, 30),
+    anchor: { x: 10, y: 10 }
+}
 
 class Map extends React.Component {
 
     // path[0] is the nearest warehouse, path[1] is starting address, path[2] is destination address.
     path = [
-        {lat: 37.711729, lng: -122.427705},
-        {lat: 37.752033 ,lng: -122.450996},
+        {lat: 37.766345, lng: -122.512029},
+        {lat: 37.752033, lng: -122.450996},
         {lat: 37.771944, lng: -122.446142}
     ];
 
-    constructor(props) {
-        super(props);
 
+    constructor(props) {
+        super(props)
         this.state = {
             warehouse: [{latitude: 37.766345, longitude: -122.512029},
                 {latitude: 37.797750, longitude: -122.408731},
                 {latitude: 37.711729, longitude: -122.427705}],
             progress: [],
-        }
+            initialDate: new Date()
+        };
+        this.onAddressChange = this.onAddressChange.bind(this);
     }
 
     displayMarkers = () => {
         return this.state.warehouse.map((warehouse, index) => {
-            return <Marker key={index} id={index} position={{
+            return <Marker icon={IconWarehouse} key={index} id={index} position={{
                 lat: warehouse.latitude,
                 lng: warehouse.longitude
             }}
@@ -33,13 +42,21 @@ class Map extends React.Component {
         })
     }
 
-    velocity = 250
-    initialDate = new Date()
+    velocity = 700
 
     getDistance = () => {
         // seconds between when the component loaded and now
-        const differentInTime = (new Date() - this.initialDate) / 1000 // pass to seconds
+        const differentInTime = (new Date() - this.state.initialDate) / 1000 // pass to seconds
         return differentInTime * this.velocity // d = v*t -- thanks Newton!
+    }
+
+    onAddressChange() {
+        this.path = [{lat: 37.766345, lng: -122.512029},
+                {lat: 37.771944, lng: -122.446142},{lat: 37.752033, lng: -122.450996},];
+        //this.setState({progress: []})
+        this.setState({initialDate: new Date()});
+        //this.componentDidMount();
+        this.componentWillMount();
     }
 
     componentDidMount = () => {
@@ -51,7 +68,9 @@ class Map extends React.Component {
     }
 
     moveObject = () => {
+        //console.log(this.state.addressReset)
         const distance = this.getDistance()
+        console.log(distance)
         if (! distance) {
             return
         }
@@ -113,7 +132,7 @@ class Map extends React.Component {
     }
 
     render = () => {
-        const Icon = {
+        const IconDrone = {
             url: 'https://cdn3.iconfinder.com/data/icons/virtual-reality-and-drones/65/_Drone-512.png',
             scaledSize: new window.google.maps.Size(30, 30),
             anchor: { x: 10, y: 10 }
@@ -124,10 +143,22 @@ class Map extends React.Component {
                 defaultCenter={{ lat: 37.759083, lng: -122.438112}}
             >
                 {this.displayMarkers()}
+                <div/>
+                <TextArea  id={"start-address"}
+                           placeholder="Please enter starting address. (e.g. 4327 20th St,San Francisco,CA 94114)"
+                    autosize={{ minRows: 2, maxRows: 6 }}
+                />
+                <div/>
+                <TextArea id={"dest-address"}
+                          placeholder="Please enter destination address. (e.g. 3832 21th St,San Francisco,CA 94114)"
+                    autosize={{ minRows: 2, maxRows: 6 }}
+                />
+                <button id={"address-confirm"} onClick={this.onAddressChange}> Address Confirm </button>
+
                 { this.state.progress && (
                     <>
                         <Polyline path={this.state.progress} options={{ strokeColor: "#FF0000 "}} />
-                        <Marker icon={Icon} position={this.state.progress[this.state.progress.length - 1]} />
+                        <Marker icon={IconDrone} position={this.state.progress[this.state.progress.length - 1]} />
                     </>
                 )}
             </GoogleMap>

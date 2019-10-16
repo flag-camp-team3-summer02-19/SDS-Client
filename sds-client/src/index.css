@@ -9,6 +9,7 @@
 @import './styles/PackageInfo.css';
 @import './styles/SelectMethod.css';
 @import './styles/PaymentMethod.css';
+@import './styles/MapContainer.css';
 
 body {
   margin: 0;

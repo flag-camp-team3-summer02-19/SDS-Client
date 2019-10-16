@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import { Input, InputNumber, DatePicker } from 'antd';
 import MapContainer from "./MapContainer";
 
-const { TextArea } = Input;
-
 function onChange(value) {
     console.log('changed', value);
 }
@@ -74,6 +72,7 @@ class DateRange extends React.Component {
 }
 
 class PackageInfo extends Component {
+
     render() {
         return (
             <div id="packageInfo">
@@ -89,16 +88,6 @@ class PackageInfo extends Component {
                     <br/>
                     <InputNumber id="weight" min={1} max={100000} defaultValue={3} onChange={onChange} />
                     <br/>
-                    <div style={{ margin: '24px 0' }} />
-                    <TextArea
-                        placeholder="Please enter starting address. (e.g. 4327 20th St,San Francisco,CA 94114)"
-                        autosize={{ minRows: 2, maxRows: 6 }}
-                    />
-                    <div style={{ margin: '24px 0' }} />
-                    <TextArea
-                        placeholder="Please enter destination address. (e.g. 3832 21th St,San Francisco,CA 94114)"
-                        autosize={{ minRows: 2, maxRows: 6 }}
-                    />
                     <br/>
                     <span>Choose pick up date below</span>
                     <br/>
@@ -107,7 +96,7 @@ class PackageInfo extends Component {
                     <button onClick={this.props.updateOrder}> Choose a delivery method </button>
                 </div>
                 <div id="mapDetail">
-                    <MapContainer />
+                    <MapContainer onChange={this.handleAddressChange}/>
                 </div>
 
             </div>
