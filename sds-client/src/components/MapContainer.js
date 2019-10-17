@@ -51,7 +51,7 @@ class Map extends React.Component {
         })
     }
 
-    velocity = 50
+    velocity = 400
 
     getDistance = () => {
         // seconds between when the component loaded and now
@@ -76,7 +76,7 @@ class Map extends React.Component {
         Geocode.fromAddress(this.state.startAddress).then(
             response => {
                 //this.path[1] = response.results[0].geometry.location;
-                let{lat, lng} = response.results[0].geometry.location;
+                const{lat, lng} = response.results[0].geometry.location;
                 console.log(lat, lng);
                 this.path[1].lat = lat;
                 this.path[1].lng = lng;
@@ -84,17 +84,15 @@ class Map extends React.Component {
                 let minDistance = 100000000;
                 for(let i = 0; i < 3; i++) {
                     console.log("insight-for-loop")
-                    let lat1 = this.state.warehouse[i].latitude;
-                    let lng1 = this.state.warehouse[i].longitude;
-                    console.log(lat1);
-                    console.log(lng1);
-                    let latLong1 = new window.google.maps.LatLng(lat1, lng1)
-                    let lat2 = lat;
-                    let lng2 = lng;
-                    let latLong2 = new window.google.maps.LatLng(lat2, lng2)
+                    const lat1 = this.state.warehouse[i].latitude;
+                    const lng1 = this.state.warehouse[i].longitude;
+                    const latLong1 = new window.google.maps.LatLng(lat1, lng1)
+                    const lat2 = lat;
+                    const lng2 = lng;
+                    const latLong2 = new window.google.maps.LatLng(lat2, lng2)
 
                     // in meters:
-                    let distance = window.google.maps.geometry.spherical.computeDistanceBetween(
+                    const distance = window.google.maps.geometry.spherical.computeDistanceBetween(
                         latLong1,
                         latLong2
                     )
@@ -104,9 +102,6 @@ class Map extends React.Component {
                         minDistance = distance;
                         this.path[0].lat = lat1;
                         this.path[0].lng = lng1;
-                        console.log("this is the min distance coords")
-                        console.log(lat1);
-                        console.log(lng1);
                     }
                 }
             },
@@ -138,7 +133,7 @@ class Map extends React.Component {
     }
 
     onAddressChange() {
-        this.path = [{lat: 37.766345, lng: -122.512029},{lat: 37.771944, lng: -122.446142},{lat: 37.752033, lng: -122.450996},];
+        //this.path = [{lat: 37.766345, lng: -122.512029},{lat: 37.771944, lng: -122.446142},{lat: 37.752033, lng: -122.450996},];
         //this.setState({progress: []})
         this.setState({initialDate: new Date()});
         this.onGeoCoding();
