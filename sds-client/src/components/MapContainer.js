@@ -21,17 +21,17 @@ class Map extends React.Component {
 
     // path[0] is the nearest warehouse, path[1] is starting address, path[2] is destination address.
     path = [
-        {lat: 37.766345, lng: -122.512029},
-        {lat: 37.752033, lng: -122.450996},
-        {lat: 37.771944, lng: -122.446142}
+        {lat: 37.766345, lng: -122.512029, distance: 0},
+        {lat: 37.752033, lng: -122.450996, distance: 0},
+        {lat: 37.771944, lng: -122.446142, distance: 0}
     ];
 
     constructor(props) {
         super(props)
         this.state = {
-            warehouse: [{latitude: 37.766345, longitude: -122.512029, distance: 0},
-                {latitude: 37.797750, longitude: -122.408731, distance: 0},
-                {latitude: 37.711729, longitude: -122.427705, distance: 0}],
+            warehouse: [{latitude: 37.766345, longitude: -122.512029},
+                {latitude: 37.797750, longitude: -122.408731},
+                {latitude: 37.711729, longitude: -122.427705}],
             progress: [],
             initialDate: new Date(),
             startAddress: "",
@@ -51,7 +51,7 @@ class Map extends React.Component {
         })
     }
 
-    velocity = 400
+    velocity = 50
 
     getDistance = () => {
         // seconds between when the component loaded and now
@@ -76,11 +76,39 @@ class Map extends React.Component {
         Geocode.fromAddress(this.state.startAddress).then(
             response => {
                 //this.path[1] = response.results[0].geometry.location;
-                const{lat, lng} = response.results[0].geometry.location;
+                let{lat, lng} = response.results[0].geometry.location;
                 console.log(lat, lng);
                 this.path[1].lat = lat;
                 this.path[1].lng = lng;
                 console.log(this.path);
+                let minDistance = 100000000;
+                for(let i = 0; i < 3; i++) {
+                    console.log("insight-for-loop")
+                    let lat1 = this.state.warehouse[i].latitude;
+                    let lng1 = this.state.warehouse[i].longitude;
+                    console.log(lat1);
+                    console.log(lng1);
+                    let latLong1 = new window.google.maps.LatLng(lat1, lng1)
+                    let lat2 = lat;
+                    let lng2 = lng;
+                    let latLong2 = new window.google.maps.LatLng(lat2, lng2)
+
+                    // in meters:
+                    let distance = window.google.maps.geometry.spherical.computeDistanceBetween(
+                        latLong1,
+                        latLong2
+                    )
+                    console.log(distance);
+                    // if distance is the minimum one
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        this.path[0].lat = lat1;
+                        this.path[0].lng = lng1;
+                        console.log("this is the min distance coords")
+                        console.log(lat1);
+                        console.log(lng1);
+                    }
+                }
             },
             error => {
                 console.error(error);
@@ -98,6 +126,7 @@ class Map extends React.Component {
                 console.error(error);
             }
         );
+
     }
 
     startAddressTextChange(event) {
