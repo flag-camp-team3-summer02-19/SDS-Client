@@ -44,7 +44,7 @@ class DashBoard extends Component {
                     <button onClick={() => {history.push('/newOrder')}}> Make New Order
                     </button>
                 </section>
-                <section>
+                <section id="search-order">
 
                     <SearchPanel listData={this.state.listData} updateDrawer={this.updateDrawer}/>
 

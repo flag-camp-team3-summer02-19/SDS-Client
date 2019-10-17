@@ -6,7 +6,7 @@ footer {
      justify-content: flex-start;
  }
 
-ul li{
+.bottom-list li{
     display: inline;
     width: auto;
     padding: 6px;

@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {List, Col, Row, Drawer, BackTop} from 'antd';
+import {List, Col, Row, Drawer, Steps, Popover} from 'antd';
 import {ShipMethod, ShipStatus, MapThumbnail_prefix, MapThumbnail_suffix, MapApiKey} from "../Constants";
 import drone from '../images/drone.png';
 import mobile from '../images/auto_mobile.png';
 import banana from '../images/banana.jpg';
 import Order from "./Order";
+
+const {Step} = Steps;
 
 const convertAddressToUrl = (address) => {
     address = address.replace(/\s+,\s+/gi, ',');
@@ -49,10 +51,10 @@ class OrderList extends Component {
                                 <img
                                     className='map-thumbnail'
                                     alt="MapThumbnail"
-                                    src={MapApiKey==='Google Map API'?
-                                        'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png':
+                                    src={MapApiKey === 'Google Map API' ?
+                                        'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png' :
                                         MapThumbnail_prefix + convertAddressToUrl(item.CurrentLoc) + MapThumbnail_suffix + MapApiKey}
-                                    onClick={this.showDrawer.bind(this, item) }
+                                    onClick={this.showDrawer.bind(this, item)}
                                 />
                             }
                         >
@@ -82,7 +84,7 @@ class OrderList extends Component {
                     onClose={this.onClose}
                     visible={this.props.drawerVisible}
                 >
-                    {this.props.itemInDrawer?<Order item={this.props.itemInDrawer}/>:null}
+                    {this.props.itemInDrawer ? <Order item={this.props.itemInDrawer}/> : null}
                 </Drawer>
             </div>
         );

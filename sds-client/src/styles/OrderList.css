@@ -14,3 +14,7 @@
 .map-thumbnail {
     width: 185px;
 }
+
+#order-list-shipping-progress {
+    text-align: left;
+}

@@ -1,4 +1,4 @@
-export const ShipStatus = { InProgress: 0, Finished : 1};
+export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipMethod = {Mobile : 3, Drone : 4};
 
 export const FakeData = [
