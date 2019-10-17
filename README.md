@@ -5,6 +5,7 @@ The Client of SuperDeliveryService using React.
 1. check the dependencies, if no, please download Node.js the LTS version and run the following code in terminal:
 ```
 npm init
+// if there is any problem of downloading (especially related to permission issue) add 'sudo' to the beginning of each command
 npm install -g cross-env
 npm install -g react-router-dom
 npm install -S history
