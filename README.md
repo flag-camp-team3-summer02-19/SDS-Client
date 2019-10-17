@@ -2,14 +2,20 @@
 The Client of SuperDeliveryService using React.
 
 ## Download this code and try!
-1. check the dependencies, if no, please download Node.js the LTS version and run the following code in terminal:
+1. download this project as .zip and then unzip in the local machine.
+2. open terminal / command prompt, go to the unzipped folder.
+3. check the dependencies, if no, please download Node.js the LTS version and run the following code in terminal:
 ```
-npm init
+// if there is any problem of downloading (especially related to permission issue):
+// add 'sudo' to the beginning of each command
 npm install -g cross-env
 npm install -g react-router-dom
+npm install -S history
+npm install -S md5
+npm install -S google-maps-react
+npm install -S antd
 ```
-2. download this project as .zip to local machine
-3. under the unziped sds-client folder, start runtime from terminal:
+4. under the unzipped sds-client folder, start runtime from terminal:
 ```
 npm start
 ```
