@@ -22,30 +22,12 @@ class OrderList extends Component {
         // console.log('In OrderList: ', this.state.visible);
     }
 
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        console.log('OrderList: shouldComponentUpdate');
-        if (nextProps.showSelectedItem && !nextState.visible) {
-            this.showDrawer(nextProps.selectedItem)
-        }
-        return true;
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('OrderList: componentDidUpdate');
-        this.props.onItemSelected();
-    }
-
     showDrawer = (item) => {
-        this.selectedItem = item;
-        this.setState({
-            visible: true,
-        });
+        this.props.updateDrawer(item, true);
     };
 
     onClose = () => {
-        this.setState({
-            visible: false,
-        });
+        this.props.updateDrawer(null, false);
     };
 
     render() {
@@ -98,9 +80,9 @@ class OrderList extends Component {
                     placement="right"
                     closable={false}
                     onClose={this.onClose}
-                    visible={this.state.visible}
+                    visible={this.props.drawerVisible}
                 >
-                    {this.selectedItem ? <Order item={this.selectedItem}/> : null}
+                    {this.props.itemInDrawer?<Order item={this.props.itemInDrawer}/>:null}
                 </Drawer>
             </div>
         );

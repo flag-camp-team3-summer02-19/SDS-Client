@@ -16,41 +16,25 @@ class DashBoard extends Component {
         this.state = {
             userInfo: this.props.userInfo,
             listData: FakeData,
-            selectedItem: undefined,
-            showSelectedItem: false,
+            drawerVisible: false,
         };
+        this.itemInDrawer = null;
         // this.showSelectedItem = false;
     }
 
 
     //TODO: do ajax call to fetch Order data from server
 
-    openDrawer = (item) => {
-        this.setState((prevState) => {
-            return {selectedItem: item,
-
-            };
-        });
-        this.showSelectedItem = true;
+    // put openDrawer here since <OrderList/> and <SearchPanel/> both want to open and close drawer
+    updateDrawer = (item, toOpenDrawer) => {
+        if (toOpenDrawer) {
+            this.itemInDrawer = item;
+            this.setState({drawerVisible: true})
+        } else {
+            this.itemInDrawer = null;
+            this.setState({drawerVisible: false})
+        }
     };
-
-    onItemSelected = () => {
-        // if (this.state.showSelectedItem) {
-        //     this.setState({showSelectedItem: false});
-        // }
-        this.showSelectedItem = false;
-        console.log('DashBoard: onItemSelected: ');
-        console.log(this.refs);
-    };
-
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        console.log('DashBoard: shouldComponentUpdate');
-        return true;
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('DashBoard: componentDidUpdate');
-    }
 
     render() {
         return (
@@ -61,11 +45,13 @@ class DashBoard extends Component {
                     </button>
                 </section>
                 <section>
-                    <SearchPanel listData={this.state.listData} openDrawer={this.openDrawer}/>
+
+                    <SearchPanel listData={this.state.listData} updateDrawer={this.updateDrawer}/>
+
                     <OrderList listData={this.state.listData}
-                               selectedItem={this.state.selectedItem}
-                               showSelectedItem={this.showSelectedItem}
-                               onItemSelected={this.onItemSelected}
+                               updateDrawer={this.updateDrawer}
+                               drawerVisible={this.state.drawerVisible}
+                               itemInDrawer = {this.itemInDrawer}
                     />
                 </section>
             </div>

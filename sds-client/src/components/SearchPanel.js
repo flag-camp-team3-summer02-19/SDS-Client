@@ -8,57 +8,65 @@ const {Option, OptGroup} = AutoComplete;
 
 class SearchPanel extends Component {
 
+    state = {
+        dataSource: this.props.listData
+    };
+
+    filterItem = (searchText) => {
+        const {listData} = this.props;
+        if (!searchText) {
+            return listData
+        }
+        let ret = [];
+        for (let i=0; i<listData.length; i++) {
+            if (listData[i].OrderNote.includes(searchText)) {
+                ret.push(listData[i]);
+            }
+        }
+        return ret;
+    };
+
     onSearch = searchText => {
         console.log("onSearch: ", searchText);
-        // this.setState({
-        //     dataSource: !searchText
-        //         ? []
-        //         : NBA.searchPlayers(searchText).map(
-        //             (player) => ({
-        //                 fullName: player.fullName,
-        //                 playerId: player.playerId,
-        //             })
-        //         )
-        // });
+        this.setState({
+            dataSource: this.filterItem(searchText)
+        });
     };
 
     onSelect = (value, option) => {
-        // console.log(option);
-        this.props.openDrawer(option.props.item);
+        this.props.updateDrawer(option.props.item, true);
     };
 
 
-    options = this.props.listData.map(item => (
-        <Option key={item.OrderId} value={item.OrderNote} className="search-item-option" item={item}>
-            {item.ShipMethod === ShipMethod.Mobile ?
-                <img alt='AutoMobile' src={mobile} className='simple-item-img'/> :
-                <img alt='Drone' src={drone} className='simple-item-img'/>}
-            <span className="item-option-label">
-                {item.OrderNote}
-            </span>
-        </Option>
-
-    )).concat([
-        <Option disabled key="all" className="show-all">
-            <a href="https://www.google.com/search?q=antd" target="_blank" rel="noopener noreferrer">
-                View all results
-            </a>
-        </Option>,
-    ]);
-
     render() {
+        const {dataSource} = this.state;
+        const options = dataSource.map(item => (
+            <Option key={item.OrderId} value={item.OrderNote} className="search-item-option" item={item}>
+                <div className="item-option-label">
+                    {item.OrderNote}
+                </div>
+                {item.ShipMethod === ShipMethod.Mobile ?
+                    <img alt='AutoMobile' src={mobile} className='simple-item-img'/> :
+                    <img alt='Drone' src={drone} className='simple-item-img'/>}
+            </Option>
+
+        ))
+        //     .concat([
+        //     <Option disabled key="all" className="show-all">
+        //         <a href="https://www.google.com/search?q=antd" target="_blank" rel="noopener noreferrer">
+        //             View all results
+        //         </a>
+        //     </Option>,
+        // ]);
+
         return (
-            //
             <AutoComplete
                 className="item-search"
-                dropdownClassName="certain-category-search-dropdown"
-                dropdownMatchSelectWidth={false}
-                dropdownStyle={{width: 300}}
                 size="large"
                 style={{width: '100%'}}
                 onSearch={this.onSearch}
                 onSelect={this.onSelect}
-                dataSource={this.options}
+                dataSource={options}
                 placeholder="search notes here"
                 optionLabelProp="value"
             >

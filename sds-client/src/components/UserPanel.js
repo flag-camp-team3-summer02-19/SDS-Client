@@ -9,15 +9,6 @@ class UserPanel extends Component {
         loggedIn: true
     };
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('UserPanel: componentDidUpdate');
-    }
-
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        console.log('UserPanel: shouldComponentUpdate');
-        return true;
-    }
-
     onClickLogout = () => {
         //TODO: tell server this user is logged out
         //TODO: destroy current session
