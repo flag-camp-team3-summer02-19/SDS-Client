@@ -3,12 +3,8 @@ import history from '../history';
 import UserPanel from "./UserPanel";
 import SearchPanel from "./SearchPanel";
 import OrderList from "./OrderList";
-import {FakeData} from '../Constants'
+import {FakeData} from '../Constants';
 
-    ;
-/* TODO 3: add <SearchPanel /> in control-panel */
-
-/* TODO 4: add <OrderList /> under control-panel */
 class DashBoard extends Component {
 
     constructor(props) {
