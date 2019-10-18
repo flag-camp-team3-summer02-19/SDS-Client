@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input } from 'antd';
-import { withGoogleMap, withScriptjs, GoogleMap, Polyline, Marker } from 'react-google-maps';
+import { withGoogleMap, withScriptjs, GoogleMap, Polyline, Marker, DirectionsRenderer } from 'react-google-maps';
 import Geocode from "react-geocode";
 
 const { TextArea } = Input;
@@ -13,6 +13,12 @@ const IconWarehouse = {
 
 const IconDrone = {
     url: 'https://cdn3.iconfinder.com/data/icons/virtual-reality-and-drones/65/_Drone-512.png',
+    scaledSize: new window.google.maps.Size(30, 30),
+    anchor: { x: 10, y: 10 }
+}
+
+const IconRobot = {
+    url: 'https://cdn.iconscout.com/icon/free/png-256/robot-97-415007.png',
     scaledSize: new window.google.maps.Size(30, 30),
     anchor: { x: 10, y: 10 }
 }
@@ -35,7 +41,9 @@ class Map extends React.Component {
             progress: [],
             initialDate: new Date(),
             startAddress: "",
-            destAddress: ""
+            destAddress: "",
+
+            directions: "",
         };
         this.onAddressChange = this.onAddressChange.bind(this);
         this.onGeoCoding = this.onGeoCoding.bind(this);
@@ -51,15 +59,15 @@ class Map extends React.Component {
         })
     }
 
-    velocity = 400
+    droneVelocity = 400
 
     getDistance = () => {
         // seconds between when the component loaded and now
         const differentInTime = (new Date() - this.state.initialDate) / 1000 // pass to seconds
-        return differentInTime * this.velocity // d = v*t -- thanks Newton!
+        return differentInTime * this.droneVelocity // d = v*t -- thanks Newton!
     }
 
-    onGeoCoding() {
+    onGeoCoding () {
         Geocode.setApiKey("AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM");
 
         // set response language. Defaults to english.
@@ -75,15 +83,14 @@ class Map extends React.Component {
         // Get address from latidude & longitude.
         Geocode.fromAddress(this.state.startAddress).then(
             response => {
-                //this.path[1] = response.results[0].geometry.location;
+
                 const{lat, lng} = response.results[0].geometry.location;
-                console.log(lat, lng);
                 this.path[1].lat = lat;
                 this.path[1].lng = lng;
-                console.log(this.path);
+                //this.setState({startAddressCoords: {lat, lng}});
+                //start = new window.google.maps.LatLng(lat, lng);
                 let minDistance = 100000000;
                 for(let i = 0; i < 3; i++) {
-                    console.log("insight-for-loop")
                     const lat1 = this.state.warehouse[i].latitude;
                     const lng1 = this.state.warehouse[i].longitude;
                     const latLong1 = new window.google.maps.LatLng(lat1, lng1)
@@ -96,7 +103,7 @@ class Map extends React.Component {
                         latLong1,
                         latLong2
                     )
-                    console.log(distance);
+
                     // if distance is the minimum one
                     if (distance < minDistance) {
                         minDistance = distance;
@@ -109,48 +116,23 @@ class Map extends React.Component {
                 console.error(error);
             }
         );
+
         Geocode.fromAddress(this.state.destAddress).then(
             response => {
                 const{lat, lng} = response.results[0].geometry.location;
-                console.log(lat, lng);
                 this.path[2].lat = lat;
                 this.path[2].lng = lng;
-                console.log(this.path);
+                //this.setState({destAddressCoords: {lat, lng}});
+                //end = new window.google.maps.LatLng(lat, lng);
             },
             error => {
                 console.error(error);
             }
         );
-
-    }
-
-    startAddressTextChange(event) {
-        this.setState({startAddress: event.target.value})
-    }
-
-    destAddressTextChange(event) {
-        this.setState({destAddress: event.target.value})
-    }
-
-    onAddressChange() {
-        //this.path = [{lat: 37.766345, lng: -122.512029},{lat: 37.771944, lng: -122.446142},{lat: 37.752033, lng: -122.450996},];
-        //this.setState({progress: []})
-        this.setState({initialDate: new Date()});
-        this.onGeoCoding();
-        //this.componentDidMount();
-        this.componentWillMount();
-    }
-
-    componentDidMount = () => {
-        this.interval = window.setInterval(this.moveObject, 1000);
-    }
-
-    componentWillUnmount = () => {
-        window.clearInterval(this.interval)
+        
     }
 
     moveObject = () => {
-
         const distance = this.getDistance()
         //this.path[1].distance needs to be further revised to destination warehouse distance.
         if (! distance || distance > this.path[2].distance + this.path[1].distance) {
@@ -190,10 +172,29 @@ class Map extends React.Component {
         this.setState({ progress })
     }
 
+    startAddressTextChange(event) {
+        this.setState({startAddress: event.target.value})
+    }
+
+    destAddressTextChange(event) {
+        this.setState({destAddress: event.target.value})
+    }
+
+    onAddressChange() {
+        this.setState({initialDate: new Date()});
+        this.componentWillMount();
+    }
+
+    componentDidMount = () => {
+        this.interval = window.setInterval(this.moveObject, 1000);
+    }
+
+    componentWillUnmount = () => {
+        window.clearInterval(this.interval)
+    }
+
     componentWillMount = () => {
         this.onGeoCoding();
-        console.log("hello")
-        console.log(this.path)
 
         for(let i = 0; i < 3; i++) {
             if (i === 0) {
@@ -213,6 +214,8 @@ class Map extends React.Component {
             )
             this.path[i].distance = distance;
         }
+        console.log("hello")
+        console.log(this.path)
     }
 
     render = () => {
@@ -232,12 +235,13 @@ class Map extends React.Component {
                           placeholder="Please enter destination address. (e.g. 3832 21th St,San Francisco,CA 94114)"
                     autosize={{ minRows: 2, maxRows: 6 }}
                 />
-                <button id={"address-confirm"} onClick={this.onAddressChange}> Address Confirm </button>
+                <button id={"address-confirm"} onClick={this.onAddressChange} > Address Confirm </button>
 
                 { this.state.progress && (
                     <>
                         <Polyline path={this.state.progress} options={{ strokeColor: "#FF0000 "}} />
                         <Marker icon={IconDrone} position={this.state.progress[this.state.progress.length - 1]} />
+                        {this.state.directions && <DirectionsRenderer directions={this.state.directions} />}
                     </>
                 )}
                 {/*<Polyline path={this.path} options={{ strokeColor: "#FF0000 " }} />*/}
@@ -251,7 +255,7 @@ const MapContainer = withScriptjs(withGoogleMap(Map))
 
 export default () => (
     <MapContainer
-        googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM&v=3.exp&libraries=geometry,drawing,places"
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={{ height: `400px`, width: '800px' }} />}
         mapElement={<div style={{ height: `100%` }} />}
