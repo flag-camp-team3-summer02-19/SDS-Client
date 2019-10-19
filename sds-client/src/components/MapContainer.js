@@ -129,7 +129,22 @@ class Map extends React.Component {
                 console.error(error);
             }
         );
-        
+
+        // Enable robots directions service.
+        const DirectionsService = new window.google.maps.DirectionsService();
+
+        var request = {
+            origin: new window.google.maps.LatLng(this.path[1].lat, this.path[1].lng),
+            destination: new window.google.maps.LatLng(this.path[2].lat, this.path[2].lng),
+            travelMode: window.google.maps.DirectionsTravelMode.DRIVING
+        };
+        DirectionsService.route(request, (response, status) => {
+            if (status == window.google.maps.DirectionsStatus.OK) {
+                this.setState({directions: response});
+            } else {
+                console.log("error loading directionsService");
+            }
+        });
     }
 
     moveObject = () => {
