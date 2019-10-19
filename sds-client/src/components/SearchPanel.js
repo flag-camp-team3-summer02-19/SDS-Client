@@ -9,7 +9,8 @@ const {Option, OptGroup} = AutoComplete;
 class SearchPanel extends Component {
 
     state = {
-        dataSource: this.props.listData
+        dataSource: this.props.listData,
+        searchText: '',
     };
 
     filterItem = (searchText) => {
@@ -29,7 +30,8 @@ class SearchPanel extends Component {
     onSearch = searchText => {
         console.log("onSearch: ", searchText);
         this.setState({
-            dataSource: this.filterItem(searchText)
+            dataSource: this.filterItem(searchText),
+            searchText: searchText,
         });
     };
 
@@ -37,22 +39,9 @@ class SearchPanel extends Component {
         this.props.updateDrawer(option.props.item, true);
     };
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('D/SearchPanel: componentDidUpdate');
-    }
-
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        console.log('D/SearchPanel: ShouldComponentUpdate');
-        return true;
-    }
-
-    componentWillUnmount() {
-        console.log('D/SearchPanel: componentWillUnmount');
-    }
-
-    componentDidMount() {
-        console.log('D/SearchPanel: componentDidMount');
-    }
+    onFocus = () => {
+        this.onSearch(this.state.searchText);
+    };
 
     render() {
         const dataSource = this.state.dataSource? this.state.dataSource : [];
@@ -82,6 +71,7 @@ class SearchPanel extends Component {
                 style={{width: '100%'}}
                 onSearch={this.onSearch}
                 onSelect={this.onSelect}
+                onFocus={this.onFocus}
                 dataSource={options}
                 placeholder="search notes here"
                 optionLabelProp="value"
