@@ -4,6 +4,10 @@ import React, {Component} from 'react';
 import {Form, Input, Button, Icon} from 'antd';
 import md5 from 'md5';
 import { Link } from 'react-router-dom';
+import {ajax} from '../util'
+import {REGISTER_ENDPOINT} from '../Constants'
+
+const onErrorMessage = "Sorry, there is some register issue.";
 
 class Register extends Component {
     state = {
@@ -17,14 +21,27 @@ class Register extends Component {
                 console.log(values);
                 let username = values.username;
                 let password = md5(username + md5(values.password));
-                /* TODO 1: add http request log in here */
-
-                /* TODO 2: fill in param to pass on successful log in */
-                this.props.onSuccessRegister({
-                    userid: 1,
-                    session: 2,
-                    username: values.email
+                let req = JSON.stringify({
+                    user_id : username,
+                    password : password,
                 });
+
+                ajax('POST', REGISTER_ENDPOINT, req,
+                    (res) => {
+                        let result = JSON.parse(res);
+                        if (result.status === 'OK') {
+                            /* TODO: update callbacks parameter  */
+                            this.props.onSuccessLogIn({
+                                userid: 1,
+                                session: 2,
+                                username: values.email
+                            });
+                        }
+                    },
+                    /* TODO: update callbacks parameter  */
+                    () => {
+                        alert(onErrorMessage);
+                    });
             }
         });
     };

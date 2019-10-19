@@ -8,7 +8,6 @@ import SearchFilter from "./SearchFilter";
 import OrderDrawer from "./OrderDrawer";
 import {Button} from "antd";
 
-
 class DashBoard extends Component {
 
     constructor(props) {
