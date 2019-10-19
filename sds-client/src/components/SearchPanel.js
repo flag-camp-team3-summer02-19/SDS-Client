@@ -8,6 +8,9 @@ const {Option, OptGroup} = AutoComplete;
 
 class SearchPanel extends Component {
 
+    //data in dropdown will only be updated from this.props when onFocus.
+    //It will not be updated from outside (this.props) when onSearch or onSelect.
+    //And this is the behavior we expect.
     state = {
         dataSource: this.props.listData,
         searchText: '',
@@ -28,7 +31,7 @@ class SearchPanel extends Component {
     };
 
     onSearch = searchText => {
-        console.log("onSearch: ", searchText);
+        // console.log("onSearch: ", searchText);
         this.setState({
             dataSource: this.filterItem(searchText),
             searchText: searchText,

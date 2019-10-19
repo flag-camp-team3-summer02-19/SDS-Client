@@ -14,6 +14,8 @@ const convertAddressToUrl = (address) => {
 };
 
 class OrderList extends Component {
+    //The data in list will always use new data (from this.props)
+    //So, date will be updated once new data (from this.props) is passed in.
 
     constructor(props) {
         super(props);
