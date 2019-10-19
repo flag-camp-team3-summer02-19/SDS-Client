@@ -1,3 +1,16 @@
+/* TODO: this Constant.js is for development purpose only,
+*   we need to remove it after we finished the project. */
+
+/*
+* TODO: we don't want to expose the backend's endpoints to our clients.
+*  Otherwise we need to consider whether our web server is secure, since
+*  it can receive request from malicious users to change our database.
+*
+*  one solution: our server can use API KEY to authenticate us
+*/
+export const LOGIN_ENDPOINT = "https://google.com";
+export const REGISTER_ENDPOINT = "https://google.com";
+
 export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipMethod = {Mobile : 3, Drone : 4};
 

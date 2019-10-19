@@ -1,7 +1,10 @@
+/* ref https://ant.design/components/form/ */
 import React, {Component} from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 import md5 from 'md5';
 import { Link } from 'react-router-dom';
+import { LOGIN_ENDPOINT } from '../Constants';
+import { ajax, Dialog } from '../util';
 
 /* More Features to consider:
  *   1. remember me box:
@@ -14,23 +17,40 @@ import { Link } from 'react-router-dom';
             Forgot password
           </a>
  */
+
+const onErrorMessage = "Sorry, there is some login issue.";
+
 class LogIn extends Component {
     handleLogIn = e => {
         /* prevent fields no filled */
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                console.log("debugger loc at LogIn.js line 42");
                 console.log(values);
                 let username = values.username;
                 let password = md5(username + md5(values.password));
-                /* TODO 1: add http request log in here */
-
-                /* TODO 2: fill in param to pass on successful log in */
-                this.props.onSuccessLogIn({
-                    userid: 1,
-                    session: 2,
-                    username: values.email
+                let req = JSON.stringify({
+                    user_id : username,
+                    password : password,
                 });
+
+                ajax('POST', LOGIN_ENDPOINT, req,
+                    (res) => {
+                        let result = JSON.parse(res);
+                        if (result.status === 'OK') {
+                            /* TODO: update callbacks parameter  */
+                            this.props.onSuccessLogIn({
+                                userid: 1,
+                                session: 2,
+                                username: values.email
+                            });
+                        }
+                    },
+                    /* TODO: update callbacks parameter  */
+                    () => {
+                        alert(onErrorMessage);
+                    });
             }
         });
     };
