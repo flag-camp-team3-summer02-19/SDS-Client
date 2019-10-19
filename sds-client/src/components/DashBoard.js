@@ -5,6 +5,7 @@ import SearchPanel from "./SearchPanel";
 import OrderList from "./OrderList";
 import {FakeData} from '../Constants';
 import SearchFilter from "./SearchFilter";
+import OrderDrawer from "./OrderDrawer";
 
 
 class DashBoard extends Component {
@@ -106,9 +107,11 @@ class DashBoard extends Component {
                     </div>
                     <OrderList listData={this.state.listData}
                                updateDrawer={this.updateDrawer}
-                               drawerVisible={this.state.drawerVisible}
                                itemInDrawer={this.itemInDrawer}
                     />
+                    <OrderDrawer drawerVisible={this.state.drawerVisible}
+                                 itemInDrawer={this.itemInDrawer}
+                                 updateDrawer={this.updateDrawer}/>
                 </section>
             </div>
         );

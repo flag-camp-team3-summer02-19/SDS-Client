@@ -13,6 +13,7 @@
 @import './styles/SearchPanel.css';
 @import "./styles/Order.css";
 @import './styles/OrderList.css';
+@import "./styles/OrderDrawer.css";
 
 
 body {
