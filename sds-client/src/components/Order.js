@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {Col, Divider, Drawer, Row} from "antd";
+import {Divider, Row, Steps} from "antd";
 import {ShipMethod, ShipStatus} from "../Constants";
 
-
+const {Step} = Steps;
 const pStyle = {
     fontSize: 16,
     color: 'rgba(0,0,0,0.85)',
@@ -39,6 +39,16 @@ class Order extends Component {
             <div>
                 <p style={{...pStyle, marginBottom: 24}}>Order Details</p>
                 <Row>
+                    <Steps current={this.props.item.Status}
+                           progressDot id='order-list-shipping-progress'
+                    >
+                        <Step description="Order Placed" />
+                        <Step description="In Progress" />
+                        <Step description="Delivered" />
+                    </Steps>
+                </Row>
+                <br/>
+                <Row>
                     <DescriptionItem title="Shipping From: " content={this.props.item.FromAddress}/>
                 </Row>
                 <Row>
@@ -48,12 +58,6 @@ class Order extends Component {
                     {this.props.item.ShipMethod === ShipMethod.Mobile ?
                         <DescriptionItem title="Shipping Method: " content='Auto Mobile'/> :
                         <DescriptionItem title="Shipping Method: " content='Drone'/>
-                    }
-                </Row>
-                <Row>
-                    {this.props.item.Status === ShipStatus.InProgress ?
-                        <DescriptionItem title="Shipping Status: " content='In Progress'/> :
-                        <DescriptionItem title="Shipping Status: " content='Finished'/>
                     }
                 </Row>
                 <Row>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {List, Col, Row, Drawer, Steps, Popover} from 'antd';
+import {List, Col, Row, Drawer, Steps, Skeleton} from 'antd';
 import {ShipMethod, ShipStatus, MapThumbnail_prefix, MapThumbnail_suffix, MapApiKey} from "../Constants";
 import drone from '../images/drone.png';
 import mobile from '../images/auto_mobile.png';
@@ -22,6 +22,8 @@ class OrderList extends Component {
             visible: false,
         };
         // console.log('In OrderList: ', this.state.visible);
+        this.emptyData = [
+            {OrderId:'',}]
     }
 
     showDrawer = (item) => {
@@ -33,47 +35,52 @@ class OrderList extends Component {
     };
 
     render() {
+        const loading = !this.props.listData; //undefined data means loading data, while empty(length=0) means no data
         return (
             <div>
                 <List
                     itemLayout="vertical"
                     size="large"
-                    dataSource={this.props.listData}
+                    dataSource={loading? this.emptyData: this.props.listData}
                     renderItem={item => (
                         <List.Item
                             key={item.OrderId}
-                            actions={[
+                            actions={!loading && [
                                 <span onClick={this.showDrawer.bind(this, item)}>
                                     Status: {item.Status === ShipStatus.Finished ? 'Finished' : 'In Progress'}
                                 </span>
                             ]}
                             extra={
-                                <img
+                                !loading && (
+                                    <img
                                     className='map-thumbnail'
                                     alt="MapThumbnail"
                                     src={MapApiKey === 'Google Map API' ?
                                         'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png' :
                                         MapThumbnail_prefix + convertAddressToUrl(item.CurrentLoc) + MapThumbnail_suffix + MapApiKey}
                                     onClick={this.showDrawer.bind(this, item)}
-                                />
+                                />)
                             }
                         >
-                            <List.Item.Meta
-                                title={item.OrderNote}
-                            />
-                            <Row className='simple-item'>
-                                <Col className='simple-item-address' span={2}>
-                                    From: {item.FromAddress}
-                                </Col>
-                                <Col span={10}>
-                                    {item.ShipMethod === ShipMethod.Mobile ?
-                                        <img alt='AutoMobile' src={mobile} className='simple-item-img'/> :
-                                        <img alt='Drone' src={drone} className='simple-item-img'/>}
-                                </Col>
-                                <Col className='simple-item-address' span={2}>
-                                    To: {item.ToAddress}
-                                </Col>
-                            </Row>
+                            <Skeleton loading={loading} active>
+                                <List.Item.Meta
+                                    title={item.OrderNote}
+                                />
+
+                                <Row className='simple-item'>
+                                    <Col className='simple-item-address' span={2}>
+                                        From: {item.FromAddress}
+                                    </Col>
+                                    <Col span={10}>
+                                        {item.ShipMethod === ShipMethod.Mobile ?
+                                            <img alt='AutoMobile' src={mobile} className='simple-item-img'/> :
+                                            <img alt='Drone' src={drone} className='simple-item-img'/>}
+                                    </Col>
+                                    <Col className='simple-item-address' span={2}>
+                                        To: {item.ToAddress}
+                                    </Col>
+                                </Row>
+                            </Skeleton>
                         </List.Item>
                     )}
                 />

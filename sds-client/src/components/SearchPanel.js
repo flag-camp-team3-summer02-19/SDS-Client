@@ -14,7 +14,7 @@ class SearchPanel extends Component {
 
     filterItem = (searchText) => {
         const {listData} = this.props;
-        if (!searchText) {
+        if (!searchText || !listData) {
             return listData
         }
         let ret = [];
@@ -37,9 +37,25 @@ class SearchPanel extends Component {
         this.props.updateDrawer(option.props.item, true);
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log('D/SearchPanel: componentDidUpdate');
+    }
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        console.log('D/SearchPanel: ShouldComponentUpdate');
+        return true;
+    }
+
+    componentWillUnmount() {
+        console.log('D/SearchPanel: componentWillUnmount');
+    }
+
+    componentDidMount() {
+        console.log('D/SearchPanel: componentDidMount');
+    }
 
     render() {
-        const {dataSource} = this.state;
+        const dataSource = this.state.dataSource? this.state.dataSource : [];
         const options = dataSource.map(item => (
             <Option key={item.OrderId} value={item.OrderNote} className="search-item-option" item={item}>
                 <div className="item-option-label">
