@@ -6,6 +6,7 @@ import OrderList from "./OrderList";
 import {FakeData} from '../Constants';
 import SearchFilter from "./SearchFilter";
 import OrderDrawer from "./OrderDrawer";
+import {Button} from "antd";
 
 
 class DashBoard extends Component {
@@ -78,10 +79,10 @@ class DashBoard extends Component {
             <div id="dashboard">
                 <section id="control-panel">
                     <UserPanel userId={this.state.userInfo.username}/>
-                    <button onClick={() => {
+                    <Button onClick={() => {
                         history.push('/newOrder')
                     }}> Make New Order
-                    </button>
+                    </Button>
                     {/*The following are only for simulating retrieving fake data from backend */}
                     <br/>
                     <br/>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {Button } from 'antd';
 import history from '../history';
 
@@ -20,9 +20,11 @@ class UserPanel extends Component {
     render() {
         return (
             <div id="user-panel">
-                <h3>Welcome: {this.props.userId}</h3>
-                <Button onClick={this.onClickLogout} className="logout-button">Logout</Button>
-                {this.state.loggedIn ? null : <Redirect to="/login"/>}
+                <h3>Welcome: </h3>
+                <div id='user-id-UserPanel'> {this.props.userId?this.props.userId:'NoUserLongUserIDHHHHHH@abcdefg.com'} </div>
+                <Link to="/login"> logout </Link>
+                {/*<Button onClick={this.onClickLogout} className="logout-button">Logout</Button>*/}
+                {/*{this.state.loggedIn ? null : <Redirect to="/login"/>}*/}
             </div>
         );
     }
