@@ -5,8 +5,6 @@ import SearchPanel from "./SearchPanel";
 import OrderList from "./OrderList";
 import {
     DEMO_GET_OK_ENDPOINT,
-    ShipStatus,
-    ShipMethod,
     MapApiKey,
     MapThumbnail_prefix,
     MapThumbnail_suffix
@@ -16,91 +14,6 @@ import OrderDrawer from "./OrderDrawer";
 import {Button} from "antd";
 
 import {ajax, convertAddressToUrl} from "../util";
-
-const dataSent = {status:"OK",userId:"userad@liamg.com",orders:[
-    {OrderId:'abcdefg1234',
-        OrderNote: 'gift for dad',
-        Status: ShipStatus.InProgress,
-        CurrentLoc: '37.720015,-122.458905',
-        FromAddress: '1398 Valencia St San Francisco, California(CA), 94110',
-        ToAddress: '33 Shields St San Francisco, California(CA), 94132',
-        ShipMethod: ShipMethod.Mobile,
-        PackageInfo: '3x5x4, 2lbs',
-    },
-    {OrderId:'bcdefgh2345',
-        OrderNote: 'gift for mom',
-        Status: ShipStatus.Finished,
-        CurrentLoc: '37.715342,-122.463503',
-        FromAddress: '524 Gates St San Francisco, California(CA), 94110',
-        ToAddress: '254 Bright St San Francisco, California(CA), 94132',
-        ShipMethod: ShipMethod.Drone,
-        PackageInfo: '4x3x5, 3lbs',
-    },
-    {OrderId:'cdefghi3456',
-        OrderNote: 'gift for child',
-        Status: ShipStatus.Finished,
-        CurrentLoc: '37.761364,-122.503817',
-        FromAddress: '450 Duboce Ave San Francisco, California(CA), 94117',
-        ToAddress: '1354 44th Ave San Francisco, California(CA), 94122',
-        ShipMethod: ShipMethod.Drone,
-        PackageInfo: '4x5x5, 4lbs',
-    },
-    {OrderId:'defghij4567',
-        OrderNote: 'gift for wife',
-        Status: ShipStatus.InProgress,
-        CurrentLoc: '37.797358,-122.441170',
-        FromAddress: '2701 Green St San Francisco, California(CA), 94123',
-        ToAddress: '1845 25th St San Francisco, California(CA), 94107',
-        ShipMethod: ShipMethod.Mobile,
-        PackageInfo: '6x5x5, 5lbs',
-    },
-        {OrderId:'efghijk5678',
-            OrderNote: 'The wise understand by themselves; fools follow the reports of others. \n' +
-                'Tibetan (on wisdom)',
-            Status: ShipStatus.OrderPlaced,
-            CurrentLoc: '37.797358,-122.441170',
-            FromAddress: '2701 Green St San Francisco, California(CA), 94123',
-            ToAddress: '1845 25th St San Francisco, California(CA), 94107',
-            ShipMethod: ShipMethod.Mobile,
-            PackageInfo: '6x5x5, 5lbs',
-        },
-        {OrderId:'fghijkl6789',
-            OrderNote: 'Lost time is never found again. Ben Franklin (1706-1790)',
-            Status: ShipStatus.InProgress,
-            CurrentLoc: '37.797358,-122.441170',
-            FromAddress: '2701 Green St San Francisco, California(CA), 94123',
-            ToAddress: '1845 25th St San Francisco, California(CA), 94107',
-            ShipMethod: ShipMethod.Mobile,
-            PackageInfo: '6x5x5, 5lbs',
-        },
-        {OrderId:'ghijklm7890',
-            OrderNote: "You have to guess what's in this gift",
-            Status: ShipStatus.InProgress,
-            CurrentLoc: '37.797358,-122.441170',
-            FromAddress: '2701 Green St San Francisco, California(CA), 94123',
-            ToAddress: '1845 25th St San Francisco, California(CA), 94107',
-            ShipMethod: ShipMethod.Mobile,
-            PackageInfo: '6x5x5, 5lbs',
-        },
-        {OrderId:'hijklmn8901',
-            OrderNote: 'I like this gift for my brave son',
-            Status: ShipStatus.OrderPlaced,
-            CurrentLoc: '37.797358,-122.441170',
-            FromAddress: '2701 Green St San Francisco, California(CA), 94123',
-            ToAddress: '1845 25th St San Francisco, California(CA), 94107',
-            ShipMethod: ShipMethod.Mobile,
-            PackageInfo: '6x5x5, 5lbs',
-        },
-        {OrderId:'ijklmno9012',
-            OrderNote: 'This is another gift for my lovely daughter',
-            Status: ShipStatus.OrderPlaced,
-            CurrentLoc: '37.797358,-122.441170',
-            FromAddress: '2701 Green St San Francisco, California(CA), 94123',
-            ToAddress: '1845 25th St San Francisco, California(CA), 94107',
-            ShipMethod: ShipMethod.Mobile,
-            PackageInfo: '6x5x5, 5lbs',
-        }
-]};
 
 class DashBoard extends Component {
 
@@ -209,20 +122,6 @@ class DashBoard extends Component {
                         history.push('/newOrder')
                     }}> Make New Order
                     </Button>
-                    {/*The following are only for simulating retrieving fake data from backend */}
-                    <br/>
-                    <br/>
-                    <button onClick={() => {
-                        this.componentDidMount();
-                    }}>retrieve fake data
-                    </button>
-                    <br/>
-                    <button onClick={() => {
-                        this.setState({listData: null});
-                        console.log(JSON.stringify(dataSent));
-                    }}>fake reloading
-                    </button>
-                    {/*The above are only for simulating retrieving fake data from backend */}
                 </section>
                 <section id="search-order">
                     <div className='search-bar-row'>
