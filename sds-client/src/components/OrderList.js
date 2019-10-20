@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {List, Col, Row, Skeleton} from 'antd';
-import {ShipMethod, ShipStatus, MapThumbnail_prefix, MapThumbnail_suffix, MapApiKey} from "../Constants";
+import {ShipMethod, ShipStatus, MapThumbnail_prefix, MapThumbnail_suffix, MapApiKey, ShipStatusMap} from "../Constants";
 import drone from '../images/drone.png';
 import mobile from '../images/auto_mobile.png';
 
@@ -35,7 +35,7 @@ class OrderList extends Component {
                         key={item.OrderId}
                         actions={!loading && [
                             <span onClick={this.showDrawer.bind(this, item)}>
-                                Status: {item.Status === ShipStatus.Finished ? 'Finished' : 'In Progress'}
+                                Status: {ShipStatusMap[item.Status]}
                             </span>
                         ]}
                         extra={

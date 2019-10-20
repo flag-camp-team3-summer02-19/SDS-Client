@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Divider, Row, Steps} from "antd";
-import {ShipMethod, ShipStatus} from "../Constants";
+import {ShipMethod, ShipStatus, ShipMethodMap, ShipStatusMap} from "../Constants";
 
 const {Step} = Steps;
 
@@ -13,6 +13,10 @@ const DescriptionItem = ({title, content}) => (
 );
 
 class Order extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         if (this.props.item) {
             return (
@@ -22,9 +26,9 @@ class Order extends Component {
                         <Steps current={this.props.item.Status}
                                progressDot id='order-list-shipping-progress'
                         >
-                            <Step description="Order Placed"/>
-                            <Step description="In Progress"/>
-                            <Step description="Delivered"/>
+                            {Object.keys(ShipStatus).map((currValue) => (
+                                <Step key={ShipStatus[currValue]} description={ShipStatusMap[ShipStatus[currValue]]}/>
+                            ))}
                         </Steps>
                     </Row>
                     <br/>
