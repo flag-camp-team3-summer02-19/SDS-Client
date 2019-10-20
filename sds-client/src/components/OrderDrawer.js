@@ -3,7 +3,7 @@ import Order from "./Order";
 import {Drawer} from "antd";
 
 class OrderDrawer extends Component {
-
+    //TODO: we can use ajax call to fetch up-to-date info in the future
     onClose = () => {
         this.props.updateDrawer(null,false);
     };

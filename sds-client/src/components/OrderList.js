@@ -1,17 +1,8 @@
 import React, {Component} from 'react';
-import {List, Col, Row, Drawer, Steps, Skeleton} from 'antd';
+import {List, Col, Row, Skeleton} from 'antd';
 import {ShipMethod, ShipStatus, MapThumbnail_prefix, MapThumbnail_suffix, MapApiKey} from "../Constants";
 import drone from '../images/drone.png';
 import mobile from '../images/auto_mobile.png';
-import banana from '../images/banana.jpg';
-import Order from "./Order";
-
-const {Step} = Steps;
-
-const convertAddressToUrl = (address) => {
-    address = address.replace(/\s+,\s+/gi, ',');
-    return address.replace(/\s+/gi, '+')
-};
 
 class OrderList extends Component {
     //The data in list will always use new data (from this.props)
@@ -25,7 +16,7 @@ class OrderList extends Component {
         };
         // console.log('In OrderList: ', this.state.visible);
         this.emptyData = [
-            {OrderId:'',}]
+            {OrderId: '',}]
     }
 
     showDrawer = (item) => {
@@ -38,7 +29,7 @@ class OrderList extends Component {
             <List
                 itemLayout="vertical"
                 size="large"
-                dataSource={loading? this.emptyData: this.props.listData}
+                dataSource={loading ? this.emptyData : this.props.listData}
                 renderItem={item => (
                     <List.Item
                         key={item.OrderId}
@@ -50,13 +41,11 @@ class OrderList extends Component {
                         extra={
                             !loading && (
                                 <img
-                                className='map-thumbnail'
-                                alt="MapThumbnail"
-                                src={MapApiKey === 'Google Map API' ?
-                                    'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png' :
-                                    MapThumbnail_prefix + convertAddressToUrl(item.CurrentLoc) + MapThumbnail_suffix + MapApiKey}
-                                onClick={this.showDrawer.bind(this, item)}
-                            />)
+                                    className='map-thumbnail'
+                                    alt="MapThumbnail"
+                                    src={item.thumbImgSource}
+                                    onClick={this.showDrawer.bind(this, item)}
+                                />)
                         }
                     >
                         <Skeleton loading={loading} active>

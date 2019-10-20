@@ -10,6 +10,7 @@
 */
 export const LOGIN_ENDPOINT = "https://google.com";
 export const REGISTER_ENDPOINT = "https://google.com";
+export const DEMO_GET_OK_ENDPOINT = "https://54fe8a19-50f5-461f-8dbe-cee1829c17a5.mock.pstmn.io/userData";
 
 export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipMethod = {Mobile : 3, Drone : 4};

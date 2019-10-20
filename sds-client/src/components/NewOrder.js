@@ -31,7 +31,7 @@ class NewOrder extends Component {
                 /* TODO 1: newOrder is made successfully
                     handle any onSuccessful callback to update dashboard
                     and redirect to dashboard */
-                history.push("/");
+                history.push("/dashboard");
             }
 
             return {
