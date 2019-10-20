@@ -97,10 +97,12 @@ class PackageInfo extends React.Component {
                     <button onClick={this.props.updateOrder}> Choose a delivery method </button>
                 </div>
                 <div id="mapDetail">
-                    <MapContainer startAddressLat={37.766345} startAddressLng={-122.512029}
-                                    destAddressLat={37.752033} destAddressLng={-122.450996}/>
-                                    <MapHelper startAddressLat={37.766345} startAddressLng={-122.512029}
-                                               destAddressLat={37.752033} destAddressLng={-122.450996}/>
+                    {/*<MapContainer startAddressLat={37.752033} startAddressLng={-122.450996}*/}
+                    {/*                destAddressLat={37.771944} destAddressLng={-122.446142}/>*/}
+
+                    {/*deliveryType = 0 ---- Drone, deliveryType = 1 ---- Robots*/}
+                                    <MapHelper startAddressLat={37.752033} startAddressLng={-122.450996}
+                                               destAddressLat={37.771944} destAddressLng={-122.446142} deliveryType={1}/>
                 </div>
 
             </div>

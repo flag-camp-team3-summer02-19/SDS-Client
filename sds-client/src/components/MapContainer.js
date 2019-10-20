@@ -26,16 +26,26 @@ const IconRobot = {
 class Map extends React.Component {
 
     // path[0] is the nearest warehouse, path[1] is starting address, path[2] is destination address.
+    // path = [
+    //     {lat: 37.766345, lng: -122.512029, distance: 0},
+    //     {lat: 37.752033, lng: -122.450996, distance: 0},
+    //     {lat: 37.771944, lng: -122.446142, distance: 0}
+    // ];
     path = [
         {lat: 37.766345, lng: -122.512029, distance: 0},
-        {lat: 37.752033, lng: -122.450996, distance: 0},
-        {lat: 37.771944, lng: -122.446142, distance: 0}
+        {lat: 0, lng: 0, distance: 0},
+        {lat: 0, lng: 0, distance: 0}
     ];
 
     constructor(props) {
         super(props);
         console.log("inside constructor of MapContainer");
         console.log(this.props);
+        this.path[1].lat = this.props.props.startAddressLat;
+        this.path[1].lng = this.props.props.startAddressLng;
+        this.path[2].lat = this.props.props.destAddressLat;
+        this.path[2].lng = this.props.props.destAddressLng;
+        console.log(this.path);
         this.state = {
             warehouse: [{latitude: 37.766345, longitude: -122.512029},
                 {latitude: 37.797750, longitude: -122.408731},
@@ -304,11 +314,16 @@ class Map extends React.Component {
 
 const MapContainer = withScriptjs(withGoogleMap(Map))
 
-export default () => (
-    <MapContainer
+export default (props) => {
+    console.log("hello inside export");
+    console.log(props);
+    return (<MapContainer
+        props={props}
         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM&v=3.exp&libraries=geometry,drawing,places"
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={{ height: `400px`, width: '800px' }} />}
         mapElement={<div style={{ height: `100%` }} />}
-    />
-)
+    />)
+};
+
+
