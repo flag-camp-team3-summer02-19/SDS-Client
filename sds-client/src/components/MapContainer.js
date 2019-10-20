@@ -42,7 +42,7 @@ class Map extends React.Component {
             initialDate: new Date(),
             startAddress: "",
             destAddress: "",
-
+            sTodCode: 1,
             directions: "",
         };
         this.onAddressChange = this.onAddressChange.bind(this);
@@ -88,7 +88,6 @@ class Map extends React.Component {
                 this.path[1].lat = lat;
                 this.path[1].lng = lng;
                 //this.setState({startAddressCoords: {lat, lng}});
-                //start = new window.google.maps.LatLng(lat, lng);
                 let minDistance = 100000000;
                 for(let i = 0; i < 3; i++) {
                     const lat1 = this.state.warehouse[i].latitude;
@@ -110,12 +109,30 @@ class Map extends React.Component {
                         this.path[0].lat = lat1;
                         this.path[0].lng = lng1;
                     }
-                }
+                };
+                if (this.state.sTodCode == 0) {
+                    const DirectionsService = new window.google.maps.DirectionsService();
+                    var request = {
+                        origin: new window.google.maps.LatLng(this.path[1].lat, this.path[1].lng),
+                        destination: new window.google.maps.LatLng(this.path[2].lat, this.path[2].lng),
+                        travelMode: window.google.maps.DirectionsTravelMode.DRIVING
+                    };
+                    DirectionsService.route(request, (response, status) => {
+                        if (status == window.google.maps.DirectionsStatus.OK) {
+                            this.setState({directions: response});
+                        } else {
+                            console.log("error loading directionsService");
+                        }
+                    });
+                };
+                this.setState({sTodCode: -1});
             },
             error => {
                 console.error(error);
-            }
+            },
         );
+        // force getting start address to execute first!
+        this.sleep(100);
 
         Geocode.fromAddress(this.state.destAddress).then(
             response => {
@@ -123,28 +140,41 @@ class Map extends React.Component {
                 this.path[2].lat = lat;
                 this.path[2].lng = lng;
                 //this.setState({destAddressCoords: {lat, lng}});
-                //end = new window.google.maps.LatLng(lat, lng);
+                console.log("in changing dest address");
+                console.log(this.path[0]);
+                console.log(this.path[1]);
+
+                // Enable robots directions service.
+                if(this.state.sTodCode == -1) {
+                    const DirectionsService = new window.google.maps.DirectionsService();
+                    var request = {
+                        origin: new window.google.maps.LatLng(this.path[1].lat, this.path[1].lng),
+                        destination: new window.google.maps.LatLng(this.path[2].lat, this.path[2].lng),
+                        travelMode: window.google.maps.DirectionsTravelMode.DRIVING
+                    };
+                    DirectionsService.route(request, (response, status) => {
+                        if (status == window.google.maps.DirectionsStatus.OK) {
+                            this.setState({directions: response});
+                        } else {
+                            console.log("error loading directionsService");
+                        }
+                    });
+                    this.setState({sTodCode: 0});
+                }
             },
             error => {
                 console.error(error);
             }
         );
+    }
 
-        // Enable robots directions service.
-        const DirectionsService = new window.google.maps.DirectionsService();
-
-        var request = {
-            origin: new window.google.maps.LatLng(this.path[1].lat, this.path[1].lng),
-            destination: new window.google.maps.LatLng(this.path[2].lat, this.path[2].lng),
-            travelMode: window.google.maps.DirectionsTravelMode.DRIVING
-        };
-        DirectionsService.route(request, (response, status) => {
-            if (status == window.google.maps.DirectionsStatus.OK) {
-                this.setState({directions: response});
-            } else {
-                console.log("error loading directionsService");
+    sleep(milliseconds) {
+        var start = new Date().getTime();
+        for (var i = 0; i < 1e7; i++) {
+            if ((new Date().getTime() - start) > milliseconds){
+                break;
             }
-        });
+        }
     }
 
     moveObject = () => {
@@ -215,8 +245,12 @@ class Map extends React.Component {
             if (i === 0) {
                 this.path[i].distance = 0;
             }
+            // console.log("hello inside for loop");
+            // console.log(this.path);
             const lat1 = this.path[i].lat;
             const lng1 = this.path[i].lng;
+            // console.log("lati and lngi");
+            // console.log(lat1, lng1);
             const latLong1 = new window.google.maps.LatLng(lat1, lng1)
             const lat2 = this.path[0].lat;
             const lng2 = this.path[0].lng;
@@ -227,10 +261,10 @@ class Map extends React.Component {
                 latLong1,
                 latLong2
             )
+            //console.log("this is caled distance")
+            //console.log(distance);
             this.path[i].distance = distance;
         }
-        console.log("hello")
-        console.log(this.path)
     }
 
     render = () => {
