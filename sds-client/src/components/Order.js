@@ -13,9 +13,6 @@ const DescriptionItem = ({title, content}) => (
 );
 
 class Order extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         if (this.props.item) {
@@ -55,7 +52,7 @@ class Order extends Component {
                     <img
                         className='map-details'
                         alt="MapDetails"
-                        src='https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png'
+                        src={this.props.mapDetailsUrl}
                     />
                 </div>
             );
