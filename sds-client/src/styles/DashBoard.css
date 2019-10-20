@@ -2,9 +2,23 @@
     padding-bottom: 20px;
     background-color: rgb(245, 245, 245);
     display: flex;
+    justify-content: space-around;
 }
 
 #control-panel {
     padding-right: 10px;
+    /*flex-grow: 0;*/
+    width: 15%;
 }
 
+#search-order {
+    /*flex-grow:1;*/
+    width: 85%;
+    padding-right: 5px;
+}
+
+.search-bar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

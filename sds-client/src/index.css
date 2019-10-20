@@ -9,18 +9,24 @@
 @import './styles/PackageInfo.css';
 @import './styles/SelectMethod.css';
 @import './styles/PaymentMethod.css';
-@import './styles/MapContainer.css';
+@import './styles/UserPanel.css';
+@import './styles/SearchPanel.css';
+@import "./styles/Order.css";
+@import './styles/OrderList.css';
+@import "./styles/OrderDrawer.css";
+@import "./styles/MapContainer.css";
+
 
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  monospace;
 }

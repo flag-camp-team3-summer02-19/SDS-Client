@@ -31,25 +31,28 @@ class App extends React.Component {
             <div className="App">
                 <Route path="/" exact>
                     {this.state.loggedIn ?
-                        <Redirect to="/dashboard" /> :
-                        <Redirect to="/login" />}
+                        <Redirect to="/dashboard"/> :
+                        <Redirect to="/login"/>}
                 </Route>
                 <Route path="/login" exact>
-                    <LogIn onSuccessLogIn={this.onSuccessLogIn} />
+                    <LogIn onSuccessLogIn={this.onSuccessLogIn}/>
                 </Route>
                 <Route path="/register" exact>
-                    <Register onSuccessRegister={this.onSuccessLogIn} />
+                    <Register onSuccessRegister={this.onSuccessLogIn}/>
                 </Route>
-                <Route path="/dashboard" exact>
-                    <DashBoard userInfo={this.state.userInfo}/>
-                </Route>
+
+                <Route path="/dashboard" exact
+                       render={(props) =>
+                           <DashBoard userInfo={this.state.userInfo} match={props.match}/>}
+                />
+
                 <Route path="/newOrder">
                     <NewOrder
                         userInfo={this.state.userInfo}
                         pathname="/newOrder"
                     />
                 </Route>
-                <BottomNavBar />
+                <BottomNavBar/>
             </div>
         );
     }

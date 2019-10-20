@@ -33,7 +33,9 @@ class Map extends React.Component {
     ];
 
     constructor(props) {
-        super(props)
+        super(props);
+        console.log("inside constructor of MapContainer");
+        console.log(this.props);
         this.state = {
             warehouse: [{latitude: 37.766345, longitude: -122.512029},
                 {latitude: 37.797750, longitude: -122.408731},
@@ -267,7 +269,7 @@ class Map extends React.Component {
         }
     }
 
-    render = () => {
+    render() {
         return (
             <GoogleMap
                 defaultZoom={12}

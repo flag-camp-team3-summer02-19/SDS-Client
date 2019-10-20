@@ -1,0 +1,18 @@
+.order-title-in-drawer {
+    margin-bottom: 24px;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.85);
+    line-height: 24px;
+    display: block;
+}
+.order-description-drawer {
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 7px;
+    color: rgba(0,0,0,0.65);
+}
+.order-description-title-drawer {
+    margin-right: 8px;
+    display: inline-block;
+    color: rgba(0,0,0,0.85);
+}

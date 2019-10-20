@@ -10,7 +10,7 @@ class BottomNavBar extends Component {
                 </section>
                 <section>
                     <h2>About Us</h2>
-                    <ul>
+                    <ul className='bottom-list'>
                         <li>Haoyan Zhang</li>
                         <li>Chuan He</li>
                         <li>Xinrong Zhao</li>

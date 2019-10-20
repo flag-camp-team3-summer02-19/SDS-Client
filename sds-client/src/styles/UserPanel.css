@@ -1,0 +1,10 @@
+#user-id-UserPanel {
+    overflow: hidden;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    margin-bottom: 5px;
+}
+
+#user-panel {
+    margin-bottom: 15px;
+}

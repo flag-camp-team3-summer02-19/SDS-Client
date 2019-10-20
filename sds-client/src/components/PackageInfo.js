@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Input, InputNumber, DatePicker } from 'antd';
 import MapContainer from "./MapContainer";
+import MapHelper from "./MapHelper";
 
 function onChange(value) {
     console.log('changed', value);
@@ -71,7 +72,7 @@ class DateRange extends React.Component {
     }
 }
 
-class PackageInfo extends Component {
+class PackageInfo extends React.Component {
 
     render() {
         return (
@@ -96,7 +97,10 @@ class PackageInfo extends Component {
                     <button onClick={this.props.updateOrder}> Choose a delivery method </button>
                 </div>
                 <div id="mapDetail">
-                    <MapContainer onChange={this.handleAddressChange}/>
+                    <MapContainer startAddressLat={37.766345} startAddressLng={-122.512029}
+                                    destAddressLat={37.752033} destAddressLng={-122.450996}/>
+                                    <MapHelper startAddressLat={37.766345} startAddressLng={-122.512029}
+                                               destAddressLat={37.752033} destAddressLng={-122.450996}/>
                 </div>
 
             </div>
@@ -105,3 +109,6 @@ class PackageInfo extends Component {
 }
 
 export default PackageInfo;
+// path={[{lat: 37.766345, lng: -122.512029},
+// {lat: 37.752033, lng: -122.450996},
+// {lat: 37.771944, lng: -122.446142}]}
