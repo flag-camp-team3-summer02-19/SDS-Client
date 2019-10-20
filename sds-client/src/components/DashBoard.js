@@ -53,7 +53,53 @@ const dataSent = {status:"OK",userId:"userad@liamg.com",orders:[
         ToAddress: '1845 25th St San Francisco, California(CA), 94107',
         ShipMethod: ShipMethod.Mobile,
         PackageInfo: '6x5x5, 5lbs',
-    }
+    },
+        {OrderId:'efghijk5678',
+            OrderNote: 'The wise understand by themselves; fools follow the reports of others. \n' +
+                'Tibetan (on wisdom)',
+            Status: ShipStatus.OrderPlaced,
+            CurrentLoc: '37.797358,-122.441170',
+            FromAddress: '2701 Green St San Francisco, California(CA), 94123',
+            ToAddress: '1845 25th St San Francisco, California(CA), 94107',
+            ShipMethod: ShipMethod.Mobile,
+            PackageInfo: '6x5x5, 5lbs',
+        },
+        {OrderId:'fghijkl6789',
+            OrderNote: 'Lost time is never found again. Ben Franklin (1706-1790)',
+            Status: ShipStatus.InProgress,
+            CurrentLoc: '37.797358,-122.441170',
+            FromAddress: '2701 Green St San Francisco, California(CA), 94123',
+            ToAddress: '1845 25th St San Francisco, California(CA), 94107',
+            ShipMethod: ShipMethod.Mobile,
+            PackageInfo: '6x5x5, 5lbs',
+        },
+        {OrderId:'ghijklm7890',
+            OrderNote: "You have to guess what's in this gift",
+            Status: ShipStatus.InProgress,
+            CurrentLoc: '37.797358,-122.441170',
+            FromAddress: '2701 Green St San Francisco, California(CA), 94123',
+            ToAddress: '1845 25th St San Francisco, California(CA), 94107',
+            ShipMethod: ShipMethod.Mobile,
+            PackageInfo: '6x5x5, 5lbs',
+        },
+        {OrderId:'hijklmn8901',
+            OrderNote: 'I like this gift for my brave son',
+            Status: ShipStatus.OrderPlaced,
+            CurrentLoc: '37.797358,-122.441170',
+            FromAddress: '2701 Green St San Francisco, California(CA), 94123',
+            ToAddress: '1845 25th St San Francisco, California(CA), 94107',
+            ShipMethod: ShipMethod.Mobile,
+            PackageInfo: '6x5x5, 5lbs',
+        },
+        {OrderId:'ijklmno9012',
+            OrderNote: 'This is another gift for my lovely daughter',
+            Status: ShipStatus.OrderPlaced,
+            CurrentLoc: '37.797358,-122.441170',
+            FromAddress: '2701 Green St San Francisco, California(CA), 94123',
+            ToAddress: '1845 25th St San Francisco, California(CA), 94107',
+            ShipMethod: ShipMethod.Mobile,
+            PackageInfo: '6x5x5, 5lbs',
+        }
 ]};
 
 class DashBoard extends Component {
@@ -68,8 +114,6 @@ class DashBoard extends Component {
         };
         this.itemInDrawer = null;
     }
-
-
 
     //TODO: only fetch data when refresh this page or redirect to this page? (this.props.history)
     componentDidMount() {
@@ -175,30 +219,9 @@ class DashBoard extends Component {
                     <br/>
                     <button onClick={() => {
                         this.setState({listData: null});
+                        console.log(JSON.stringify(dataSent));
                     }}>fake reloading
                     </button>
-                    <button onClick={() =>
-                    {
-                        if(this.state.imageSource) {
-                            this.setState({imageSource:null})
-                        } else {
-                            ajax('GET', 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',null,
-                            (rt)=>{
-                                const base64 = btoa(
-                                    new Uint8Array(rt).reduce(
-                                        (data, byte) => data + String.fromCharCode(byte),
-                                        '',
-                                    ),
-                                );
-                                // const base64 = btoa(rt);
-                                this.setState({imageSource:'data:;base64,' + base64})
-                            },
-                            ()=>{
-                                console.log("I don't what is the error");
-                            }, true)
-                        }
-                    }}> on/off image: ajax call</button>
-                    <img src={this.state.imageSource} />
                     {/*The above are only for simulating retrieving fake data from backend */}
                 </section>
                 <section id="search-order">
