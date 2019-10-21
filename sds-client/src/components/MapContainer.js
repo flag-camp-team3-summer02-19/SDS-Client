@@ -122,7 +122,7 @@ class Map extends React.Component {
                         this.path[0].lng = lng1;
                     }
                 };
-                if (this.state.sTodCode == 0) {
+                if (this.state.sTodCode === 0) {
                     const DirectionsService = new window.google.maps.DirectionsService();
                     var request = {
                         origin: new window.google.maps.LatLng(this.path[1].lat, this.path[1].lng),
@@ -130,7 +130,7 @@ class Map extends React.Component {
                         travelMode: window.google.maps.DirectionsTravelMode.DRIVING
                     };
                     DirectionsService.route(request, (response, status) => {
-                        if (status == window.google.maps.DirectionsStatus.OK) {
+                        if (status === window.google.maps.DirectionsStatus.OK) {
                             this.setState({directions: response});
                         } else {
                             console.log("error loading directionsService");
@@ -157,7 +157,7 @@ class Map extends React.Component {
                 console.log(this.path[1]);
 
                 // Enable robots directions service.
-                if(this.state.sTodCode == -1) {
+                if(this.state.sTodCode === -1) {
                     const DirectionsService = new window.google.maps.DirectionsService();
                     var request = {
                         origin: new window.google.maps.LatLng(this.path[1].lat, this.path[1].lng),
@@ -165,7 +165,7 @@ class Map extends React.Component {
                         travelMode: window.google.maps.DirectionsTravelMode.DRIVING
                     };
                     DirectionsService.route(request, (response, status) => {
-                        if (status == window.google.maps.DirectionsStatus.OK) {
+                        if (status === window.google.maps.DirectionsStatus.OK) {
                             this.setState({directions: response});
                         } else {
                             console.log("error loading directionsService");
