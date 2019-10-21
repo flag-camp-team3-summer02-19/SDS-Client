@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import { Input, InputNumber, DatePicker } from 'antd';
+import React from 'react';
+import { InputNumber, DatePicker } from 'antd';
 import MapContainer from "./MapContainer";
 import MapHelper from "./MapHelper";
 

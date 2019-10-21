@@ -4,7 +4,7 @@ import { Form, Icon, Input, Button } from 'antd';
 import md5 from 'md5';
 import { Link } from 'react-router-dom';
 import { LOGIN_ENDPOINT } from '../Constants';
-import { ajax, Dialog } from '../util';
+import { ajax } from '../util';
 
 /* More Features to consider:
  *   1. remember me box:
@@ -50,6 +50,12 @@ class LogIn extends Component {
                     /* TODO: update callbacks parameter  */
                     () => {
                         alert(onErrorMessage);
+                        // TODO: for development purpose, remember to delete afterwards
+                        this.props.onSuccessLogIn({
+                            userid: 1,
+                            session: 2,
+                            username: values.email
+                        });
                     });
             }
         });
