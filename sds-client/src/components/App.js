@@ -15,7 +15,7 @@ class App extends React.Component {
     state = {
         loggedIn: false,
         userInfo: {}
-    }
+    };
 
     onSuccessLogIn = values => {
         this.setState({
@@ -23,7 +23,7 @@ class App extends React.Component {
             userInfo: values
         });
         history.push('/');
-    }
+    };
 
     render() {
         console.log(this.state);

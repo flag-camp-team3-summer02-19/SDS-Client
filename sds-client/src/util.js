@@ -20,7 +20,6 @@ export function ajax(method, url, data, successCallback, errorCallback, isImage)
             if(isImage) {
                 successCallback(xhr.response);
             } else {successCallback(xhr.responseText);}
-
         } else {
             errorCallback();
         }
@@ -46,5 +45,5 @@ export function ajax(method, url, data, successCallback, errorCallback, isImage)
 export function convertAddressToUrl(address) {
     address = address.replace(/\s+,\s+/gi, ',');
     return address.replace(/\s+/gi, '+')
-};
+}
 

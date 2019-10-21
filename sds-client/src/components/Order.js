@@ -4,7 +4,6 @@ import {ShipMethod, ShipStatus, ShipMethodMap, ShipStatusMap} from "../Constants
 
 const {Step} = Steps;
 
-
 const DescriptionItem = ({title, content}) => (
     <div className='order-description-drawer'>
         <p className='order-description-title-drawer'>{title}: </p>

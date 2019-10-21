@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import { Input, InputNumber, DatePicker } from 'antd';
 import MapContainer from "./MapContainer";
-
-const { TextArea } = Input;
+import MapHelper from "./MapHelper";
 
 function onChange(value) {
     console.log('changed', value);
@@ -73,7 +72,8 @@ class DateRange extends React.Component {
     }
 }
 
-class PackageInfo extends Component {
+class PackageInfo extends React.Component {
+
     render() {
         return (
             <div id="packageInfo">
@@ -89,16 +89,6 @@ class PackageInfo extends Component {
                     <br/>
                     <InputNumber id="weight" min={1} max={100000} defaultValue={3} onChange={onChange} />
                     <br/>
-                    <div style={{ margin: '24px 0' }} />
-                    <TextArea
-                        placeholder="Please enter starting address. (e.g. 4327 20th St,San Francisco,CA 94114)"
-                        autosize={{ minRows: 2, maxRows: 6 }}
-                    />
-                    <div style={{ margin: '24px 0' }} />
-                    <TextArea
-                        placeholder="Please enter destination address. (e.g. 3832 21th St,San Francisco,CA 94114)"
-                        autosize={{ minRows: 2, maxRows: 6 }}
-                    />
                     <br/>
                     <span>Choose pick up date below</span>
                     <br/>
@@ -107,7 +97,12 @@ class PackageInfo extends Component {
                     <button onClick={this.props.updateOrder}> Choose a delivery method </button>
                 </div>
                 <div id="mapDetail">
-                    <MapContainer />
+                    {/*<MapContainer startAddressLat={37.752033} startAddressLng={-122.450996}*/}
+                    {/*                destAddressLat={37.771944} destAddressLng={-122.446142}/>*/}
+
+                    {/*deliveryType = 0 ---- Drone, deliveryType = 1 ---- Robots*/}
+                                    <MapHelper startAddressLat={37.752033} startAddressLng={-122.450996}
+                                               destAddressLat={37.771944} destAddressLng={-122.446142} deliveryType={1}/>
                 </div>
 
             </div>
@@ -116,3 +111,6 @@ class PackageInfo extends Component {
 }
 
 export default PackageInfo;
+// path={[{lat: 37.766345, lng: -122.512029},
+// {lat: 37.752033, lng: -122.450996},
+// {lat: 37.771944, lng: -122.446142}]}
