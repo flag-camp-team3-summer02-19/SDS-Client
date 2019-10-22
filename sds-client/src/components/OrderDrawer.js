@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import Order from "./Order";
 import {Drawer} from "antd";
-import {MapApiKey, MapThumbnail_prefix, MapThumbnail_suffix} from "../Constants";
-import {ajax, convertAddressToUrl} from "../util";
+import {ajax} from "../util";
 
 class OrderDrawer extends Component {
 
     state = {
-        mapDetailsUrl: null,
+        mapLoc: {},
     };
 
     //TODO: we can use ajax call to fetch up-to-date info in the future
@@ -17,14 +16,23 @@ class OrderDrawer extends Component {
 
     afterVisibleChange = (visible) => {
         if(visible) {
-            const thumbnailUrl = MapApiKey === 'Google Map API' ?
-                'https://images.unsplash.com/photo-1534050359320-02900022671e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60' :
-                MapThumbnail_prefix + convertAddressToUrl(this.props.itemInDrawer.CurrentLoc) + MapThumbnail_suffix + MapApiKey;
-            ajax('GET', thumbnailUrl, null,
+            //TODO: do not need to fetch data from server if this.props.itemInDrawer.Status === ShipStatus.Finished
+            const CURRENT_LOC_ENDPOINT = "https://google.com";
+            this.setState({mapLoc:{}});
+            ajax('GET', CURRENT_LOC_ENDPOINT, null,
                 (rt) => {
-                    const base64 = btoa(new Uint8Array(rt).reduce((data, byte) => data + String.fromCharCode(byte),'',),);
-                    this.setState({mapDetailsUrl: 'data:;base64,' + base64});
-                },() => {console.log("ajax call for map details failed on item: " + this.props.itemInDrawer.OrderId);}, true);
+                    if(rt.status === "OK") {
+                        //TODO: refine the code below based on backend implementation
+                        const mapLoc = {curLat:rt.curLat, curLon:rt.curLon, destLat:rt.destLat, destLon:rt.destLon};
+                        this.setState({mapLoc: mapLoc});
+                    }
+                },
+                () => {
+                    console.log("ajax call for map details failed on item: " + this.props.itemInDrawer.OrderId);
+                    //TODO: the follosing is just a demo, will be deleted in the final release
+                    const mapLoc = {curLat:37.720015, curLon:-122.458905, destLat:37.771944, destLon:-122.446142};
+                    this.setState({mapLoc: mapLoc});
+                })
         } else {
             //TODO: delete this line later
             this.setState({mapDetailsUrl: null})
@@ -34,7 +42,7 @@ class OrderDrawer extends Component {
     render() {
         return (
             <Drawer
-                width={640}
+                width={610}
                 placement="right"
                 closable={false}
                 onClose={this.onClose}
@@ -42,7 +50,7 @@ class OrderDrawer extends Component {
                 visible={this.props.drawerVisible}
                 className='order-drawer'
             >
-                <Order item={this.props.itemInDrawer} mapDetailsUrl={this.state.mapDetailsUrl}/>
+                <Order item={this.props.itemInDrawer} mapLoc={this.state.mapLoc}/>
             </Drawer>
         );
     }

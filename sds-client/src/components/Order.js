@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {Divider, Row, Steps} from "antd";
-import {ShipMethod, ShipStatus, ShipMethodMap, ShipStatusMap} from "../Constants";
+import {ShipMethod, ShipStatus, ShipStatusMap} from "../Constants";
+import MapHelper from "./MapHelper";
+import loading_map from '../assets/images/loading_img.gif';
+
 
 const {Step} = Steps;
 
@@ -48,11 +51,15 @@ class Order extends Component {
                     </Row>
                     <Divider/>
                     <p className='order-title-in-drawer'>Map details</p>
-                    <img
-                        className='map-details'
-                        alt="MapDetails"
-                        src={this.props.mapDetailsUrl}
-                    />
+                    {/*parseFloat(this.props.item.CurrentLoc.split(",")[1])*/}
+                    {Object.keys(this.props.mapLoc).length!==0 ?
+                        <MapHelper startAddressLat={this.props.mapLoc.curLat} startAddressLng={this.props.mapLoc.curLon}
+                               destAddressLat={this.props.mapLoc.destLat} destAddressLng={this.props.mapLoc.destLon} deliveryType={this.props.item.ShipMethod}/>
+                               : <img className='map-details' src={loading_map} alt="map details map"/>}
+                    {/*{Object.keys(this.props.mapLoc).length!==0 ?*/}
+                    {/*    <MapHelper startAddressLat={37.720015} startAddressLng={-122.458905}*/}
+                    {/*               destAddressLat={37.771944} destAddressLng={-122.446142} deliveryType={4-this.props.item.ShipMethod}/>*/}
+                    {/*    : <img className='map-details' src={loading_map}/>}*/}
                 </div>
             );
         } else {

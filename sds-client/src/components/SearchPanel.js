@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Icon, Input, AutoComplete} from 'antd';
 import {ShipMethod} from "../Constants";
-import mobile from "../images/auto_mobile.png";
-import drone from "../images/drone.png";
+import mobile from "../assets/images/auto_mobile.png";
+import drone from "../assets/images/drone.png";
 
 const {Option, OptGroup} = AutoComplete;
 
