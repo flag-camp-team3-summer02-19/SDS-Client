@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {List, Col, Row, Skeleton} from 'antd';
-import {ShipMethod, ShipStatus, MapThumbnail_prefix, MapThumbnail_suffix, MapApiKey, ShipStatusMap} from "../Constants";
-import drone from '../images/drone.png';
-import mobile from '../images/auto_mobile.png';
+import {ShipMethod, ShipStatusMap} from "../Constants";
+import drone from '../assets/images/drone.png';
+import mobile from '../assets/images/auto_mobile.png';
 
 class OrderList extends Component {
     //The data in list will always use new data (from this.props)
