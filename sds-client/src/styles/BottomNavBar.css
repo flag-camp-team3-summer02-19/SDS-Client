@@ -1,12 +1,12 @@
 footer {
-    background-color: rgb(200, 200, 200);
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-}
+     background-color: rgb(200, 200, 200);
+     display: flex;
+     flex-direction: column;
+     flex-wrap: wrap;
+     justify-content: flex-start;
+ }
 
-ul li{
+.bottom-list li{
     display: inline;
     width: auto;
     padding: 6px;

@@ -3,10 +3,18 @@ import history from '../history';
 import UserPanel from "./UserPanel";
 import SearchPanel from "./SearchPanel";
 import OrderList from "./OrderList";
-import {FakeData} from '../Constants';
+import {
+    DEMO_GET_OK_ENDPOINT,
+    MapApiKey,
+    MapThumbnail_prefix,
+    MapThumbnail_suffix
+} from '../Constants';
 import SearchFilter from "./SearchFilter";
 import OrderDrawer from "./OrderDrawer";
 import {Button} from "antd";
+
+import {ajax, convertAddressToUrl} from "../util";
+
 
 class DashBoard extends Component {
 
@@ -19,12 +27,45 @@ class DashBoard extends Component {
             isListDataValid: false,
         };
         this.itemInDrawer = null;
-        // this.filteredData = FakeData;
     }
 
-
-    //TODO: do ajax call to fetch Order data from server
     //TODO: only fetch data when refresh this page or redirect to this page? (this.props.history)
+    componentDidMount() {
+        //do ajax call to fetch simple Order data from server
+        ajax('GET',DEMO_GET_OK_ENDPOINT,JSON.stringify(this.state.userInfo), this.onDataUpdated, this.onDataUpdateFailed);
+    }
+
+    ajax_recursive_wrapper = (arr, currIdx) => {
+        if(currIdx < arr.length) {
+            const thumbnailUrl = MapApiKey === 'Google Map API' ?
+                'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png' :
+                MapThumbnail_prefix + convertAddressToUrl(arr[currIdx].CurrentLoc) + MapThumbnail_suffix + MapApiKey;
+            ajax('GET', thumbnailUrl, null,
+                (rt) => {
+                    const base64 = btoa(new Uint8Array(rt).reduce((data, byte) => data + String.fromCharCode(byte),'',),);
+                    arr[currIdx].thumbImgSource = 'data:;base64,' + base64;
+                    this.ajax_recursive_wrapper(arr, currIdx + 1);
+                },() => {console.log("ajax_recursive_wrapper failed on item: " + currIdx);}, true);
+        } else {
+            //only re-render map thumbnail after all images are downloaded.
+            this.setState({listData: arr});
+        }
+    };
+    onDataUpdated = (resp) => {
+        let result = JSON.parse(resp);
+        //the following is temp code to add thumbnailSource in each item.
+        let result_clone = Object.assign([],result);
+        //TODO: update these codes after discuss with backend
+        this.setState({listData: result.orders});
+
+        //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
+        this.ajax_recursive_wrapper(result_clone.orders, 0);
+
+    };
+
+    onDataUpdateFailed = () => {
+        console.log("ajax failed on fetching order data");
+    };
 
     // put openDrawer here since <OrderList/> and <SearchPanel/> both want to open and close drawer
     updateDrawer = (item, toOpenDrawer) => {
@@ -82,19 +123,6 @@ class DashBoard extends Component {
                         history.push('/newOrder')
                     }}> Make New Order
                     </Button>
-                    {/*The following are only for simulating retrieving fake data from backend */}
-                    <br/>
-                    <br/>
-                    <button onClick={() => {
-                        this.setState({listData: FakeData});
-                    }}>retrieve fake data
-                    </button>
-                    <br/>
-                    <button onClick={() => {
-                        this.setState({listData: null});
-                    }}>fake reloading
-                    </button>
-                    {/*The above are only for simulating retrieving fake data from backend */}
                 </section>
                 <section id="search-order">
                     <div className='search-bar-row'>

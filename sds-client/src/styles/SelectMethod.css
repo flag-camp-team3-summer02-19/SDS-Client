@@ -1,0 +1,13 @@
+#selectMethod {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+#interaction-panel {
+    margin: 10px;
+}
+
+.map-container {
+    margin: auto;
+}

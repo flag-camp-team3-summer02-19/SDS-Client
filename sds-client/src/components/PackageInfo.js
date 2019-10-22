@@ -1,75 +1,11 @@
-import React, {Component} from 'react';
-import { Input, InputNumber, DatePicker } from 'antd';
+import React from 'react';
+import { InputNumber, DatePicker } from 'antd';
+import DateRange from './DateRange';
 import MapContainer from "./MapContainer";
 import MapHelper from "./MapHelper";
 
 function onChange(value) {
     console.log('changed', value);
-}
-
-class DateRange extends React.Component {
-    state = {
-        startValue: null,
-        endValue: null,
-        endOpen: false,
-    };
-
-    disabledStartDate = startValue => {
-        const { endValue } = this.state;
-        if (!startValue || !endValue) {
-            return false;
-        }
-        return startValue.valueOf() > endValue.valueOf();
-    };
-
-    disabledEndDate = endValue => {
-        const { startValue } = this.state;
-        if (!endValue || !startValue) {
-            return false;
-        }
-        return endValue.valueOf() <= startValue.valueOf();
-    };
-
-    dateonChange = (field, value) => {
-        this.setState({
-            [field]: value,
-        });
-    };
-
-    onStartChange = value => {
-        this.dateonChange('startValue', value);
-    };
-
-    onEndChange = value => {
-        this.dateonChange('endValue', value);
-    };
-
-    handleStartOpenChange = open => {
-        if (!open) {
-            this.setState({ endOpen: true });
-        }
-    };
-
-    handleEndOpenChange = open => {
-        this.setState({ endOpen: open });
-    };
-
-    render() {
-        const { startValue, endValue, endOpen } = this.state;
-        return (
-            <div>
-                <DatePicker
-                    disabledDate={this.disabledStartDate}
-                    showTime
-                    format="YYYY-MM-DD HH:mm:ss"
-                    value={startValue}
-                    placeholder="Start"
-                    onChange={this.onStartChange}
-                    onOpenChange={this.handleStartOpenChange}
-                />
-            </div>
-        );
-    }
 }
 
 class PackageInfo extends React.Component {

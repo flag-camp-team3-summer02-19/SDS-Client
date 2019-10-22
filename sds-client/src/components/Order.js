@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {Divider, Row, Steps} from "antd";
-import {ShipMethod, ShipStatus} from "../Constants";
+import {ShipMethod, ShipStatus, ShipStatusMap} from "../Constants";
+import MapHelper from "./MapHelper";
+import loading_map from '../assets/images/loading_img.gif';
+
 
 const {Step} = Steps;
-
 
 const DescriptionItem = ({title, content}) => (
     <div className='order-description-drawer'>
@@ -13,6 +15,7 @@ const DescriptionItem = ({title, content}) => (
 );
 
 class Order extends Component {
+
     render() {
         if (this.props.item) {
             return (
@@ -22,9 +25,9 @@ class Order extends Component {
                         <Steps current={this.props.item.Status}
                                progressDot id='order-list-shipping-progress'
                         >
-                            <Step description="Order Placed"/>
-                            <Step description="In Progress"/>
-                            <Step description="Delivered"/>
+                            {Object.keys(ShipStatus).map((currValue) => (
+                                <Step key={ShipStatus[currValue]} description={ShipStatusMap[ShipStatus[currValue]]}/>
+                            ))}
                         </Steps>
                     </Row>
                     <br/>
@@ -48,11 +51,15 @@ class Order extends Component {
                     </Row>
                     <Divider/>
                     <p className='order-title-in-drawer'>Map details</p>
-                    <img
-                        className='map-details'
-                        alt="MapDetails"
-                        src='https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png'
-                    />
+                    {/*parseFloat(this.props.item.CurrentLoc.split(",")[1])*/}
+                    {Object.keys(this.props.mapLoc).length!==0 ?
+                        <MapHelper startAddressLat={this.props.mapLoc.curLat} startAddressLng={this.props.mapLoc.curLon}
+                               destAddressLat={this.props.mapLoc.destLat} destAddressLng={this.props.mapLoc.destLon} deliveryType={this.props.item.ShipMethod}/>
+                               : <img className='map-details' src={loading_map} alt="map details map"/>}
+                    {/*{Object.keys(this.props.mapLoc).length!==0 ?*/}
+                    {/*    <MapHelper startAddressLat={37.720015} startAddressLng={-122.458905}*/}
+                    {/*               destAddressLat={37.771944} destAddressLng={-122.446142} deliveryType={4-this.props.item.ShipMethod}/>*/}
+                    {/*    : <img className='map-details' src={loading_map}/>}*/}
                 </div>
             );
         } else {

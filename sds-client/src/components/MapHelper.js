@@ -2,7 +2,7 @@ import React from 'react';
 //import { Map, GoogleApiWrapper, Marker, Polyline,} from 'google-maps-react';
 //import {DirectionsRenderer} from "react-google-maps";
 import { withGoogleMap, withScriptjs, GoogleMap, Polyline, Marker, DirectionsRenderer } from 'react-google-maps';
-
+import {ShipMethod} from "../Constants";
 
 const IconWarehouse = {
     url: 'https://img.pngio.com/warehouse-free-buildings-icons-warehouse-icon-png-512_512.png',
@@ -55,6 +55,15 @@ class Map extends React.Component {
         this.displayRobotsRoute = this.displayRobotsRoute.bind(this);
     }
 
+    componentDidMount() {
+        this.path[0].lat = this.props.props.startAddressLat;
+        this.path[0].lng = this.props.props.startAddressLng;
+        this.path[1].lat = this.props.props.destAddressLat;
+        this.path[1].lng = this.props.props.destAddressLng;
+        this.deliveryType = this.props.props.deliveryType;
+        this.displayRobotsRoute();
+    }
+
     displayMarkers = () => {
         return this.warehouse.map((warehouse, index) => {
             return <Marker icon={IconWarehouse} key={index} id={index} position={{
@@ -87,17 +96,16 @@ class Map extends React.Component {
     }
 
     render() {
-        this.displayRobotsRoute();
         return (
             <GoogleMap
                 zoom={12}
                 defaultCenter={{ lat: 37.759083, lng: -122.438112}}
             >
                 {this.displayMarkers()}
-                {this.deliveryType==0 && <Polyline path={this.path} options={{ strokeColor: "#FF0000 " }} />}
-                {this.deliveryType==0 && <Marker icon={IconDrone} position={this.path[0]} />}
-                {this.deliveryType==1 && this.state.directions && <DirectionsRenderer directions={this.state.directions} />}
-                {this.deliveryType==1 && <Marker icon={IconRobot} position={this.path[0]} />}
+                {this.deliveryType===ShipMethod.Drone && <Polyline path={this.path} options={{ strokeColor: "#FF0000 " }} />}
+                {this.deliveryType===ShipMethod.Drone && <Marker icon={IconDrone} position={this.path[0]} />}
+                {this.deliveryType===ShipMethod.Mobile && this.state.directions && <DirectionsRenderer directions={this.state.directions} />}
+                {this.deliveryType===ShipMethod.Mobile && <Marker icon={IconRobot} position={this.path[0]} />}
             </GoogleMap>
         );
     }
@@ -110,7 +118,7 @@ export default (props) => {
         props={props}
         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM&v=3.exp&libraries=geometry,drawing,places"
         loadingElement={<div style={{height: `100%`}}/>}
-        containerElement={<div style={{height: `400px`, width: '800px'}}/>}
+        containerElement={<div style={{height: `345px`, width: '550px'}}/>}
         mapElement={<div style={{height: `100%`}}/>}
     />);
 }
