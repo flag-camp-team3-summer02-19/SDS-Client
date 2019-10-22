@@ -56,6 +56,7 @@ class Order extends Component {
                         <MapHelper startAddressLat={this.props.mapLoc.curLat} startAddressLng={this.props.mapLoc.curLon}
                                    destAddressLat={this.props.mapLoc.destLat} destAddressLng={this.props.mapLoc.destLon} deliveryType={this.props.item.ShipMethod}/>
                         : <img className='map-details' src={loading_map} alt="map details map"/>}
+
                     {/*{Object.keys(this.props.mapLoc).length!==0 ?*/}
                     {/*    <MapHelper startAddressLat={37.720015} startAddressLng={-122.458905}*/}
                     {/*               destAddressLat={37.771944} destAddressLng={-122.446142} deliveryType={4-this.props.item.ShipMethod}/>*/}
