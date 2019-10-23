@@ -10,6 +10,7 @@
 */
 export const LOGIN_ENDPOINT = "https://google.com";
 export const REGISTER_ENDPOINT = "https://google.com";
+export const PACKAGEINFO_ENDPOINT = "https://google.com";
 export const DEMO_GET_OK_ENDPOINT = "https://9e919392-f843-47c2-b9b5-58d14014c11a.mock.pstmn.io/userData";
 
 export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
@@ -68,4 +69,6 @@ export const FakeData = [
 
 export const MapThumbnail_prefix = "https://maps.googleapis.com/maps/api/staticmap?size=512x512&maptype=roadmap&markers=size:mid%7Ccolor:red%7C";
 export const MapThumbnail_suffix = '&key=';
-export const MapApiKey = 'Google Map API';
+export const MapApiKey = "AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM";
+export const GOOGLE_MAP_URL = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM&v=3.exp&libraries=geometry,drawing,places";
+// 'Google Map Api'

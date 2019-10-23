@@ -2,6 +2,7 @@ import React from 'react';
 import {compose, withProps} from 'recompose';
 import {DirectionsRenderer, GoogleMap, Marker, Polyline, withGoogleMap, withScriptjs} from 'react-google-maps';
 import Geocode from "react-geocode";
+import {GOOGLE_MAP_URL, MapApiKey} from "../Constants";
 
 const IconWarehouse = {
     url: 'https://img.pngio.com/warehouse-free-buildings-icons-warehouse-icon-png-512_512.png',
@@ -24,7 +25,7 @@ const IconRobot = {
 
 const WrapMap = (props) => compose(
     withProps ({
-        googleMapURL:"https://maps.googleapis.com/maps/api/js?key=AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM&v=3.exp&libraries=geometry,drawing,places",
+        googleMapURL:GOOGLE_MAP_URL,
         loadingElement:<div style={{ height: `100%` }} />,
         containerElement:<div style={{ height: `500px`, width: '800px' }} />,
         mapElement:<div style={{ height: `100%` }} />,
@@ -73,7 +74,7 @@ class MapContainer extends React.Component {
     };
 
     onGeoCoding (startAddress, destAddress) {
-        Geocode.setApiKey("AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM");
+        Geocode.setApiKey(MapApiKey);
 
         // set response language. Defaults to english.
         Geocode.setLanguage("en");
@@ -136,7 +137,7 @@ class MapContainer extends React.Component {
             },
         );
         // force getting start address to execute first!
-        this.sleep(100);
+        this.sleep(300);
 
         Geocode.fromAddress(destAddress).then(
             response => {

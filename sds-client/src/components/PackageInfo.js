@@ -3,22 +3,32 @@ import { InputNumber, DatePicker } from 'antd';
 import DateRange from './DateRange';
 import MapContainer from "./MapContainer";
 import { Input } from 'antd';
+import SelectMethod from "./SelectMethod";
+// import {PACKAGEINFO_ENDPOINT} from "../Constants";
+// import md5 from 'md5';
+// import { ajax } from '../util';
 import Geocode from "react-geocode";
 import MapHelper from "./MapHelper";
 import {GoogleMap} from "react-google-maps";
 
 const { TextArea } = Input;
-
-function onChange(value) {
-    console.log('changed', value);
-}
+const onErrorAddress = "Please enter valid starting / destination address";
+const onErrorMessage = "Please verify your package info";
 
 class PackageInfo extends React.Component {
+    packageLength= 0;
+    packageWidth= 0;
+    packageHeight= 0;
+    packageWeight= 0;
+
     startAddress= "";
     destAddress= "";
 
+    pickupDate= null;
+
     constructor (props) {
         super (props);
+        console.log(this.packageLength);
         this.state = {
             warehouse: [{latitude: 37.766345, longitude: -122.512029},
                 {latitude: 37.797750, longitude: -122.408731},
@@ -34,9 +44,27 @@ class PackageInfo extends React.Component {
 
             startAddress: "",
             destAddress: "",
+            startValue: null,
         };
         this.onAddressChange = this.onAddressChange.bind(this);
+        this.handlePackageInfo = this.handlePackageInfo.bind(this);
         this.mapContainer = React.createRef();
+    }
+
+    onChangeLength(value) {
+        this.packageLength = value;
+    }
+
+    onChangeWidth(value) {
+        this.packageWidth = value;
+    }
+
+    onChangeHeight(value) {
+        this.packageHeight = value;
+    }
+
+    onChangeWeight(value) {
+        this.packageWeight = value;
     }
 
     startAddressTextChange(event) {
@@ -50,25 +78,55 @@ class PackageInfo extends React.Component {
     }
 
     onAddressChange() {
-        this.mapContainer.current.onGeoCoding(this.startAddress, this.destAddress);
-        this.mapContainer.current.resetInitialDate();
+        if(this.startAddress === "" || this.destAddress === "") {
+            alert(onErrorAddress);
+        } else {
+            this.mapContainer.current.onGeoCoding(this.startAddress, this.destAddress);
+            this.mapContainer.current.resetInitialDate();
+        }
     }
+
+    onPickupDateChange = (value) => {
+        this.setState({startValue: value});
+        //this.pickupDate = value;
+    };
+
+    handlePackageInfo() {
+        console.log(this.state.startValue);
+        if (this.packageLength <= 0 || this.packageWidth <= 0 || this.packageHeight <= 0 || this.packageWeight <= 0 ||
+            this.startAddress === "" || this.destAddress === "" || this.state.startValue === null) {
+            alert(onErrorMessage);
+        } else {
+            // return this.props.updateOrder;
+            // this.props.onSuccessPackageInfo({
+            //     packageLength: this.packageLength,
+            //     packageWidth: this.packageWidth,
+            //     packageHeight: this.packageHeight,
+            //     packageWeight: this.packageWeight,
+            //     startAddress: this.startAddress,
+            //     destAddress: this.destAddress,
+            //     // pickupDate: this.pickupDate,
+            // });
+            // this.props.updateOrder;
+        }
+    }
+
 
     render() {
         return (
             <div id="packageInfo">
-                <p id={"title"}>packageinfo:</p>
                 <div id="packageDetail">
+                    <p id={"title"}>PackageInfo:</p>
                     <span> Enter package Dimension (inch * inch * inch)</span>
                     <br/>
-                    <InputNumber id="length" min={1} max={100000} defaultValue={3} onChange={onChange} />
-                    <InputNumber id="width" min={1} max={100000} defaultValue={3} onChange={onChange} />
-                    <InputNumber id="height" min={1} max={100000} defaultValue={3} onChange={onChange} />
+                    <InputNumber id="length" min={0} max={100000} defaultValue={0} onChange={this.onChangeLength.bind(this)} />
+                    <InputNumber id="width" min={0} max={100000} defaultValue={0} onChange={this.onChangeWidth.bind(this)} />
+                    <InputNumber id="height" min={0} max={100000} defaultValue={0} onChange={this.onChangeHeight.bind(this)} />
                     <br/>
                     <br/>
                     <span> Enter package Weight (lbs) below</span>
                     <br/>
-                    <InputNumber id="weight" min={1} max={100000} defaultValue={3} onChange={onChange} />
+                    <InputNumber id="weight" min={0} max={100000} defaultValue={0} onChange={this.onChangeWeight.bind(this)} />
                     <br/>
                     <br/>
                     <div/>
@@ -89,9 +147,12 @@ class PackageInfo extends React.Component {
                     <br/>
                     <span>Choose pick up date below</span>
                     <br/>
-                    <DateRange />
+                    {/*<DateRange value={this.pickupDate} onChangeValue={this.onPickupDateChange}/>*/}
+                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" value={this.state.startValue}
+                        placeholder="Pick Up Date" onChange={this.onPickupDateChange.bind(this)} />
                     <br/>
                     <br/>
+                    {/*<button onClick={this.props.updateOrder}> Choose a delivery method </button>*/}
                     <button onClick={this.props.updateOrder}> Choose a delivery method </button>
                 </div>
                 <div id="mapDetail">
