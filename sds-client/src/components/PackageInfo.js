@@ -160,7 +160,8 @@ class PackageInfo extends React.Component {
                     {/*                startAddressLat={this.state.startAddressLat} startAddressLng={this.state.startAddressLng}*/}
                     {/*                destAddressLat={this.state.destAddressLat} destAddressLng={this.state.destAddressLng}*/}
                     {/*                startAddress={this.state.startAddress} destAddress={this.state.destAddress}/>*/}
-                    <MapContainer ref={this.mapContainer} />
+                    {/*deliveryType == 0 ---> drone; 1 ---> robots*/}
+                    <MapContainer ref={this.mapContainer} deliveryType={1}/>
                     {/*deliveryType = 0 ---- Drone, deliveryType = 1 ---- Robots*/}
                     {/*                <MapHelper startAddressLat={37.752033} startAddressLng={-122.450996}*/}
                     {/*                           destAddressLat={37.771944} destAddressLng={-122.446142} deliveryType={1}/>*/}

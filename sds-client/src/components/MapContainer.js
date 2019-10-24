@@ -58,7 +58,8 @@ class MapContainer extends React.Component {
             progress: [],
             startAddress: this.props.startAddress,
             destAddress: this.props.destAddress,
-            directions: "",
+            sTodDirections: "",
+            wTosDirections: "",
         };
         // console.log(this.state.destAddress);
     }
@@ -115,6 +116,19 @@ class MapContainer extends React.Component {
                         this.path[0].lng = lng1;
                     }
                 }
+                const wTosDirectionsService = new window.google.maps.DirectionsService();
+                var request = {
+                    origin: new window.google.maps.LatLng(this.path[0].lat, this.path[0].lng),
+                    destination: new window.google.maps.LatLng(this.path[1].lat, this.path[1].lng),
+                    travelMode: window.google.maps.DirectionsTravelMode.DRIVING
+                };
+                wTosDirectionsService.route(request, (response, status) => {
+                    if (status === window.google.maps.DirectionsStatus.OK) {
+                        this.setState({wTosDirections: response});
+                    } else {
+                        console.log("error loading directionsService");
+                    }
+                });
                 if (this.sTodCode === 0) {
                     const DirectionsService = new window.google.maps.DirectionsService();
                     var request = {
@@ -124,7 +138,7 @@ class MapContainer extends React.Component {
                     };
                     DirectionsService.route(request, (response, status) => {
                         if (status === window.google.maps.DirectionsStatus.OK) {
-                            this.setState({directions: response});
+                            this.setState({sTodDirections: response});
                         } else {
                             console.log("error loading directionsService");
                         }
@@ -159,7 +173,7 @@ class MapContainer extends React.Component {
                     };
                     DirectionsService.route(request, (response, status) => {
                         if (status === window.google.maps.DirectionsStatus.OK) {
-                            this.setState({directions: response});
+                            this.setState({sTodDirections: response});
                         } else {
                             console.log("error loading directionsService");
                         }
@@ -285,10 +299,22 @@ class MapContainer extends React.Component {
                     {/*                animation={window.google.maps.Animation.BOUNCE} />*/}
                     {/*    </>*/}
                     {/*)}*/}
-                    {this.state.directions && <DirectionsRenderer directions={this.state.directions} />}
-                    {<Marker icon={IconRobot} position={this.path[this.path.length - 1]} animation={window.google.maps.Animation.BOUNCE} />}
-                    <Polyline path={this.path} options={{ strokeColor: "#FF0000 " }} />
-                    <Marker icon={IconDrone} position={this.path[this.path.length - 1]} animation={window.google.maps.Animation.BOUNCE} />
+                    {this.props.deliveryType === 1 && (
+                        <>
+                            {this.state.wTosDirections && <DirectionsRenderer directions={this.state.wTosDirections} />}
+                            {<Marker icon={IconRobot} position={this.path[1]} animation={window.google.maps.Animation.BOUNCE} />}
+
+                            {this.state.sTodDirections && <DirectionsRenderer directions={this.state.sTodDirections} />}
+                            {<Marker icon={IconRobot} position={this.path[this.path.length - 1]} animation={window.google.maps.Animation.BOUNCE} />}
+                        </>
+                    )}
+
+                    {this.props.deliveryType === 0 && (
+                        <>
+                            <Polyline path={this.path} options={{ strokeColor: "#FF0000 " }} />
+                            <Marker icon={IconDrone} position={this.path[this.path.length - 1]} animation={window.google.maps.Animation.BOUNCE} />
+                        </>
+                    )}
                     {/*{this.state.directions && <DirectionsRenderer directions={this.state.directions} />}*/}
                     {/*<Marker icon={IconRobot} position={this.path[0]} />*/}
                 </GoogleMap>
