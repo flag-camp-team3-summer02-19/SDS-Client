@@ -70,5 +70,5 @@ export const FakeData = [
 export const MapThumbnail_prefix = "https://maps.googleapis.com/maps/api/staticmap?size=512x512&maptype=roadmap&markers=size:mid%7Ccolor:red%7C";
 export const MapThumbnail_suffix = '&key=';
 export const MapApiKey = "AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM";
-export const GOOGLE_MAP_URL = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM&v=3.exp&libraries=geometry,drawing,places";
+export const GOOGLE_MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${MapApiKey}&v=3.exp&libraries=geometry,drawing,places`;
 // 'Google Map Api'
