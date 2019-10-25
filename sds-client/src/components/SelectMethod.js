@@ -50,7 +50,7 @@ class SelectMethod extends Component {
         this.mapContainer = React.createRef();
     }
 
-    deliveryType = 1;
+    deliveryType = -1;
     updateChoice = index => {
         this.setState(prev =>({curChoice: index}));
         // console.log("inside update Choice");
@@ -64,7 +64,7 @@ class SelectMethod extends Component {
 
     componentDidMount() {
         this.mapContainer.current.onGeoCoding(packageInfo.startAddress, packageInfo.destAddress);
-        this.mapContainer.current.onDeliveryTypeChange(1);
+        this.mapContainer.current.onDeliveryTypeChange(-1);
     }
 
     render() {
