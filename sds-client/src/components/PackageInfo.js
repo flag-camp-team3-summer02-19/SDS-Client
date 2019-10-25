@@ -24,6 +24,7 @@ class PackageInfo extends React.Component {
     startAddress= "";
     destAddress= "";
 
+    deliveryType = 1;
     pickupDate= null;
 
     constructor (props) {
@@ -161,7 +162,7 @@ class PackageInfo extends React.Component {
                     {/*                destAddressLat={this.state.destAddressLat} destAddressLng={this.state.destAddressLng}*/}
                     {/*                startAddress={this.state.startAddress} destAddress={this.state.destAddress}/>*/}
                     {/*deliveryType == 0 ---> drone; 1 ---> robots*/}
-                    <MapContainer ref={this.mapContainer} deliveryType={1}/>
+                    <MapContainer ref={this.mapContainer} />
                     {/*deliveryType = 0 ---- Drone, deliveryType = 1 ---- Robots*/}
                     {/*                <MapHelper startAddressLat={37.752033} startAddressLng={-122.450996}*/}
                     {/*                           destAddressLat={37.771944} destAddressLng={-122.446142} deliveryType={1}/>*/}

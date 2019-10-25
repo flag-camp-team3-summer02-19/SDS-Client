@@ -6,7 +6,7 @@ import {
     Button
 } from 'antd';
 import { ShipMethod } from '../Constants';
-import MapHelper from './MapHelper';
+import MapContainer from './MapContainer';
 
 /* TODO: delete the fake data afterwards */
 const packageInfo = {
@@ -39,16 +39,36 @@ const deliveryMethod = [
 const { Panel } = Collapse;
 const ButtonGroup = Button.Group;
 
+
 class SelectMethod extends Component {
-    state = {
-        curChoice: 0
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            curChoice: 0
+        }
+        this.mapContainer = React.createRef();
     }
 
+    deliveryType = 1;
     updateChoice = index => {
-        this.setState(prev => ({curChoice: index}));
+        this.setState(prev =>({curChoice: index}));
+        // console.log("inside update Choice");
+        // console.log(this.state.curChoice);
+        //this.mapContainer.current.onDeliveryTypeChange(this.state.curChoice);
+
+        this.mapContainer.current.onGeoCoding(packageInfo.startAddress, packageInfo.destAddress);
+        this.deliveryType = this.deliveryType * -1;
+        this.mapContainer.current.onDeliveryTypeChange(this.deliveryType);
+    }
+
+    componentDidMount() {
+        this.mapContainer.current.onGeoCoding(packageInfo.startAddress, packageInfo.destAddress);
+        this.mapContainer.current.onDeliveryTypeChange(1);
     }
 
     render() {
+        // const deliveryType = deliveryMethod[this.state.curChoice].shipMethod === ShipMethod.Mobile ? 1 : 0;
         /* TODO: fill the necessary information for the current route */
         const listPanel = deliveryMethod.map((route, index) => (
             <Panel key={index} header={route.title}>
@@ -57,7 +77,7 @@ class SelectMethod extends Component {
             </Panel>
         ));
 
-        const deliveryType = deliveryMethod[this.state.curChoice].shipMethod === ShipMethod.Mobile ? 1 : 0;
+        // const deliveryType = deliveryMethod[this.state.curChoice].shipMethod === ShipMethod.Mobile ? 1 : -1;
 
         return (
             <div id="selectMethod">
@@ -90,13 +110,7 @@ class SelectMethod extends Component {
                     </ButtonGroup>
                 </section>
                 <section className="map-container">
-                    <MapHelper
-                        startAddressLat={packageInfo.startAddressLat}
-                        startAddressLng={packageInfo.startAddressLng}
-                        destAddressLat={packageInfo.destAddressLat}
-                        destAddressLng={packageInfo.destAddressLng}
-                        deliveryType={deliveryType}
-                    />
+                    <MapContainer ref={this.mapContainer} />
                 </section>
             </div>
         );

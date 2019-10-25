@@ -60,6 +60,8 @@ class MapContainer extends React.Component {
             destAddress: this.props.destAddress,
             sTodDirections: "",
             wTosDirections: "",
+            // default deliveryType = 0; --> both, 1 -->robots, -1 -->drone
+            deliveryType: -1,
         };
         // console.log(this.state.destAddress);
     }
@@ -73,6 +75,10 @@ class MapContainer extends React.Component {
                            onClick={() => console.log("You clicked me!")} />
         })
     };
+
+    onDeliveryTypeChange (deliveryType) {
+        this.setState({deliveryType: deliveryType});
+    }
 
     onGeoCoding (startAddress, destAddress) {
         Geocode.setApiKey(MapApiKey);
@@ -299,7 +305,7 @@ class MapContainer extends React.Component {
                     {/*                animation={window.google.maps.Animation.BOUNCE} />*/}
                     {/*    </>*/}
                     {/*)}*/}
-                    {this.props.deliveryType === 1 && (
+                    {(this.state.deliveryType === 0 || this.state.deliveryType === 1) && (
                         <>
                             {this.state.wTosDirections && <DirectionsRenderer directions={this.state.wTosDirections} />}
                             {<Marker icon={IconRobot} position={this.path[1]} animation={window.google.maps.Animation.BOUNCE} />}
@@ -309,9 +315,10 @@ class MapContainer extends React.Component {
                         </>
                     )}
 
-                    {this.props.deliveryType === 0 && (
+                    {(this.state.deliveryType === 0 || this.state.deliveryType === -1) && (
                         <>
                             <Polyline path={this.path} options={{ strokeColor: "#FF0000 " }} />
+                            <Marker icon={IconDrone} position={this.path[1]} animation={window.google.maps.Animation.BOUNCE} />
                             <Marker icon={IconDrone} position={this.path[this.path.length - 1]} animation={window.google.maps.Animation.BOUNCE} />
                         </>
                     )}
