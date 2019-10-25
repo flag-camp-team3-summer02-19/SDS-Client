@@ -41,34 +41,22 @@ const ButtonGroup = Button.Group;
 
 
 class SelectMethod extends Component {
-
     constructor(props) {
         super(props);
-        this.state = {
-            curChoice: 0
-        }
         this.mapContainer = React.createRef();
     }
 
-    deliveryType = -1;
     updateChoice = index => {
-        this.setState(prev =>({curChoice: index}));
-        // console.log("inside update Choice");
-        // console.log(this.state.curChoice);
-        //this.mapContainer.current.onDeliveryTypeChange(this.state.curChoice);
-
         this.mapContainer.current.onGeoCoding(packageInfo.startAddress, packageInfo.destAddress);
-        this.deliveryType = this.deliveryType * -1;
-        this.mapContainer.current.onDeliveryTypeChange(this.deliveryType);
+        let deliveryType = deliveryMethod[index].shipMethod === ShipMethod.Mobile ? 1 : -1;
+        this.mapContainer.current.onDeliveryTypeChange(deliveryType);
     }
 
     componentDidMount() {
-        this.mapContainer.current.onGeoCoding(packageInfo.startAddress, packageInfo.destAddress);
-        this.mapContainer.current.onDeliveryTypeChange(-1);
+        this.updateChoice(0);
     }
 
     render() {
-        // const deliveryType = deliveryMethod[this.state.curChoice].shipMethod === ShipMethod.Mobile ? 1 : 0;
         /* TODO: fill the necessary information for the current route */
         const listPanel = deliveryMethod.map((route, index) => (
             <Panel key={index} header={route.title}>
@@ -76,8 +64,6 @@ class SelectMethod extends Component {
                 <p>We recommended {route.shipMethod} to deliver your package!</p>
             </Panel>
         ));
-
-        // const deliveryType = deliveryMethod[this.state.curChoice].shipMethod === ShipMethod.Mobile ? 1 : -1;
 
         return (
             <div id="selectMethod">
