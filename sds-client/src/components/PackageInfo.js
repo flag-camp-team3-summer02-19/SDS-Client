@@ -4,9 +4,9 @@ import DateRange from './DateRange';
 import MapContainer from "./MapContainer";
 import { Input } from 'antd';
 import SelectMethod from "./SelectMethod";
-// import {PACKAGEINFO_ENDPOINT} from "../Constants";
+import {LOGIN_ENDPOINT, PACKAGEINFO_ENDPOINT} from "../Constants";
 // import md5 from 'md5';
-// import { ajax } from '../util';
+import { ajax } from '../util';
 import Geocode from "react-geocode";
 import MapHelper from "./MapHelper";
 import {GoogleMap} from "react-google-maps";
@@ -14,6 +14,7 @@ import {GoogleMap} from "react-google-maps";
 const { TextArea } = Input;
 const onErrorAddress = "Please enter valid starting / destination address";
 const onErrorMessage = "Please verify your package info";
+const onErrorCallBackMessage = "Can not connect to remote server";
 
 class PackageInfo extends React.Component {
     packageLength= 0;
@@ -83,6 +84,7 @@ class PackageInfo extends React.Component {
             alert(onErrorAddress);
         } else {
             this.mapContainer.current.onGeoCoding(this.startAddress, this.destAddress);
+            this.mapContainer.current.onDeliveryTypeChange(0);
             this.mapContainer.current.resetInitialDate();
         }
     }
@@ -92,23 +94,37 @@ class PackageInfo extends React.Component {
         //this.pickupDate = value;
     };
 
+
     handlePackageInfo() {
         console.log(this.state.startValue);
         if (this.packageLength <= 0 || this.packageWidth <= 0 || this.packageHeight <= 0 || this.packageWeight <= 0 ||
             this.startAddress === "" || this.destAddress === "" || this.state.startValue === null) {
             alert(onErrorMessage);
         } else {
-            // return this.props.updateOrder;
-            // this.props.onSuccessPackageInfo({
-            //     packageLength: this.packageLength,
-            //     packageWidth: this.packageWidth,
-            //     packageHeight: this.packageHeight,
-            //     packageWeight: this.packageWeight,
-            //     startAddress: this.startAddress,
-            //     destAddress: this.destAddress,
-            //     // pickupDate: this.pickupDate,
-            // });
-            // this.props.updateOrder;
+            let req = JSON.stringify({
+                user_id : this.props.username,
+                startAddress: this.startAddress,
+                destAddress: this.destAddress,
+                packageLength: this.packageLength,
+                packageWidth: this.packageWidth,
+                packageHeight: this.packageHeight,
+                packageWeight: this.packageWeight,
+                pickupDate: this.state.startValue,
+            });
+            console.log(req);
+            ajax('POST', PACKAGEINFO_ENDPOINT, req,
+                (res) => {
+                    let result = JSON.parse(res);
+                    if (result.status === 'OK') {
+                        /* TODO: update callbacks parameter  */
+                        this.props.updateOrder(1);
+                    }
+                },
+                /* TODO: update callbacks parameter  */
+                () => {
+                    alert(onErrorCallBackMessage);
+                    this.props.updateOrder(1);
+                });
         }
     }
 
@@ -154,7 +170,7 @@ class PackageInfo extends React.Component {
                     <br/>
                     <br/>
                     {/*<button onClick={this.props.updateOrder}> Choose a delivery method </button>*/}
-                    <button onClick={this.props.updateOrder}> Choose a delivery method </button>
+                    <button onClick={this.handlePackageInfo.bind(this)}> Choose a delivery method </button>
                 </div>
                 <div id="mapDetail">
                     {/*<MapContainer   wareHouseLat={this.state.wareHouseLat} wareHouseLng={this.state.wareHouseLng}*/}
