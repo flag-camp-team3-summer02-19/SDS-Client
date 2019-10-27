@@ -2,7 +2,7 @@ import React from 'react';
 import {compose, withProps} from 'recompose';
 import {DirectionsRenderer, GoogleMap, Marker, Polyline, withGoogleMap, withScriptjs} from 'react-google-maps';
 import Geocode from "react-geocode";
-import {GOOGLE_MAP_URL, MapApiKey} from "../Constants";
+import {GOOGLE_MAP_URL, MapApiKey, ShipMethod} from "../Constants";
 
 const IconWarehouse = {
     url: 'https://img.pngio.com/warehouse-free-buildings-icons-warehouse-icon-png-512_512.png',
@@ -61,7 +61,7 @@ class MapContainer extends React.Component {
             sTodDirections: "",
             wTosDirections: "",
             // default deliveryType = 0; --> both, 1 -->robots, -1 -->drone
-            deliveryType: -1,
+            deliveryType: ShipMethod.Drone,
         };
         // console.log(this.state.destAddress);
     }
@@ -307,7 +307,7 @@ class MapContainer extends React.Component {
                     {/*                animation={window.google.maps.Animation.BOUNCE} />*/}
                     {/*    </>*/}
                     {/*)}*/}
-                    {(this.state.deliveryType === 0 || this.state.deliveryType === 1) && (
+                    {(this.state.deliveryType === ShipMethod.Both || this.state.deliveryType === ShipMethod.Mobile) && (
                         <>
                             {this.state.wTosDirections && <DirectionsRenderer directions={this.state.wTosDirections} />}
                             {<Marker icon={IconRobot} position={this.path[1]} animation={window.google.maps.Animation.BOUNCE} />}
@@ -317,7 +317,7 @@ class MapContainer extends React.Component {
                         </>
                     )}
 
-                    {(this.state.deliveryType === 0 || this.state.deliveryType === -1) && (
+                    {(this.state.deliveryType === ShipMethod.Both || this.state.deliveryType === ShipMethod.Drone) && (
                         <>
                             <Polyline path={this.path} options={{ strokeColor: "#FF0000 " }} />
                             <Marker icon={IconDrone} position={this.path[1]} animation={window.google.maps.Animation.BOUNCE} />

@@ -16,7 +16,7 @@ export const DEMO_GET_OK_ENDPOINT = "https://9e919392-f843-47c2-b9b5-58d14014c11
 
 export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipStatusMap = {0: "Order Placed", 1: "In Progress", 2: "Delivered"};
-export const ShipMethod = {Mobile : 3, Drone : 4};
+export const ShipMethod = {Mobile : 1, Drone : -1, Both : 0};
 export const ShipMethodMap = {3: 'Auto Mobile', 4: 'Drone'};
 
 export const FakeData = [
