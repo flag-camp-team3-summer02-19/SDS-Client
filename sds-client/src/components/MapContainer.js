@@ -216,6 +216,8 @@ class MapContainer extends React.Component {
                 console.error(error);
             }
         );
+
+        return (this.path);
     }
 
     sleep(milliseconds) {
