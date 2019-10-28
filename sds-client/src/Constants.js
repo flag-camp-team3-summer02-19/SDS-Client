@@ -17,7 +17,7 @@ export const DEMO_GET_OK_ENDPOINT = "https://9e919392-f843-47c2-b9b5-58d14014c11
 export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipStatusMap = {0: "Order Placed", 1: "In Progress", 2: "Delivered"};
 export const ShipMethod = {Mobile : 1, Drone : -1, Both : 0};
-export const ShipMethodMap = {3: 'Auto Mobile', 4: 'Drone'};
+export const ShipMethodMap = {0: 'Drone', 1: 'Both', 2: 'Auto Mobile'};
 
 export const FakeData = [
     {OrderId:'abcdefg1234',
@@ -70,6 +70,6 @@ export const FakeData = [
 
 export const MapThumbnail_prefix = "https://maps.googleapis.com/maps/api/staticmap?size=512x512&maptype=roadmap&markers=size:mid%7Ccolor:red%7C";
 export const MapThumbnail_suffix = '&key=';
-export const MapApiKey = "AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM";
+export const MapApiKey = "Google Map Api";
 export const GOOGLE_MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${MapApiKey}&v=3.exp&libraries=geometry,drawing,places`;
 // 'Google Map Api'

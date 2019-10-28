@@ -56,7 +56,7 @@ class SelectMethod extends Component {
         this.latlng = this.mapContainer.current.onGeoCoding(packageInfo.startAddress, packageInfo.destAddress);
         console.log("inside updateChoice");
         console.log(this.latlng);
-        this.deliveryType = deliveryMethod[index].shipMethod === ShipMethod.Mobile ? ShipMethod.Mobile : ShipMethod.Drone;
+        this.deliveryType = deliveryMethod[index].shipMethod;
         this.mapContainer.current.onDeliveryTypeChange(this.deliveryType);
     }
 
