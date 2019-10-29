@@ -9,13 +9,13 @@
  * @param isImage - True if this ajax call is used to fetch image file from server
  * @param header - array of extra key value pairs that should put in http request header
  */
-export function ajax(method, url, data, successCallback, errorCallback, isImage, header) {
+export function ajax(method, url, data, successCallback, errorCallback, isImage, header, withCredentials=false) {
     var xhr = new XMLHttpRequest();
     if (isImage) {
         xhr.responseType = 'arraybuffer';
     }
     xhr.open(method, url, true);
-    xhr.withCredentials = true;
+    xhr.withCredentials = withCredentials;
 
     xhr.onload = function() {
         if (xhr.status === 200) {
