@@ -31,7 +31,7 @@ class Register extends Component {
                         let result = JSON.parse(res);
                         if (result.status === 'OK') {
                             /* TODO: update callbacks parameter  */
-                            this.props.onSuccessLogIn({
+                            this.props.onSuccessLogIn(false, {
                                 userid: 1,
                                 session: 2,
                                 username: values.email

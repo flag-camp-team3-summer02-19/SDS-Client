@@ -17,9 +17,9 @@ class App extends React.Component {
         userInfo: {}
     };
 
-    onSuccessLogIn = values => {
+    onSuccessLogIn = (loggedIn, values) => {
         this.setState({
-            loggedIn: true,
+            loggedIn: loggedIn,
             userInfo: values
         });
         history.push('/');

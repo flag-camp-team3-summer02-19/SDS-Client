@@ -38,7 +38,7 @@ class LogIn extends Component {
                         let result = JSON.parse(res);
                         if (result.status === 'OK') {
                             /* TODO: update callbacks parameter  */
-                            this.props.onSuccessLogIn({
+                            this.props.onSuccessLogIn(true, {
                                 userid: 1,
                                 session: 2,
                                 username: values.email
@@ -49,7 +49,7 @@ class LogIn extends Component {
                     () => {
                         alert(onErrorMessage);
                         // TODO: for development purpose, remember to delete afterwards
-                        this.props.onSuccessLogIn({
+                        this.props.onSuccessLogIn(true, {
                             userid: 1,
                             session: 2,
                             username: values.email
