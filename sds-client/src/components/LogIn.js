@@ -26,13 +26,11 @@ class LogIn extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log("debugger loc at LogIn.js line 42");
-                console.log(values);
-                let username = values.username;
-                let password = md5(username + md5(values.password));
+                let email = values.email;
+                let password = md5(email + md5(values.password));
                 let req = JSON.stringify({
-                    user_id : username,
-                    password : password,
+                    email : email,
+                    password : Array.from(password),
                 });
 
                 ajax('POST', LOGIN_ENDPOINT, req,
