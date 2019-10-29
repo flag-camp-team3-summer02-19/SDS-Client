@@ -18,17 +18,18 @@ class Register extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log(values);
                 let email = values.email;
                 let password = md5(email + md5(values.password));
                 let req = JSON.stringify({
                     email : email,
                     password : Array.from(password),
                 });
+                console.log(req);
 
                 ajax('POST', REGISTER_ENDPOINT, req,
                     (res) => {
                         let result = JSON.parse(res);
+                        console.log(result);
                         if (result.status === 'OK') {
                             /* TODO: update callbacks parameter  */
                             this.props.onSuccessLogIn(false, {
@@ -41,7 +42,7 @@ class Register extends Component {
                     /* TODO: update callbacks parameter  */
                     () => {
                         alert(onErrorMessage);
-                    });
+                    }, false, null, true);
             }
         });
     };

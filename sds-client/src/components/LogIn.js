@@ -32,6 +32,7 @@ class LogIn extends Component {
                     email : email,
                     password : Array.from(password),
                 });
+                console.log(req);
 
                 ajax('POST', LOGIN_ENDPOINT, req,
                     (res) => {
@@ -54,7 +55,7 @@ class LogIn extends Component {
                             session: 2,
                             username: values.email
                         });
-                    });
+                    },false, null, true);
             }
         });
     };
