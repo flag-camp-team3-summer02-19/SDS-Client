@@ -14,6 +14,7 @@ export function ajax(method, url, data, successCallback, errorCallback, isImage,
         xhr.responseType = 'arraybuffer';
     }
     xhr.open(method, url, true);
+    xhr.withCredentials = true;
 
     xhr.onload = function() {
         if (xhr.status === 200) {
