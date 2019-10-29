@@ -37,3 +37,21 @@
 #weight {
     width: 100px;
 }
+
+#address-confirm {
+
+    width: 200px;
+    height: 30px;
+}
+
+#start-address {
+
+    width: 300px;
+    height: 30px;
+}
+
+#dest-address {
+
+    width: 300px;
+    height: 30px;
+}

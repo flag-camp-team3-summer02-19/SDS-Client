@@ -5,8 +5,10 @@ import {
     Divider,
     Button
 } from 'antd';
-import { ShipMethod } from '../Constants';
-import MapHelper from './MapHelper';
+import {PACKAGEINFO_ENDPOINT, ShipMethod} from '../Constants';
+import MapContainer from './MapContainer';
+import {ajax} from "../util";
+import {LOGIN_ENDPOINT, SELECTMETHOD_ENDPOINT} from "../Constants";
 
 /* TODO: delete the fake data afterwards */
 const packageInfo = {
@@ -38,14 +40,59 @@ const deliveryMethod = [
 
 const { Panel } = Collapse;
 const ButtonGroup = Button.Group;
+const onErrorMessage = "Please choose a delivery method!";
+const onErrorCallBackMessage = "Can not connect to remote server";
 
 class SelectMethod extends Component {
-    state = {
-        curChoice: 0
+    constructor(props) {
+        super(props);
+        this.mapContainer = React.createRef();
     }
+    latlng;
+    // 0 --- not choose yet, 1 --- mobile, -1 --- drone
+    deliveryType = ShipMethod.Both;
 
     updateChoice = index => {
-        this.setState(prev => ({curChoice: index}));
+        this.latlng = this.mapContainer.current.onGeoCoding(packageInfo.startAddress, packageInfo.destAddress);
+        console.log("inside updateChoice");
+        console.log(this.latlng);
+        this.deliveryType = deliveryMethod[index].shipMethod;
+        this.mapContainer.current.onDeliveryTypeChange(this.deliveryType);
+    }
+
+    handleDeliveryMethod() {
+        if (this.deliveryType === ShipMethod.Both) {
+            alert(onErrorMessage);
+        } else {
+            let req = JSON.stringify({
+                user_id : this.props.username,
+                startAddress: packageInfo.startAddress,
+                destAddress: packageInfo.destAddress,
+                startAddressLat: this.latlng[1].lat,
+                startAddressLng: this.latlng[1].lng,
+                destAddressLat: this.latlng[2].lat,
+                destAddressLng: this.latlng[2].lng,
+                deliveryType: this.deliveryType,
+            });
+            console.log(req);
+            ajax('POST', SELECTMETHOD_ENDPOINT, req,
+                (res) => {
+                    let result = JSON.parse(res);
+                    if (result.status === 'OK') {
+                        /* TODO: update callbacks parameter  */
+                        this.props.updateOrder(2);
+                    }
+                },
+                /* TODO: update callbacks parameter  */
+                () => {
+                    alert(onErrorCallBackMessage);
+                    this.props.updateOrder(2);
+                });
+        }
+    }
+
+    componentDidMount() {
+        this.updateChoice(0);
     }
 
     render() {
@@ -56,8 +103,6 @@ class SelectMethod extends Component {
                 <p>We recommended {route.shipMethod} to deliver your package!</p>
             </Panel>
         ));
-
-        const deliveryType = deliveryMethod[this.state.curChoice].shipMethod === ShipMethod.Mobile ? 1 : 0;
 
         return (
             <div id="selectMethod">
@@ -83,20 +128,14 @@ class SelectMethod extends Component {
                             <Icon type="left" />
                             Previous
                         </Button>
-                        <Button type="primary" onClick={this.props.updateOrder}>
+                        <Button type="primary" onClick={this.handleDeliveryMethod.bind(this)}>
                             Next
                             <Icon type="right" />
                         </Button>
                     </ButtonGroup>
                 </section>
                 <section className="map-container">
-                    <MapHelper
-                        startAddressLat={packageInfo.startAddressLat}
-                        startAddressLng={packageInfo.startAddressLng}
-                        destAddressLat={packageInfo.destAddressLat}
-                        destAddressLng={packageInfo.destAddressLng}
-                        deliveryType={deliveryType}
-                    />
+                    <MapContainer ref={this.mapContainer} />
                 </section>
             </div>
         );
