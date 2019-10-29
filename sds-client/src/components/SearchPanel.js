@@ -80,10 +80,9 @@ class SearchPanel extends Component {
         console.log("onFocus ");
     };
 
-    onPressEnter = (a,b,c) => {
-        console.log(a);
-        console.log(b);
-        console.log(c);
+    onPressEnter = (searchText) => {
+        console.log("SearchPanel: onPressEnter ");
+        this.props.onPressEnter(searchText);
     };
 
     render() {
@@ -130,7 +129,7 @@ class SearchPanel extends Component {
                 optionLabelProp="value"
                 defaultActiveFirstOption = {false}
             >
-                <Input suffix={<Icon type="search" className="certain-category-icon"/>} allowClear onPressEnter={this.onPressEnter}/>
+                <Input.Search allowClear onSearch={this.onPressEnter}/>
             </AutoComplete>
         );
     }

@@ -27,6 +27,7 @@ class DashBoard extends Component {
             isListDataValid: false,
         };
         this.itemInDrawer = null;
+        this.listData_cache = this.state.listData;
     }
 
     //TODO: only fetch data when refresh this page or redirect to this page? (this.props.history)
@@ -53,10 +54,12 @@ class DashBoard extends Component {
     };
     onDataUpdated = (resp) => {
         let result = JSON.parse(resp);
+
         //the following is temp code to add thumbnailSource in each item.
         let result_clone = Object.assign([],result);
         //TODO: update these codes after discuss with backend
         this.setState({listData: result.orders});
+        this.listData_cache = result.orders;
 
         //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
         this.ajax_recursive_wrapper(result_clone.orders, 0);
@@ -107,7 +110,23 @@ class DashBoard extends Component {
         );
     };
 
-    filterFunc = {
+    onPressEnter = (searchText) => {
+        let filteredListData;
+        if(!searchText) {
+            filteredListData = this.listData_cache;
+        } else {
+            filteredListData = this.listData_cache.filter((currentValue, index, arr) => {
+                return (currentValue.OrderNote.includes(searchText) || currentValue.OrderId.toString().toUpperCase().includes(searchText.toUpperCase()))
+            });
+        }
+        //make a copy of the cache
+        let listData_clone = Object.assign([],filteredListData);
+        this.setState({listData: filteredListData}); //render the list without map thumbnail
+        //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
+        this.ajax_recursive_wrapper(listData_clone, 0);
+    };
+
+    sortFunc = {
         orderDateIncrease: this.orderDateIncrease,
         orderDateDecrease: this.orderDateDecrease,
         statusIncrease: this.statusIncrease,
@@ -128,9 +147,10 @@ class DashBoard extends Component {
                     <div className='search-bar-row'>
                         <SearchPanel listData={this.state.listData}
                                      updateDrawer={this.updateDrawer}
+                                     onPressEnter={this.onPressEnter}
                                      className='search-bar'/>
                         <SearchFilter className='dropdown-filter'
-                                      filterFunc={this.filterFunc}
+                                      sortFunc={this.sortFunc}
                                       menuDisabled={!this.state.listData}/>
                     </div>
                     <OrderList listData={this.state.listData}
