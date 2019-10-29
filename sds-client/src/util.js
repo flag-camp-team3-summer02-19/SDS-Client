@@ -8,7 +8,7 @@
  * @param errorCallback - Error callback function
  * @param isImage - True if this ajax call is used to fetch image file from server
  */
-export function ajax(method, url, data, successCallback, errorCallback, isImage) {
+export function ajax(method, url, data, successCallback, errorCallback, isImage, header) {
     var xhr = new XMLHttpRequest();
     if (isImage) {
         xhr.responseType = 'arraybuffer';
@@ -29,6 +29,12 @@ export function ajax(method, url, data, successCallback, errorCallback, isImage)
         console.error("The request couldn't be completed.");
         errorCallback();
     };
+
+    if (header !== null) {
+        for (let i = 0; i < header.length; i++) {
+            xhr.setRequestHeader(header[i][0], header[i][1]);
+        }
+    }
 
     if (data === null) {
         xhr.send();
