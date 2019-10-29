@@ -8,22 +8,6 @@ class DateRange extends React.Component {
         endOpen: false,
     };
 
-    disabledStartDate = startValue => {
-        const { endValue } = this.state;
-        if (!startValue || !endValue) {
-            return false;
-        }
-        return startValue.valueOf() > endValue.valueOf();
-    };
-
-    disabledEndDate = endValue => {
-        const { startValue } = this.state;
-        if (!endValue || !startValue) {
-            return false;
-        }
-        return endValue.valueOf() <= startValue.valueOf();
-    };
-
     dateonChange = (field, value) => {
         this.setState({
             [field]: value,
@@ -34,32 +18,25 @@ class DateRange extends React.Component {
         this.dateonChange('startValue', value);
     };
 
-    onEndChange = value => {
-        this.dateonChange('endValue', value);
-    };
-
     handleStartOpenChange = open => {
         if (!open) {
             this.setState({ endOpen: true });
         }
     };
 
-    handleEndOpenChange = open => {
-        this.setState({ endOpen: open });
-    };
-
     render() {
-        const { startValue, endValue, endOpen } = this.state;
+        const { startValue } = this.state;
         return (
             <div>
                 <DatePicker
-                    disabledDate={this.disabledStartDate}
                     showTime
                     format="YYYY-MM-DD HH:mm:ss"
-                    value={startValue}
-                    placeholder="Start"
+                    value={this.props.value}
+                    placeholder="Pick Up Date"
                     onChange={this.onStartChange}
-                    onOpenChange={this.handleStartOpenChange}
+                    onChange={this.props.onChangeValue}
+                    // onChange={this.onStartChange}
+                    // onOpenChange={this.handleStartOpenChange}
                 />
             </div>
         );

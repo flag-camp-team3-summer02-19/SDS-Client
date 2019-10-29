@@ -21,6 +21,14 @@ class NewOrder extends Component {
         ]
     }
 
+    onSuccessPackageInfo = values => {
+        this.setState({
+            loggedIn: true,
+            userInfo: values
+        });
+        history.push('/');
+    };
+
     /* this method will be called only when sub-components each on success state*/
     updateOrder = order => {
         this.setState(prev => {

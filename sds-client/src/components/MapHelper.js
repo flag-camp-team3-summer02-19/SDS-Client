@@ -41,7 +41,6 @@ class Map extends React.Component {
     deliveryType= -1;
     constructor(props) {
         super(props);
-        var mPath = this.props.props;
         this.path[0].lat = this.props.props.startAddressLat;
         this.path[0].lng = this.props.props.startAddressLng;
         this.path[1].lat = this.props.props.destAddressLat;

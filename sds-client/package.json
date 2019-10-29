@@ -16,7 +16,8 @@
     "react-scripts": "3.2.0",
     "spherical-geometry-js": "^2.0.0",
     "vue": "^2.6.10",
-    "vue2-google-maps": "^0.10.7"
+    "vue2-google-maps": "^0.10.7",
+    "recompose": "latest"
   },
   "scripts": {
     "start": "cross-env PORT=3006 react-scripts start",
