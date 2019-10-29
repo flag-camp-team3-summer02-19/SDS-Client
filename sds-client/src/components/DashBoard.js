@@ -11,7 +11,7 @@ import {
 } from '../Constants';
 import SearchFilter from "./SearchFilter";
 import OrderDrawer from "./OrderDrawer";
-import {Button} from "antd";
+import {Button, BackTop} from "antd";
 
 import {ajax, convertAddressToUrl} from "../util";
 
@@ -153,6 +153,7 @@ class DashBoard extends Component {
                                       sortFunc={this.sortFunc}
                                       menuDisabled={!this.state.listData}/>
                     </div>
+                    <BackTop />
                     <OrderList listData={this.state.listData}
                                updateDrawer={this.updateDrawer}
                                itemInDrawer={this.itemInDrawer}
