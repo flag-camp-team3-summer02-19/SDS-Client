@@ -31,7 +31,7 @@ export function ajax(method, url, data, successCallback, errorCallback, isImage,
         errorCallback();
     };
 
-    if (header !== null) {
+    if (header) {
         for (let i = 0; i < header.length; i++) {
             xhr.setRequestHeader(header[i][0], header[i][1]);
         }
