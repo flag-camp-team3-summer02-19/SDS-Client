@@ -18,20 +18,21 @@ class Register extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log(values);
-                let username = values.username;
-                let password = md5(username + md5(values.password));
+                let email = values.email;
+                let password = md5(email + md5(values.password));
                 let req = JSON.stringify({
-                    user_id : username,
-                    password : password,
+                    email : email,
+                    password : Array.from(password),
                 });
+                console.log(req);
 
                 ajax('POST', REGISTER_ENDPOINT, req,
                     (res) => {
                         let result = JSON.parse(res);
+                        console.log(result);
                         if (result.status === 'OK') {
                             /* TODO: update callbacks parameter  */
-                            this.props.onSuccessLogIn({
+                            this.props.onSuccessLogIn(false, {
                                 userid: 1,
                                 session: 2,
                                 username: values.email
@@ -41,7 +42,7 @@ class Register extends Component {
                     /* TODO: update callbacks parameter  */
                     () => {
                         alert(onErrorMessage);
-                    });
+                    }, false, null, true);
             }
         });
     };
