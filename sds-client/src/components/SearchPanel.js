@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Icon, Input, AutoComplete, Row,Col, Menu} from 'antd';
+import {Select, Input, AutoComplete, Row,Col, Icon, Menu} from 'antd';
 import {ShipMethod} from "../Constants";
 import mobile from "../assets/images/auto_mobile.png";
 import drone from "../assets/images/drone.png";
@@ -63,7 +63,7 @@ class SearchPanel extends Component {
     };
 
     onSearch = searchText => {
-        console.log("onSearch: ", searchText);
+        // console.log("onSearch: ", searchText);
         this.setState({
             dataSource: this.filterItem(searchText),
             searchText: searchText,
@@ -72,16 +72,16 @@ class SearchPanel extends Component {
 
     onSelect = (value, option) => {
         this.props.updateDrawer(option.props.item, true);
-        console.log("onSelect: ", value);
+        // console.log("onSelect: ", value);
     };
 
     onFocus = () => {
         this.onSearch(this.state.searchText);
-        console.log("onFocus ");
+        // console.log("onFocus ");
     };
 
     onPressEnter = (searchText) => {
-        console.log("SearchPanel: onPressEnter ");
+        // console.log("SearchPanel: onPressEnter ");
         this.props.onPressEnter(searchText);
     };
 
@@ -125,11 +125,11 @@ class SearchPanel extends Component {
                 onSelect={this.onSelect}
                 onFocus={this.onFocus}
                 dataSource={options}
-                placeholder="search notes here"
                 optionLabelProp="value"
-                defaultActiveFirstOption = {false}
+                defaultActiveFirstOption={false}
             >
-                <Input.Search allowClear onSearch={this.onPressEnter}/>
+                <Input.Search allowClear onSearch={this.onPressEnter}
+                              placeholder="search notes here"/>
             </AutoComplete>
         );
     }

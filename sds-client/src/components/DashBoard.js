@@ -11,7 +11,8 @@ import {
 } from '../Constants';
 import SearchFilter from "./SearchFilter";
 import OrderDrawer from "./OrderDrawer";
-import {Button, BackTop} from "antd";
+import {Button, BackTop, Tag} from "antd";
+import FilterTags from "./FilterTags";
 
 import {ajax, convertAddressToUrl} from "../util";
 
@@ -25,9 +26,11 @@ class DashBoard extends Component {
             listData: null,
             drawerVisible: false,
             isListDataValid: false,
+            filterTags:[],
         };
         this.itemInDrawer = null;
         this.listData_cache = this.state.listData;
+        this.filtersChain = [];
     }
 
     //TODO: only fetch data when refresh this page or redirect to this page? (this.props.history)
@@ -56,14 +59,13 @@ class DashBoard extends Component {
         let result = JSON.parse(resp);
 
         //the following is temp code to add thumbnailSource in each item.
-        let result_clone = Object.assign([],result);
+        // let result_clone = Object.assign([],result);
         //TODO: update these codes after discuss with backend
         this.setState({listData: result.orders});
         this.listData_cache = result.orders;
 
         //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
-        this.ajax_recursive_wrapper(result_clone.orders, 0);
-
+        this.ajax_recursive_wrapper(result.orders, 0);
     };
 
     onDataUpdateFailed = () => {
@@ -93,8 +95,9 @@ class DashBoard extends Component {
         this.setState(
             (prevSt) => {
                 if (prevSt.listData) {
+                    let newListData = [...prevSt.listData];
                     return {
-                        listData: prevSt.listData.sort((a, b) => {return a.Status - b.Status})};
+                        listData: newListData.sort((a, b) => {return a.Status - b.Status})};
                 }
             }
         );
@@ -103,27 +106,42 @@ class DashBoard extends Component {
         this.setState(
             (prevSt) => {
                 if (prevSt.listData) {
+                    let newListData = [...prevSt.listData];
                     return {
-                        listData: prevSt.listData.sort((a, b) => {return b.Status - a.Status})}
+                        listData: newListData.sort((a, b) => {return b.Status - a.Status})}
                 }
             }
         );
     };
 
     onPressEnter = (searchText) => {
+        if(!searchText) return;
+        this.setState((prevState) => {
+            let newTag = {tagName:'all:', searchText:searchText, visible:true, color:"volcano"};
+            let tags = prevState.filterTags;
+            // the order of the filters in this.filterChain is the same in the corresponding tag in this.state.filterTags
+            tags.push(newTag);
+            this.filtersChain.push({filterClass:'all', searchText:searchText});
+            return {
+                listData: this.searchFilterChain(this.listData_cache),
+                filterTags: tags,
+            }
+        });
+
+    };
+
+    filterSearchText = (searchText, filterClass, inListData) => {
         let filteredListData;
         if(!searchText) {
-            filteredListData = this.listData_cache;
-        } else {
-            filteredListData = this.listData_cache.filter((currentValue, index, arr) => {
+            filteredListData = inListData;
+        } else if(filterClass === 'all') {
+            filteredListData = inListData.filter((currentValue, index, arr) => {
                 return (currentValue.OrderNote.includes(searchText) || currentValue.OrderId.toString().toUpperCase().includes(searchText.toUpperCase()))
             });
+        } else {
+            filteredListData = undefined;
         }
-        //make a copy of the cache
-        let listData_clone = Object.assign([],filteredListData);
-        this.setState({listData: filteredListData}); //render the list without map thumbnail
-        //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
-        this.ajax_recursive_wrapper(listData_clone, 0);
+        return filteredListData;
     };
 
     sortFunc = {
@@ -131,6 +149,26 @@ class DashBoard extends Component {
         orderDateDecrease: this.orderDateDecrease,
         statusIncrease: this.statusIncrease,
         statusDecrease: this.statusDecrease
+    };
+
+    filterTagOnClose = (tag, idx) => {
+        this.setState((prevSt)=> {
+            let tags = prevSt.filterTags;
+            tags.splice(idx, 1); //this violates the immutable of this.state. How to solve this?
+            this.filtersChain.splice(idx, 1);
+            return {
+                listData: this.searchFilterChain(this.listData_cache),
+                filterTags: tags,
+            };
+        })
+    };
+
+    searchFilterChain = (initListData) => {
+        let filteredListData = initListData;
+        for(let i=0;i<this.filtersChain.length;++i) {
+            filteredListData = this.filterSearchText(this.filtersChain[i].searchText, this.filtersChain[i].filterClass, filteredListData);
+        }
+        return filteredListData;
     };
 
     render() {
@@ -153,6 +191,9 @@ class DashBoard extends Component {
                                       sortFunc={this.sortFunc}
                                       menuDisabled={!this.state.listData}/>
                     </div>
+                    <FilterTags tags={this.state.filterTags}
+                                tagOnClose={this.filterTagOnClose}
+                                />
                     <BackTop />
                     <OrderList listData={this.state.listData}
                                updateDrawer={this.updateDrawer}
