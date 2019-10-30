@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {Tag, Button} from "antd";
+import {Tag, Icon} from "antd";
 
 class FilterTags extends Component {
     render() {
         const {tags} = this.props;
         return (
             <div className="filter-tags">
-                {tags.length > 0?<Button onClick={()=> {console.log("clear")}}>clear all</Button>:null}
+                {tags.length > 0?<div className='close-all-filters-icon'><Icon width='10px' type="close-circle" onClick={()=> {console.log("clear")}} /></div> : null}
                 {tags.map((currentValue, index, arr) => {
                     return (<Tag key={index}
                          closable
