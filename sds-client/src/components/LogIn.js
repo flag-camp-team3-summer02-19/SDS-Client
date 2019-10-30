@@ -37,25 +37,17 @@ class LogIn extends Component {
                 ajax('POST', LOGIN_ENDPOINT, req,
                     (res) => {
                         let result = JSON.parse(res);
-                        if (result.status === 'OK') {
-                            /* TODO: update callbacks parameter  */
+                        console.log(result);
+                        if (result.resultCode === 120) {
                             this.props.onSuccessLogIn(true, {
-                                userid: 1,
-                                session: 2,
-                                username: values.email
+                                sessionID: result.sessionID
                             });
+                        } else {
+                            alert(result.message);
                         }
                     },
-                    /* TODO: update callbacks parameter  */
-                    () => {
-                        alert(onErrorMessage);
-                        // TODO: for development purpose, remember to delete afterwards
-                        this.props.onSuccessLogIn(true, {
-                            userid: 1,
-                            session: 2,
-                            username: values.email
-                        });
-                    },false, null, true);
+                    () => { alert(onErrorMessage); },
+                    false, null, true);
             }
         });
     };
