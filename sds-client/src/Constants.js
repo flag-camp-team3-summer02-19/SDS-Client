@@ -72,4 +72,3 @@ export const MapThumbnail_prefix = "https://maps.googleapis.com/maps/api/staticm
 export const MapThumbnail_suffix = '&key=';
 export const MapApiKey = "Google Map Api";
 export const GOOGLE_MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${MapApiKey}&v=3.exp&libraries=geometry,drawing,places`;
-// 'Google Map Api'
