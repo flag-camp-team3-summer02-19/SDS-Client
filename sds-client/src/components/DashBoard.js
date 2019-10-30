@@ -151,7 +151,7 @@ class DashBoard extends Component {
         statusDecrease: this.statusDecrease
     };
 
-    filterTagOnClose = (tag, idx) => {
+    onCloseFilterTag = (tag, idx) => {
         this.setState((prevSt)=> {
             let tags = prevSt.filterTags;
             tags.splice(idx, 1); //this violates the immutable of this.state. How to solve this?
@@ -161,6 +161,12 @@ class DashBoard extends Component {
                 filterTags: tags,
             };
         })
+    };
+
+    onCloseAllFilterTags = () => {
+        let tags = [];
+        this.filtersChain = [];
+        this.setState({listData: this.searchFilterChain(this.listData_cache), filterTags: tags});
     };
 
     searchFilterChain = (initListData) => {
@@ -192,7 +198,8 @@ class DashBoard extends Component {
                                       menuDisabled={!this.state.listData}/>
                     </div>
                     <FilterTags tags={this.state.filterTags}
-                                tagOnClose={this.filterTagOnClose}
+                                onCloseTag={this.onCloseFilterTag}
+                                onCloseAllTags={this.onCloseAllFilterTags}
                                 />
                     <BackTop />
                     <OrderList listData={this.state.listData}
