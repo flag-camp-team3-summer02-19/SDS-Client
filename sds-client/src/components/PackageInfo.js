@@ -27,6 +27,7 @@ class PackageInfo extends React.Component {
 
     deliveryType = 1;
     pickupDate= null;
+    packageNotes = "";
 
     constructor (props) {
         super (props);
@@ -79,6 +80,10 @@ class PackageInfo extends React.Component {
       //  this.setState({destAddress: event.target.value});
     }
 
+    packageNotesTextChange(event) {
+        this.packageNotes = event.target.value;
+    }
+
     onAddressChange() {
         if(this.startAddress === "" || this.destAddress === "") {
             alert(onErrorAddress);
@@ -110,6 +115,7 @@ class PackageInfo extends React.Component {
                 packageHeight: this.packageHeight,
                 packageWeight: this.packageWeight,
                 pickupDate: this.state.startValue,
+                packageNotes: this.packageNotes,
             });
             console.log(req);
             ajax('POST', PACKAGEINFO_ENDPOINT, req,
@@ -167,6 +173,12 @@ class PackageInfo extends React.Component {
                     {/*<DateRange value={this.pickupDate} onChangeValue={this.onPickupDateChange}/>*/}
                     <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" value={this.state.startValue}
                         placeholder="Pick Up Date" onChange={this.onPickupDateChange.bind(this)} />
+                    <br/>
+                    <br/>
+                    <TextArea id={"package-notes"} onChange={this.packageNotesTextChange.bind(this)}
+                              placeholder="Please enter your package notes here."
+                              autosize={{ minRows: 2, maxRows: 3 }}
+                    />
                     <br/>
                     <br/>
                     {/*<button onClick={this.props.updateOrder}> Choose a delivery method </button>*/}

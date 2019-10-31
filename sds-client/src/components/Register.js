@@ -30,19 +30,15 @@ class Register extends Component {
                     (res) => {
                         let result = JSON.parse(res);
                         console.log(result);
-                        if (result.status === 'OK') {
-                            /* TODO: update callbacks parameter  */
-                            this.props.onSuccessLogIn(false, {
-                                userid: 1,
-                                session: 2,
-                                username: values.email
-                            });
+                        if (result.resultCode === 110) {
+                            this.props.onSuccessRegister(false, { } );
+                            alert(result.message);
+                        } else {
+                            alert(result.message);
                         }
                     },
-                    /* TODO: update callbacks parameter  */
-                    () => {
-                        alert(onErrorMessage);
-                    }, false, null, true);
+                    () => { alert(onErrorMessage); },
+                    false, null, true);
             }
         });
     };
