@@ -18,6 +18,7 @@
 @import "./styles/FilterTags.css";
 @import "./styles/SearchFilter.css";
 @import "./styles/MapHelper.css";
+@import "./styles/FilterSelect.css";
 
 
 body {

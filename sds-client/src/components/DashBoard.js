@@ -7,7 +7,9 @@ import {
     DEMO_GET_OK_ENDPOINT,
     MapApiKey,
     MapThumbnail_prefix,
-    MapThumbnail_suffix
+    MapThumbnail_suffix,
+    TagColorMap,
+    TagNames
 } from '../Constants';
 import SearchFilter from "./SearchFilter";
 import OrderDrawer from "./OrderDrawer";
@@ -15,9 +17,7 @@ import {Button, BackTop, Tag} from "antd";
 import FilterTags from "./FilterTags";
 
 import {ajax, convertAddressToUrl} from "../util";
-
-const TagColorMap = {'all:':'volcano', 'address:':'cyan', 'addressFrom:':'blue', 'addressTo:':'geekBlue', 'note:':'green', 'trackingNum:':'purple'};
-const TagNames = {all:'all:', address:'address:', addressFrom:'addressFrom:', addressTo:'addressTo', note:'note:', trackingNum:'trackingNum:'};
+import FilterSelect from "./FilterSelect";
 
 class DashBoard extends Component {
 
@@ -29,10 +29,10 @@ class DashBoard extends Component {
             drawerVisible: false,
             isListDataValid: false,
             filterTags:[],
+            currentFilterTagName:TagNames.all,
         };
         this.itemInDrawer = null;
         this.listData_cache = this.state.listData;
-        this.filtersChain = [];
         this.tagFilterMap = new Map(); //key:string of "tagType:searchText", value:{tag, filter}
     }
 
@@ -124,13 +124,42 @@ class DashBoard extends Component {
         statusDecrease: this.statusDecrease
     };
 
+    filter_note = (searchText, item) => item.OrderNote.includes(searchText);
+    filter_trackingNum = (searchText, item) => item.OrderId.toString().toUpperCase().startsWith(searchText.toUpperCase());
+    filter_addressFrom = (searchText, item) => item.FromAddress.includes(searchText);
+    filter_addressTo = (searchText, item) => item.ToAddress.includes(searchText);
+
     filterSearchText = (searchText, filterClass, inListData) => {
         let filteredListData;
         if(!searchText) {
             filteredListData = inListData;
         } else if(filterClass === TagNames.all) {
             filteredListData = inListData.filter((currentValue, index, arr) => {
-                return (currentValue.OrderNote.includes(searchText) || currentValue.OrderId.toString().toUpperCase().startsWith(searchText.toUpperCase()))
+                return this.filter_note(searchText, currentValue)
+                    || this.filter_trackingNum(searchText, currentValue)
+                    || this.filter_addressFrom(searchText, currentValue)
+                    || this.filter_addressTo(searchText, currentValue);
+            });
+        } else if(filterClass === TagNames.note) {
+            filteredListData = inListData.filter((currentValue, index, arr) => {
+                return this.filter_note(searchText, currentValue);
+            });
+        } else if(filterClass === TagNames.trackingNum) {
+            filteredListData = inListData.filter((currentValue, index, arr) => {
+                return this.filter_trackingNum(searchText, currentValue);
+            });
+        } else if(filterClass === TagNames.addressFrom) {
+            filteredListData = inListData.filter((currentValue, index, arr) => {
+                return this.filter_addressFrom(searchText, currentValue);
+            });
+        } else if(filterClass === TagNames.addressTo) {
+            filteredListData = inListData.filter((currentValue, index, arr) => {
+                return this.filter_addressTo(searchText, currentValue);
+            });
+        } else if(filterClass === TagNames.address) {
+            filteredListData = inListData.filter((currentValue, index, arr) => {
+                return this.filter_addressFrom(searchText, currentValue)
+                    || this.filter_addressTo(searchText, currentValue);
             });
         } else {
             filteredListData = undefined;
@@ -140,10 +169,10 @@ class DashBoard extends Component {
 
     onPressEnter = (searchText) => {
         if(!searchText) return;
-        let newTagKey = TagNames.all + searchText;
+        let newTagKey = this.state.currentFilterTagName + searchText;
         if (this.tagFilterMap.has(newTagKey)) return;
         this.setState((prevState) => {
-            this.tagFilterMap.set(newTagKey, {tagName:TagNames.all, searchText:searchText});
+            this.tagFilterMap.set(newTagKey, {tagName:this.state.currentFilterTagName, searchText:searchText});
             return {
                 listData: this.searchFilterChain(this.listData_cache),
                 filterTags: this.genFilterTags(),
@@ -184,6 +213,10 @@ class DashBoard extends Component {
         return tags;
     };
 
+    onChangeFilterTag = (tagName) => {
+      this.setState({currentFilterTagName:tagName})
+    };
+
     render() {
         return (
             <div id="dashboard">
@@ -203,6 +236,9 @@ class DashBoard extends Component {
                         <SearchFilter className='dropdown-filter'
                                       sortFunc={this.sortFunc}
                                       menuDisabled={!this.state.listData}/>
+                    </div>
+                    <div className='filter-select-tag-date-picker'>
+                        <FilterSelect onChangeFilterTag={this.onChangeFilterTag}/>
                     </div>
                     <FilterTags tags={this.state.filterTags}
                                 onCloseTag={this.onCloseFilterTag}

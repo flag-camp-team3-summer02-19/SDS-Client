@@ -18,6 +18,8 @@ export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipStatusMap = {0: "Order Placed", 1: "In Progress", 2: "Delivered"};
 export const ShipMethod = {Mobile : 3, Drone : 4};
 export const ShipMethodMap = {3: 'Auto Mobile', 4: 'Drone'};
+export const TagColorMap = {'all:':'volcano', 'address:':'#108ee9', 'addressFrom:':'blue', 'addressTo:':'cyan', 'note:':'green', 'trackingNum:':'purple'};
+export const TagNames = {all:'all:', address:'address:', addressFrom:'addressFrom:', addressTo:'addressTo:', note:'note:', trackingNum:'trackingNum:'};
 
 export const FakeData = [
     {OrderId:'abcdefg1234',
