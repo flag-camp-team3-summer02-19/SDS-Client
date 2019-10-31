@@ -16,6 +16,8 @@ import FilterTags from "./FilterTags";
 
 import {ajax, convertAddressToUrl} from "../util";
 
+const TagColorMap = {'all:':'volcano', 'address:':'cyan', 'addressFrom:':'blue', 'addressTo:':'geekBlue', 'note:':'green', 'trackingNum:':'purple'};
+const TagNames = {all:'all:', address:'address:', addressFrom:'addressFrom:', addressTo:'addressTo', note:'note:', trackingNum:'trackingNum:'};
 
 class DashBoard extends Component {
 
@@ -31,6 +33,7 @@ class DashBoard extends Component {
         this.itemInDrawer = null;
         this.listData_cache = this.state.listData;
         this.filtersChain = [];
+        this.tagFilterMap = new Map(); //key:string of "tagType:searchText", value:{tag, filter}
     }
 
     //TODO: only fetch data when refresh this page or redirect to this page? (this.props.history)
@@ -114,36 +117,6 @@ class DashBoard extends Component {
         );
     };
 
-    onPressEnter = (searchText) => {
-        if(!searchText) return;
-        this.setState((prevState) => {
-            let newTag = {tagName:'all:', searchText:searchText, visible:true, color:"volcano"};
-            let tags = prevState.filterTags;
-            // the order of the filters in this.filterChain is the same in the corresponding tag in this.state.filterTags
-            tags.push(newTag);
-            this.filtersChain.push({filterClass:'all', searchText:searchText});
-            return {
-                listData: this.searchFilterChain(this.listData_cache),
-                filterTags: tags,
-            }
-        });
-
-    };
-
-    filterSearchText = (searchText, filterClass, inListData) => {
-        let filteredListData;
-        if(!searchText) {
-            filteredListData = inListData;
-        } else if(filterClass === 'all') {
-            filteredListData = inListData.filter((currentValue, index, arr) => {
-                return (currentValue.OrderNote.includes(searchText) || currentValue.OrderId.toString().toUpperCase().includes(searchText.toUpperCase()))
-            });
-        } else {
-            filteredListData = undefined;
-        }
-        return filteredListData;
-    };
-
     sortFunc = {
         orderDateIncrease: this.orderDateIncrease,
         orderDateDecrease: this.orderDateDecrease,
@@ -151,30 +124,64 @@ class DashBoard extends Component {
         statusDecrease: this.statusDecrease
     };
 
-    onCloseFilterTag = (tag, idx) => {
-        this.setState((prevSt)=> {
-            let tags = prevSt.filterTags;
-            tags.splice(idx, 1); //this violates the immutable of this.state. How to solve this?
-            this.filtersChain.splice(idx, 1);
+    filterSearchText = (searchText, filterClass, inListData) => {
+        let filteredListData;
+        if(!searchText) {
+            filteredListData = inListData;
+        } else if(filterClass === TagNames.all) {
+            filteredListData = inListData.filter((currentValue, index, arr) => {
+                return (currentValue.OrderNote.includes(searchText) || currentValue.OrderId.toString().toUpperCase().startsWith(searchText.toUpperCase()))
+            });
+        } else {
+            filteredListData = undefined;
+        }
+        return filteredListData;
+    };
+
+    onPressEnter = (searchText) => {
+        if(!searchText) return;
+        let newTagKey = TagNames.all + searchText;
+        if (this.tagFilterMap.has(newTagKey)) return;
+        this.setState((prevState) => {
+            this.tagFilterMap.set(newTagKey, {tagName:TagNames.all, searchText:searchText});
             return {
                 listData: this.searchFilterChain(this.listData_cache),
-                filterTags: tags,
+                filterTags: this.genFilterTags(),
+            }
+        });
+    };
+
+    onCloseFilterTag = (tag, idx) => {
+        this.setState((prevSt)=> {
+            let curTagKey = tag.tagName + tag.searchText;
+            this.tagFilterMap.delete(curTagKey);
+            return {
+                listData: this.searchFilterChain(this.listData_cache),
+                filterTags: this.genFilterTags(),
             };
         })
     };
 
     onCloseAllFilterTags = () => {
         let tags = [];
-        this.filtersChain = [];
+        this.tagFilterMap.clear();
         this.setState({listData: this.searchFilterChain(this.listData_cache), filterTags: tags});
     };
 
     searchFilterChain = (initListData) => {
         let filteredListData = initListData;
-        for(let i=0;i<this.filtersChain.length;++i) {
-            filteredListData = this.filterSearchText(this.filtersChain[i].searchText, this.filtersChain[i].filterClass, filteredListData);
+        for (let [tagKey, tagValue] of this.tagFilterMap.entries()) {
+            filteredListData = this.filterSearchText(tagValue.searchText, tagValue.tagName, filteredListData);
         }
         return filteredListData;
+    };
+
+    genFilterTags = () => {
+        let tags = [];
+        for (let [tagKey, tagValue] of this.tagFilterMap.entries()) {
+            tags.push({tagName:tagValue.tagName, searchText: tagValue.searchText, color:TagColorMap[tagValue.tagName]});
+        }
+        return tags;
     };
 
     render() {
