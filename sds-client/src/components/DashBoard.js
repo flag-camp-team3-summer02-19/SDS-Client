@@ -38,6 +38,7 @@ class DashBoard extends Component {
         this.itemInDrawer = null;
         this.listData_cache = this.state.listData;
         this.tagFilterMap = new Map(); //key:string of "tagType:searchText", value:{tag, filter}
+        this.ajaxHeader = [];
     }
 
     componentWillUnmount() {
@@ -48,7 +49,8 @@ class DashBoard extends Component {
     componentDidMount() {
         this._isMounted = true; // this is a fix to avoid warning: Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
         //do ajax call to fetch simple Order data from server
-        ajax('GET',ORDERS_ENDPOINT,null, this.onDataUpdated, this.onDataUpdateFailed,false,[['sessionID', this.state.userInfo.info.sessionID]],true);
+        this.ajaxHeader = [['sessionID', this.state.userInfo.info.sessionID]];
+        ajax('GET',ORDERS_ENDPOINT,null, this.onDataUpdated, this.onDataUpdateFailed,false, this.ajaxHeader,false);
     }
 
     onLogout = () => {
@@ -295,7 +297,9 @@ class DashBoard extends Component {
                         />
                         <OrderDrawer drawerVisible={this.state.drawerVisible}
                                      itemInDrawer={this.itemInDrawer}
-                                     updateDrawer={this.updateDrawer}/>
+                                     updateDrawer={this.updateDrawer}
+                                     ajaxHeader={this.ajaxHeader}
+                                     onLogout={this.onLogout}/>
                     </section>
                 </div>
             </div>
