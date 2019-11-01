@@ -27,12 +27,16 @@ class DashBoard extends Component {
             isListDataValid: false,
         };
         this.itemInDrawer = null;
+
     }
 
     //TODO: only fetch data when refresh this page or redirect to this page? (this.props.history)
     componentDidMount() {
         //do ajax call to fetch simple Order data from server
-        ajax('GET',DEMO_GET_OK_ENDPOINT,JSON.stringify(this.state.userInfo), this.onDataUpdated, this.onDataUpdateFailed);
+        let sessionId = this.props.userInfo.sessionID;
+        console.log(this.state.userInfo.sessionID);
+        ajax('GET',DEMO_GET_OK_ENDPOINT,
+            JSON.stringify(this.state.userInfo), this.onDataUpdated, this.onDataUpdateFailed,false, [["sessionID", sessionId]], true);
     }
 
     ajax_recursive_wrapper = (arr, currIdx) => {
@@ -55,11 +59,12 @@ class DashBoard extends Component {
         let result = JSON.parse(resp);
         //the following is temp code to add thumbnailSource in each item.
         let result_clone = Object.assign([],result);
+        console.log(result_clone);
         //TODO: update these codes after discuss with backend
         this.setState({listData: result.orders});
 
         //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
-        this.ajax_recursive_wrapper(result_clone.orders, 0);
+        this.ajax_recursive_wrapper(result_clone.ordersSummary, 0);
 
     };
 

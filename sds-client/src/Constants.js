@@ -14,7 +14,8 @@ export const REGISTER_ENDPOINT = "http://localhost:1234/api/idm/register";
 export const PACKAGEINFO_ENDPOINT = "http://localhost:1234/api/idm/orderDetails";
 export const SELECTMETHOD_ENDPOINT = "https://google.com";
 
-export const DEMO_GET_OK_ENDPOINT = "https://9e919392-f843-47c2-b9b5-58d14014c11a.mock.pstmn.io/userData";
+export const DEMO_GET_OK_ENDPOINT = "http://localhost:1234/api/idm/orders";
+//https://9e919392-f843-47c2-b9b5-58d14014c11a.mock.pstmn.io/userData
 
 export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipStatusMap = {0: "Order Placed", 1: "In Progress", 2: "Delivered"};
