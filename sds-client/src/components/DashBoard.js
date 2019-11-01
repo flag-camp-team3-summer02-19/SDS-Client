@@ -70,8 +70,6 @@ class DashBoard extends Component {
                 },() => {console.log("ajax_recursive_wrapper failed on item: " + currIdx);}, true);
         } else {
             //only re-render map thumbnail after all images are downloaded.
-            console.log("D:in DashBoard:ajax_recursive_wrapper:");
-            console.log(arr);
             if(this._isMounted) {
                 this.setState({listData: arr});
             }
@@ -80,7 +78,6 @@ class DashBoard extends Component {
     onDataUpdated = (resp) => {
         if(this._isMounted){
             let result = JSON.parse(resp);
-            console.log(result);
             let orders = [];
             let loggedIn = false;
             if (result.status === "OK") {
@@ -99,14 +96,15 @@ class DashBoard extends Component {
                     }
                 );
                 loggedIn = true;
-                //the following is temp code to add thumbnailSource in each item.
-                // let result_clone = Object.assign([],result);
-                this.listData_cache = orders;
-
-                //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
-                this.ajax_recursive_wrapper(orders, 0);
             }
             this.setState({listData: orders, loggedIn: loggedIn});
+
+            //the following is temp code to add thumbnailSource in each item.
+            // let result_clone = Object.assign([],result);
+            this.listData_cache = orders;
+
+            //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
+            this.ajax_recursive_wrapper(orders, 0);
         }
     };
 
@@ -260,14 +258,15 @@ class DashBoard extends Component {
     };
 
     render() {
-        console.log("D:inDashBoard");
-        console.log(this.state);
         return (
             <div>
                 {this.state.loggedIn ? null : <Redirect to="/login"/>}
                 <div id="dashboard">
                     <section id="control-panel">
-                        <UserPanel userInfo={this.state.userInfo} loggedIn={this.state.loggedIn} onLogout={this.onLogout}/>
+                        <UserPanel userInfo={this.state.userInfo}
+                                   loggedIn={this.state.loggedIn}
+                                   onLogout={this.onLogout}
+                                   ajaxHeader={this.ajaxHeader}/>
                         <Button onClick={() => {
                             history.push('/newOrder')
                         }}> Make New Order

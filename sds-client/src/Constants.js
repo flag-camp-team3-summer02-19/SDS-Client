@@ -10,6 +10,7 @@
 */
 export const LOGIN_ENDPOINT = "http://localhost:1234/api/idm/login";
 export const REGISTER_ENDPOINT = "http://localhost:1234/api/idm/register";
+export const LOGOUT_ENDPOINT = "http://localhost:1234/api/idm/logout";
 export const PACKAGEINFO_ENDPOINT = "https://google.com";
 export const SELECTMETHOD_ENDPOINT = "https://google.com";
 export const ORDERS_ENDPOINT = "http://localhost:1234/api/idm/orders";

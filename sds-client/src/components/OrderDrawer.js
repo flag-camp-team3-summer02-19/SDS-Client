@@ -14,7 +14,6 @@ class OrderDrawer extends Component {
         };
     }
 
-    //TODO: we can use ajax call to fetch up-to-date info in the future
     onClose = () => {
         this.props.updateDrawer(null,false);
     };
@@ -32,7 +31,7 @@ class OrderDrawer extends Component {
                             FromAddress: result.packageInfo.from,
                             ToAddress: result.packageInfo.to,
                             ShipMethod: result.method.deliveryType,
-                            Status: result.packageInfo.deliveryStatus,
+                            Status: result.method.deliveryStatus,
                             OrderedTime: this.props.itemInDrawer.OrderedTime,
                             PackageInfo: result.packageInfo.length + ' x ' + result.packageInfo.width + ' x ' + result.packageInfo.height + ', ' + result.packageInfo.weight + ' lbs',
                             DeliveryTime: result.method.deliveryTime,
