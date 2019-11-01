@@ -8,6 +8,7 @@
  * @param errorCallback - Error callback function
  * @param isImage - True if this ajax call is used to fetch image file from server
  * @param header - array of extra key value pairs that should put in http request header
+ * @param withCredentials - true if we send request to our backend
  */
 export function ajax(method, url, data, successCallback, errorCallback, isImage, header, withCredentials=false) {
     var xhr = new XMLHttpRequest();

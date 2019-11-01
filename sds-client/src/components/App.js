@@ -17,7 +17,7 @@ class App extends React.Component {
         userInfo: {}
     };
 
-    onSuccessLogIn = (loggedIn, values) => {
+    updateLogInStatus = (loggedIn, values) => {
         this.setState({
             loggedIn: loggedIn,
             userInfo: values
@@ -35,10 +35,10 @@ class App extends React.Component {
                         <Redirect to="/login"/>}
                 </Route>
                 <Route path="/login" exact>
-                    <LogIn onSuccessLogIn={this.onSuccessLogIn}/>
+                    <LogIn onSuccessLogIn={this.updateLogInStatus}/>
                 </Route>
                 <Route path="/register" exact>
-                    <Register onSuccessRegister={this.onSuccessLogIn}/>
+                    <Register onSuccessRegister={this.updateLogInStatus}/>
                 </Route>
 
                 <Route path="/dashboard" exact

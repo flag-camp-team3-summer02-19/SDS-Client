@@ -41,8 +41,8 @@ class LogIn extends Component {
                         console.log(result);
                         if (result.resultCode === 120) {
                             this.props.onSuccessLogIn(true, {
-                                sessionID: result.sessionID,
-                                username: values.email,
+                                email: email,
+                                sessionID: result.sessionID
                             });
                         } else {
                             alert(result.message);
