@@ -2,7 +2,7 @@ import React from 'react';
 import {compose, withProps} from 'recompose';
 import {DirectionsRenderer, GoogleMap, Marker, Polyline, withGoogleMap, withScriptjs} from 'react-google-maps';
 import Geocode from "react-geocode";
-import {GOOGLE_MAP_URL, MapApiKey} from "../Constants";
+import {GOOGLE_MAP_URL, MapApiKey, ShipMethod} from "../Constants";
 
 const IconWarehouse = {
     url: 'https://img.pngio.com/warehouse-free-buildings-icons-warehouse-icon-png-512_512.png',
@@ -61,9 +61,10 @@ class MapContainer extends React.Component {
             sTodDirections: "",
             wTosDirections: "",
             // default deliveryType = 0; --> both, 1 -->robots, -1 -->drone
-            deliveryType: -1,
+            deliveryType: ShipMethod.Drone,
         };
         // console.log(this.state.destAddress);
+        this.gotAddress = {startAddress: false, destAddress:false};
     }
 
     displayMarkers = () => {
@@ -135,29 +136,19 @@ class MapContainer extends React.Component {
                         console.log("error loading directionsService");
                     }
                 });
-                if (this.sTodCode === 0) {
-                    const DirectionsService = new window.google.maps.DirectionsService();
-                    var request = {
-                        origin: new window.google.maps.LatLng(this.path[1].lat, this.path[1].lng),
-                        destination: new window.google.maps.LatLng(this.path[2].lat, this.path[2].lng),
-                        travelMode: window.google.maps.DirectionsTravelMode.DRIVING
-                    };
-                    DirectionsService.route(request, (response, status) => {
-                        if (status === window.google.maps.DirectionsStatus.OK) {
-                            this.setState({sTodDirections: response});
-                        } else {
-                            console.log("error loading directionsService");
-                        }
-                    });
+                this.gotAddress.startAddress = true;
+                // this.sTodCode === 0
+                if (this.gotAddress.startAddress === true && this.gotAddress.destAddress === true) {
+                    this.showDeliveryRoute(this.path[1], this.path[2]);
                 }
-                this.sTodCode = -1;
+                // this.sTodCode = -1;
             },
             error => {
                 console.error(error);
             },
         );
         // force getting start address to execute first!
-        this.sleep(300);
+        // this.sleep(300);
 
         Geocode.fromAddress(destAddress).then(
             response => {
@@ -170,21 +161,11 @@ class MapContainer extends React.Component {
                 console.log(this.path[1]);
 
                 // Enable robots directions service.
-                if(this.sTodCode === -1) {
-                    const DirectionsService = new window.google.maps.DirectionsService();
-                    var request = {
-                        origin: new window.google.maps.LatLng(this.path[1].lat, this.path[1].lng),
-                        destination: new window.google.maps.LatLng(this.path[2].lat, this.path[2].lng),
-                        travelMode: window.google.maps.DirectionsTravelMode.DRIVING
-                    };
-                    DirectionsService.route(request, (response, status) => {
-                        if (status === window.google.maps.DirectionsStatus.OK) {
-                            this.setState({sTodDirections: response});
-                        } else {
-                            console.log("error loading directionsService");
-                        }
-                    });
-                    this.sTodCode = 0;
+                // this.sTodCode === -1
+                this.gotAddress.destAddress = true;
+                if (this.gotAddress.startAddress === true && this.gotAddress.destAddress === true) {
+                    this.showDeliveryRoute(this.path[1], this.path[2]);
+                    // this.sTodCode = 0;
                 }
 
                 for(let i = 0; i < 3; i++) {
@@ -227,6 +208,22 @@ class MapContainer extends React.Component {
                 break;
             }
         }
+    }
+
+    showDeliveryRoute(startAddressLatLng, destAddressLatLng) {
+        const DirectionsService = new window.google.maps.DirectionsService();
+        var request = {
+            origin: new window.google.maps.LatLng(startAddressLatLng.lat, startAddressLatLng.lng),
+            destination: new window.google.maps.LatLng(destAddressLatLng.lat, destAddressLatLng.lng),
+            travelMode: window.google.maps.DirectionsTravelMode.DRIVING
+        };
+        DirectionsService.route(request, (response, status) => {
+            if (status === window.google.maps.DirectionsStatus.OK) {
+                this.setState({sTodDirections: response});
+            } else {
+                console.log("error loading directionsService");
+            }
+        });
     }
 
     droneVelocity = 200;
@@ -307,7 +304,7 @@ class MapContainer extends React.Component {
                     {/*                animation={window.google.maps.Animation.BOUNCE} />*/}
                     {/*    </>*/}
                     {/*)}*/}
-                    {(this.state.deliveryType === 0 || this.state.deliveryType === 1) && (
+                    {(this.state.deliveryType === ShipMethod.Both || this.state.deliveryType === ShipMethod.Mobile) && (
                         <>
                             {this.state.wTosDirections && <DirectionsRenderer directions={this.state.wTosDirections} />}
                             {<Marker icon={IconRobot} position={this.path[1]} animation={window.google.maps.Animation.BOUNCE} />}
@@ -317,7 +314,7 @@ class MapContainer extends React.Component {
                         </>
                     )}
 
-                    {(this.state.deliveryType === 0 || this.state.deliveryType === -1) && (
+                    {(this.state.deliveryType === ShipMethod.Both || this.state.deliveryType === ShipMethod.Drone) && (
                         <>
                             <Polyline path={this.path} options={{ strokeColor: "#FF0000 " }} />
                             <Marker icon={IconDrone} position={this.path[1]} animation={window.google.maps.Animation.BOUNCE} />

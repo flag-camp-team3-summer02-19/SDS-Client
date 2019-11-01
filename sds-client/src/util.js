@@ -7,13 +7,16 @@
  * @param successCallback - Successful callback function
  * @param errorCallback - Error callback function
  * @param isImage - True if this ajax call is used to fetch image file from server
+ * @param header - array of extra key value pairs that should put in http request header
+ * @param withCredentials - true if we send request to our backend
  */
-export function ajax(method, url, data, successCallback, errorCallback, isImage) {
+export function ajax(method, url, data, successCallback, errorCallback, isImage, header, withCredentials=false) {
     var xhr = new XMLHttpRequest();
     if (isImage) {
         xhr.responseType = 'arraybuffer';
     }
     xhr.open(method, url, true);
+    xhr.withCredentials = withCredentials;
 
     xhr.onload = function() {
         if (xhr.status === 200) {
@@ -29,6 +32,12 @@ export function ajax(method, url, data, successCallback, errorCallback, isImage)
         console.error("The request couldn't be completed.");
         errorCallback();
     };
+
+    if (header) {
+        for (let i = 0; i < header.length; i++) {
+            xhr.setRequestHeader(header[i][0], header[i][1]);
+        }
+    }
 
     if (data === null) {
         xhr.send();

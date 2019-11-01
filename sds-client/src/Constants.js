@@ -8,18 +8,20 @@
 *
 *  one solution: our server can use API KEY to authenticate us
 */
-export const LOGIN_ENDPOINT = "https://google.com";
-export const REGISTER_ENDPOINT = "https://google.com";
+
+export const LOGIN_ENDPOINT = "http://localhost:1234/api/idm/login";
+export const REGISTER_ENDPOINT = "http://localhost:1234/api/idm/register";
 export const PACKAGEINFO_ENDPOINT = "https://google.com";
 export const SELECTMETHOD_ENDPOINT = "https://google.com";
+
 export const DEMO_GET_OK_ENDPOINT = "https://9e919392-f843-47c2-b9b5-58d14014c11a.mock.pstmn.io/userData";
 
 export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipStatusMap = {0: "Order Placed", 1: "In Progress", 2: "Delivered"};
-export const ShipMethod = {Mobile : 3, Drone : 4};
-export const ShipMethodMap = {3: 'Auto Mobile', 4: 'Drone'};
 export const TagColorMap = {'all:':'volcano', 'address:':'#108ee9', 'addressFrom:':'blue', 'addressTo:':'cyan', 'note:':'green', 'trackingNum:':'purple'};
 export const TagNames = {all:'all:', address:'address:', addressFrom:'addressFrom:', addressTo:'addressTo:', note:'note:', trackingNum:'trackingNum:'};
+export const ShipMethod = {Mobile : 1, Drone : -1, Both : 0};
+export const ShipMethodMap = {'-1': 'Drone', 0: 'Both', 1: 'Auto Mobile'}; //can be called: ShipMethodMap[ShipMethod.Drone]
 
 export const FakeData = [
     {OrderId:'abcdefg1234',
@@ -72,6 +74,7 @@ export const FakeData = [
 
 export const MapThumbnail_prefix = "https://maps.googleapis.com/maps/api/staticmap?size=512x512&maptype=roadmap&markers=size:mid%7Ccolor:red%7C";
 export const MapThumbnail_suffix = '&key=';
-export const MapApiKey = "Google Map API";//"AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM";
+
+export const MapApiKey = "Google Map API";
 export const GOOGLE_MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${MapApiKey}&v=3.exp&libraries=geometry,drawing,places`;
 // 'Google Map Api'

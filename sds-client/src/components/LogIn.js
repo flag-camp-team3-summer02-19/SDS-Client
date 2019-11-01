@@ -26,37 +26,28 @@ class LogIn extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log("debugger loc at LogIn.js line 42");
-                console.log(values);
-                let username = values.username;
-                let password = md5(username + md5(values.password));
+                let email = values.email;
+                let password = md5(email + md5(values.password));
                 let req = JSON.stringify({
-                    user_id : username,
-                    password : password,
+                    email : email,
+                    password : Array.from(password),
                 });
+                console.log(req);
 
                 ajax('POST', LOGIN_ENDPOINT, req,
                     (res) => {
                         let result = JSON.parse(res);
-                        if (result.status === 'OK') {
-                            /* TODO: update callbacks parameter  */
-                            this.props.onSuccessLogIn({
-                                userid: 1,
-                                session: 2,
-                                username: values.email
+                        console.log(result);
+                        if (result.resultCode === 120) {
+                            this.props.onSuccessLogIn(true, {
+                                sessionID: result.sessionID
                             });
+                        } else {
+                            alert(result.message);
                         }
                     },
-                    /* TODO: update callbacks parameter  */
-                    () => {
-                        alert(onErrorMessage);
-                        // TODO: for development purpose, remember to delete afterwards
-                        this.props.onSuccessLogIn({
-                            userid: 1,
-                            session: 2,
-                            username: values.email
-                        });
-                    });
+                    () => { alert(onErrorMessage); },
+                    false, null, true);
             }
         });
     };
