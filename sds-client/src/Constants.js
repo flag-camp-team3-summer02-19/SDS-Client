@@ -8,20 +8,23 @@
 *
 *  one solution: our server can use API KEY to authenticate us
 */
-
 export const LOGIN_ENDPOINT = "http://localhost:1234/api/idm/login";
 export const REGISTER_ENDPOINT = "http://localhost:1234/api/idm/register";
 export const PACKAGEINFO_ENDPOINT = "https://google.com";
 export const SELECTMETHOD_ENDPOINT = "https://google.com";
+export const ORDERS_ENDPOINT = "http://localhost:1234/api/idm/orders";
+export const ORDER_DETAILS_ENDPOINT = "http://localhost:1234/api/idm/orderDetails";
 
+// export const DEMO_GET_OK_ORDERS_ENDPOINT = ;
+// export const DEMO_GET_OK_ORDER_DETAILS_ENDPOINT = ;
 export const DEMO_GET_OK_ENDPOINT = "https://9e919392-f843-47c2-b9b5-58d14014c11a.mock.pstmn.io/userData";
 
 export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipStatusMap = {0: "Order Placed", 1: "In Progress", 2: "Delivered"};
 export const TagColorMap = {'all:':'volcano', 'address:':'#108ee9', 'addressFrom:':'blue', 'addressTo:':'cyan', 'note:':'green', 'trackingNum:':'purple'};
 export const TagNames = {all:'all:', address:'address:', addressFrom:'addressFrom:', addressTo:'addressTo:', note:'note:', trackingNum:'trackingNum:'};
-export const ShipMethod = {Mobile : 1, Drone : -1, Both : 0};
-export const ShipMethodMap = {'-1': 'Drone', 0: 'Both', 1: 'Auto Mobile'}; //can be called: ShipMethodMap[ShipMethod.Drone]
+export const ShipMethod = {Mobile : 3, Drone : 4, Both : 0};
+export const ShipMethodMap = {'4': 'Drone', 0: 'Both', 3: 'Auto Mobile'}; //can be called: ShipMethodMap[ShipMethod.Drone]
 
 export const FakeData = [
     {OrderId:'abcdefg1234',

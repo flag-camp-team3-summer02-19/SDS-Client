@@ -27,7 +27,7 @@ class LogIn extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let email = values.email;
-                let password = md5(email + md5(values.password));
+                let password = values.password;//md5(email + md5(values.password));
                 let req = JSON.stringify({
                     email : email,
                     password : Array.from(password),
@@ -40,7 +40,8 @@ class LogIn extends Component {
                         console.log(result);
                         if (result.resultCode === 120) {
                             this.props.onSuccessLogIn(true, {
-                                sessionID: result.sessionID
+                                sessionID: result.sessionID,
+                                email: email,
                             });
                         } else {
                             alert(result.message);

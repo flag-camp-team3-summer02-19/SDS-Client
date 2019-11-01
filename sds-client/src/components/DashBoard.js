@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link, Redirect} from 'react-router-dom';
 import history from '../history';
 import UserPanel from "./UserPanel";
 import SearchPanel from "./SearchPanel";
@@ -9,7 +10,8 @@ import {
     MapThumbnail_prefix,
     MapThumbnail_suffix,
     TagColorMap,
-    TagNames
+    TagNames,
+    ORDERS_ENDPOINT
 } from '../Constants';
 import SearchFilter from "./SearchFilter";
 import OrderDrawer from "./OrderDrawer";
@@ -24,6 +26,7 @@ class DashBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loggedIn: this.props.userInfo.loggedIn,
             userInfo: this.props.userInfo,
             listData: null,
             drawerVisible: false,
@@ -31,22 +34,32 @@ class DashBoard extends Component {
             filterTags:[],
             currentFilterTagName:TagNames.all,
         };
+        this._isMounted = false;
         this.itemInDrawer = null;
         this.listData_cache = this.state.listData;
         this.tagFilterMap = new Map(); //key:string of "tagType:searchText", value:{tag, filter}
     }
 
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
     //TODO: only fetch data when refresh this page or redirect to this page? (this.props.history)
     componentDidMount() {
+        this._isMounted = true; // this is a fix to avoid warning: Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
         //do ajax call to fetch simple Order data from server
-        ajax('GET',DEMO_GET_OK_ENDPOINT,JSON.stringify(this.state.userInfo), this.onDataUpdated, this.onDataUpdateFailed);
+        ajax('GET',ORDERS_ENDPOINT,null, this.onDataUpdated, this.onDataUpdateFailed,false,[['sessionID', this.state.userInfo.info.sessionID]],true);
     }
+
+    onLogout = () => {
+        this.setState({loggedIn: false});
+    };
 
     ajax_recursive_wrapper = (arr, currIdx) => {
         if(currIdx < arr.length) {
             const thumbnailUrl = MapApiKey === 'Google Map API' ?
                 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png' :
-                MapThumbnail_prefix + convertAddressToUrl(arr[currIdx].CurrentLoc) + MapThumbnail_suffix + MapApiKey;
+                MapThumbnail_prefix + arr[currIdx].CurrentLoc + MapThumbnail_suffix + MapApiKey;
             ajax('GET', thumbnailUrl, null,
                 (rt) => {
                     const base64 = btoa(new Uint8Array(rt).reduce((data, byte) => data + String.fromCharCode(byte),'',),);
@@ -55,24 +68,51 @@ class DashBoard extends Component {
                 },() => {console.log("ajax_recursive_wrapper failed on item: " + currIdx);}, true);
         } else {
             //only re-render map thumbnail after all images are downloaded.
-            this.setState({listData: arr});
+            console.log("D:in DashBoard:ajax_recursive_wrapper:");
+            console.log(arr);
+            if(this._isMounted) {
+                this.setState({listData: arr});
+            }
         }
     };
     onDataUpdated = (resp) => {
-        let result = JSON.parse(resp);
+        if(this._isMounted){
+            let result = JSON.parse(resp);
+            console.log(result);
+            let orders = [];
+            let loggedIn = false;
+            if (result.status === "OK") {
+                orders = result.ordersSummary.map(
+                    (cv) => {
+                        return {
+                            OrderId: cv.orderId,
+                            OrderNote: cv.notes,
+                            FromAddress: cv.from,
+                            ToAddress: cv.to,
+                            ShipMethod: cv.deliveryType,
+                            Status: cv.deliveryStatus,
+                            OrderedTime: cv.orderedTime,
+                            CurrentLoc: cv.currentLocLatLon.lat.toFixed(6) +','+ cv.currentLocLatLon.lon.toFixed(6),
+                        }
+                    }
+                );
+                loggedIn = true;
+                //the following is temp code to add thumbnailSource in each item.
+                // let result_clone = Object.assign([],result);
+                this.listData_cache = orders;
 
-        //the following is temp code to add thumbnailSource in each item.
-        // let result_clone = Object.assign([],result);
-        //TODO: update these codes after discuss with backend
-        this.setState({listData: result.orders});
-        this.listData_cache = result.orders;
-
-        //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
-        this.ajax_recursive_wrapper(result.orders, 0);
+                //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
+                this.ajax_recursive_wrapper(orders, 0);
+            }
+            this.setState({listData: orders, loggedIn: loggedIn});
+        }
     };
 
     onDataUpdateFailed = () => {
         console.log("ajax failed on fetching order data");
+        if (this._isMounted) {
+            this.setState({listData: [], loggedIn: false});
+        }
     };
 
     // put openDrawer here since <OrderList/> and <SearchPanel/> both want to open and close drawer
@@ -218,41 +258,46 @@ class DashBoard extends Component {
     };
 
     render() {
+        console.log("D:inDashBoard");
+        console.log(this.state);
         return (
-            <div id="dashboard">
-                <section id="control-panel">
-                    <UserPanel userId={this.state.userInfo.username}/>
-                    <Button onClick={() => {
-                        history.push('/newOrder')
-                    }}> Make New Order
-                    </Button>
-                </section>
-                <section id="search-order">
-                    <div className='search-bar-row'>
-                        <SearchPanel listData={this.state.listData}
-                                     updateDrawer={this.updateDrawer}
-                                     onPressEnter={this.onPressEnter}
-                                     className='search-bar'/>
-                        <SearchFilter className='dropdown-filter'
-                                      sortFunc={this.sortFunc}
-                                      menuDisabled={!this.state.listData}/>
-                    </div>
-                    <div className='filter-select-tag-date-picker'>
-                        <FilterSelect onChangeFilterTag={this.onChangeFilterTag}/>
-                    </div>
-                    <FilterTags tags={this.state.filterTags}
-                                onCloseTag={this.onCloseFilterTag}
-                                onCloseAllTags={this.onCloseAllFilterTags}
-                                />
-                    <BackTop />
-                    <OrderList listData={this.state.listData}
-                               updateDrawer={this.updateDrawer}
-                               itemInDrawer={this.itemInDrawer}
-                    />
-                    <OrderDrawer drawerVisible={this.state.drawerVisible}
-                                 itemInDrawer={this.itemInDrawer}
-                                 updateDrawer={this.updateDrawer}/>
-                </section>
+            <div>
+                {this.state.loggedIn ? null : <Redirect to="/login"/>}
+                <div id="dashboard">
+                    <section id="control-panel">
+                        <UserPanel userInfo={this.state.userInfo} loggedIn={this.state.loggedIn} onLogout={this.onLogout}/>
+                        <Button onClick={() => {
+                            history.push('/newOrder')
+                        }}> Make New Order
+                        </Button>
+                    </section>
+                    <section id="search-order">
+                        <div className='search-bar-row'>
+                            <SearchPanel listData={this.state.listData}
+                                         updateDrawer={this.updateDrawer}
+                                         onPressEnter={this.onPressEnter}
+                                         className='search-bar'/>
+                            <SearchFilter className='dropdown-filter'
+                                          sortFunc={this.sortFunc}
+                                          menuDisabled={!this.state.listData}/>
+                        </div>
+                        <div className='filter-select-tag-date-picker'>
+                            <FilterSelect onChangeFilterTag={this.onChangeFilterTag}/>
+                        </div>
+                        <FilterTags tags={this.state.filterTags}
+                                    onCloseTag={this.onCloseFilterTag}
+                                    onCloseAllTags={this.onCloseAllFilterTags}
+                        />
+                        <BackTop/>
+                        <OrderList listData={this.state.listData}
+                                   updateDrawer={this.updateDrawer}
+                                   itemInDrawer={this.itemInDrawer}
+                        />
+                        <OrderDrawer drawerVisible={this.state.drawerVisible}
+                                     itemInDrawer={this.itemInDrawer}
+                                     updateDrawer={this.updateDrawer}/>
+                    </section>
+                </div>
             </div>
         );
     }
