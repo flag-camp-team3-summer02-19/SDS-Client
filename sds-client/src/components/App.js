@@ -49,6 +49,7 @@ class App extends React.Component {
                 <Route path="/newOrder">
                     <NewOrder
                         userInfo={this.state.userInfo}
+
                         pathname="/newOrder"
                     />
                 </Route>

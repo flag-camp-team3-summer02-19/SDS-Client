@@ -36,9 +36,9 @@ class DashBoard extends Component {
         let sessionId = this.props.userInfo.sessionID;
         console.log(this.state.userInfo.sessionID);
         ajax('GET',DEMO_GET_OK_ENDPOINT,
-            JSON.stringify(this.state.userInfo), this.onDataUpdated, this.onDataUpdateFailed,false, [["sessionID", sessionId]], true);
+            JSON.stringify(this.state.userInfo), this.onDataUpdated, this.onDataUpdateFailed);
     }
-
+    // false, [["sessionID", sessionId]], true
     ajax_recursive_wrapper = (arr, currIdx) => {
         if(currIdx < arr.length) {
             const thumbnailUrl = MapApiKey === 'Google Map API' ?
@@ -126,7 +126,7 @@ class DashBoard extends Component {
                     <UserPanel userId={this.state.userInfo.username}/>
                     <Button onClick={() => {
                         history.push('/newOrder')
-                    }}> Make New Order
+                    }} > Make New Order
                     </Button>
                 </section>
                 <section id="search-order">

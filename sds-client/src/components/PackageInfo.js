@@ -1,11 +1,10 @@
 import React from 'react';
 import { InputNumber, DatePicker } from 'antd';
-import DateRange from './DateRange';
 import MapContainer from "./MapContainer";
 import { Input } from 'antd';
 import SelectMethod from "./SelectMethod";
-import {LOGIN_ENDPOINT, PACKAGEINFO_ENDPOINT} from "../Constants";
-// import md5 from 'md5';
+import {PACKAGEINFO_ENDPOINT} from "../Constants";
+import md5 from 'md5';
 import { ajax } from '../util';
 import Geocode from "react-geocode";
 import MapHelper from "./MapHelper";
@@ -31,7 +30,7 @@ class PackageInfo extends React.Component {
 
     constructor (props) {
         super (props);
-        console.log(this.packageLength);
+        console.log(this.props);
         this.state = {
             warehouse: [{latitude: 37.766345, longitude: -122.512029},
                 {latitude: 37.797750, longitude: -122.408731},
@@ -103,34 +102,52 @@ class PackageInfo extends React.Component {
     handlePackageInfo() {
         console.log(this.state.startValue);
         if (this.packageLength <= 0 || this.packageWidth <= 0 || this.packageHeight <= 0 || this.packageWeight <= 0 ||
-            this.startAddress === "" || this.destAddress === "" || this.state.startValue === null) {
+            this.startAddress === "" || this.destAddress === "" || this.state.startValue === null || this.packageNotes === "") {
             alert(onErrorMessage);
         } else {
-            let req = JSON.stringify({
-                user_id : this.props.username,
-                startAddress: this.startAddress,
-                destAddress: this.destAddress,
-                packageLength: this.packageLength,
-                packageWidth: this.packageWidth,
-                packageHeight: this.packageHeight,
-                packageWeight: this.packageWeight,
-                pickupDate: this.state.startValue,
-                packageNotes: this.packageNotes,
-            });
-            console.log(req);
-            ajax('POST', PACKAGEINFO_ENDPOINT, req,
+            let order = JSON.stringify({
+                packageInfo: {
+                    // startAddressLat: this.latlng[1].lat,
+                    // startAddressLng: this.latlng[1].lng,
+                    // destAddressLat: this.latlng[2].lat,
+                    // destAddressLng: this.latlng[2].lng,
+                    length: this.packageLength,
+                    width: this.packageWidth,
+                    height: this.packageHeight,
+                    weight: this.packageWeight,
+                    from: this.startAddress,
+                    to: this.destAddress,
+                    notes: this.packageNotes,
+                }}
+            );
+            console.log(order);
+            let sessionId = this.props.userInfo.sessionID;
+            console.log(sessionId);
+            ajax('POST', PACKAGEINFO_ENDPOINT, order,
                 (res) => {
                     let result = JSON.parse(res);
-                    if (result.status === 'OK') {
+                    console.log(result);
+                    if (result.resultCode === 150) {
                         /* TODO: update callbacks parameter  */
-                        this.props.updateOrder(1);
+                        order = ({
+                            packageInfo: {
+                                length: this.packageLength,
+                                width: this.packageWidth,
+                                height: this.packageHeight,
+                                weight: this.packageWeight,
+                                from: this.startAddress,
+                                to: this.destAddress,
+                                notes: this.packageNotes,
+                                methods: result.methods,
+                            }}
+                        );
+                        this.props.updateOrder(order);
                     }
                 },
                 /* TODO: update callbacks parameter  */
                 () => {
                     alert(onErrorCallBackMessage);
-                    this.props.updateOrder(1);
-                });
+                }, false, [["sessionID", sessionId]], true);
         }
     }
 
@@ -182,7 +199,7 @@ class PackageInfo extends React.Component {
                     <br/>
                     <br/>
                     {/*<button onClick={this.props.updateOrder}> Choose a delivery method </button>*/}
-                    <button onClick={this.handlePackageInfo.bind(this)}> Choose a delivery method </button>
+                    <button onClick={this.handlePackageInfo.bind(this)} > Choose a delivery method </button>
                 </div>
                 <div id="mapDetail">
                     {/*<MapContainer   wareHouseLat={this.state.wareHouseLat} wareHouseLng={this.state.wareHouseLng}*/}

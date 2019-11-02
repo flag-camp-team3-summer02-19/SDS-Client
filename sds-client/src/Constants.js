@@ -11,8 +11,8 @@
 
 export const LOGIN_ENDPOINT = "http://localhost:1234/api/idm/login";
 export const REGISTER_ENDPOINT = "http://localhost:1234/api/idm/register";
-export const PACKAGEINFO_ENDPOINT = "http://localhost:1234/api/idm/orderDetails";
-export const SELECTMETHOD_ENDPOINT = "https://google.com";
+export const PACKAGEINFO_ENDPOINT = "http://localhost:1234/api/idm/makeNewDelivery";
+export const SELECTMETHOD_ENDPOINT = "http://localhost:1234/api/idm/makeNewDelivery";
 
 export const DEMO_GET_OK_ENDPOINT = "http://localhost:1234/api/idm/orders";
 //https://9e919392-f843-47c2-b9b5-58d14014c11a.mock.pstmn.io/userData
