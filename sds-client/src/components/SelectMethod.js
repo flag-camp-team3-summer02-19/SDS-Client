@@ -116,11 +116,12 @@ class SelectMethod extends Component {
             console.log(sessionID);
             ajax('POST', SELECTMETHOD_ENDPOINT, order,
                 (res) => {
-                    let result = JSON.parse(res);
-                    if (result.resultCode === 150) {
-                        /* TODO: update callbacks parameter  */
-                        this.props.updateOrder(order);
-                    }
+                console.log(res);
+                    // let result = JSON.parse(res);
+                    // if (result.resultCode === 150) {
+                    //     /* TODO: update callbacks parameter  */
+                    //     this.props.updateOrder(order);
+                    // }
                 },
                 /* TODO: update callbacks parameter, updated...  */
                 () => {

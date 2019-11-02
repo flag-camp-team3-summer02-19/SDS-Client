@@ -13,7 +13,7 @@ export const REGISTER_ENDPOINT = "http://localhost:1234/api/idm/register";
 export const LOGOUT_ENDPOINT = "http://localhost:1234/api/idm/logout";
 
 export const PACKAGEINFO_ENDPOINT = "http://localhost:1234/api/idm/makeNewDelivery";
-export const SELECTMETHOD_ENDPOINT = "http://localhost:1234/api/idm/test";
+export const SELECTMETHOD_ENDPOINT = "http://localhost:1234/api/idm/placeOrder";
 
 export const ORDERS_ENDPOINT = "http://localhost:1234/api/idm/orders";
 export const ORDER_DETAILS_ENDPOINT = "http://localhost:1234/api/idm/orderDetails";
@@ -83,7 +83,7 @@ export const FakeData = [
 
 export const MapThumbnail_prefix = "https://maps.googleapis.com/maps/api/staticmap?size=512x512&maptype=roadmap&markers=size:mid%7Ccolor:red%7C";
 export const MapThumbnail_suffix = '&key=';
-export const MapApiKey = "Google Map API";
+export const MapApiKey = "AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM";
 export const GOOGLE_MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${MapApiKey}&v=3.exp&libraries=geometry,drawing,places`;
 
 //Google Map Api
