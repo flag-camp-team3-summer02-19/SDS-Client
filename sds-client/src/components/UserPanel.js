@@ -11,8 +11,8 @@ class UserPanel extends Component {
         //TODO: tell server this user is logged out
         ajax('GET',LOGOUT_ENDPOINT,null,
             (rt)=>{
-                let result = JSON.parse(rt);
-                console.log('userLogout: ' + result.message);
+            let result = JSON.parse(rt);
+            console.log('userLogout: ' + result.message);
             }, null, false, this.props.ajaxHeader);
         this.props.onLogout();
     };

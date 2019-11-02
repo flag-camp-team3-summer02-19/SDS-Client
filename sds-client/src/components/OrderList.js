@@ -36,6 +36,9 @@ class OrderList extends Component {
                         actions={!loading && [
                             <span onClick={this.showDrawer.bind(this, item)}>
                                 Status: {ShipStatusMap[item.Status]}
+                            </span>,
+                            <span onClick={this.showDrawer.bind(this, item)}>
+                                Tracking Number: {item.OrderId.toString().toUpperCase()}
                             </span>
                         ]}
                         extra={
