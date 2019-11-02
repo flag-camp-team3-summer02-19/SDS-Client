@@ -305,6 +305,7 @@ class DashBoard extends Component {
                         <SearchPanel listData={this.state.listData}
                                      updateDrawer={this.updateDrawer}
                                      onPressEnter={this.onPressEnter}
+                                     currentFilterTagName={this.state.currentFilterTagName}
                                      className='search-bar'/>
                         <SearchFilter className='dropdown-filter'
                                       sortFunc={this.sortFunc}

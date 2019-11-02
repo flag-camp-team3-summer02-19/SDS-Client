@@ -27,6 +27,7 @@ export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipStatusMap = {0: "Order Placed", 1: "In Progress", 2: "Delivered"};
 export const TagColorMap = {'all:':'volcano', 'address:':'#108ee9', 'addressFrom:':'blue', 'addressTo:':'cyan', 'note:':'green', 'trackingNum:':'purple'};
 export const TagNames = {all:'all:', address:'address:', addressFrom:'addressFrom:', addressTo:'addressTo:', note:'note:', trackingNum:'trackingNum:'};
+export const TagNamesMap = {'all:':TagNames.all, 'address:':TagNames.address, 'addressFrom:':TagNames.addressFrom, 'addressTo:':TagNames.addressTo, 'note:':TagNames.note, 'trackingNum:':TagNames.trackingNum};
 
 export const ShipMethod = {Mobile : 3, Drone : 4, Both : 0}; // 1 for mobile, -1 for drone
 export const ShipMethodMap = {4: 'Drone', 0: 'Both', 3: 'Auto Mobile'}; //can be called: ShipMethodMap[ShipMethod.Drone]
