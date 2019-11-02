@@ -58,10 +58,10 @@ class NewOrder extends Component {
         return (
             <div id="newOrder">
                 <Route path={this.props.pathname + "/packageInfo"} exact>
-                    <PackageInfo updateOrder={this.updateOrder}/>
+                    <PackageInfo updateOrder={this.updateOrder} userInfo={this.props.userInfo} />
                 </Route>
                 <Route path={this.props.pathname + "/selectMethod"} exact>
-                    <SelectMethod updateOrder={this.updateOrder}/>
+                    <SelectMethod updateOrder={this.updateOrder} userInfo={this.props.userInfo} packageInfo={this.state.order}/>
                 </Route>
                 <Route path={this.props.pathname + "/paymentMethod"} exact>
                     <PaymentMethod updateOrder={this.updateOrder}/>

@@ -254,7 +254,7 @@ class DashBoard extends Component {
     };
 
     onChangeFilterTag = (tagName) => {
-      this.setState({currentFilterTagName:tagName})
+        this.setState({currentFilterTagName:tagName})
     };
 
     render() {
