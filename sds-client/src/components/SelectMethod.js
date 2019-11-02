@@ -94,18 +94,18 @@ class SelectMethod extends Component {
         } else {
             let order = JSON.stringify({
                 packageInfo: {
-                // startAddressLat: this.latlng[1].lat,
-                // startAddressLng: this.latlng[1].lng,
-                // destAddressLat: this.latlng[2].lat,
-                // destAddressLng: this.latlng[2].lng,
-                length: this.props.packageInfo.packageInfo.length,
-                width: this.props.packageInfo.packageInfo.width,
-                height: this.props.packageInfo.packageInfo.height,
-                weight: this.props.packageInfo.packageInfo.weight,
+                    // startAddressLat: this.latlng[1].lat,
+                    // startAddressLng: this.latlng[1].lng,
+                    // destAddressLat: this.latlng[2].lat,
+                    // destAddressLng: this.latlng[2].lng,
+                    length: this.props.packageInfo.packageInfo.length,
+                    width: this.props.packageInfo.packageInfo.width,
+                    height: this.props.packageInfo.packageInfo.height,
+                    weight: this.props.packageInfo.packageInfo.weight,
                     from: this.props.packageInfo.packageInfo.from,
                     to: this.props.packageInfo.packageInfo.to,
-                notes: this.props.packageInfo.packageInfo.notes,
-            }, method: {
+                    notes: this.props.packageInfo.packageInfo.notes,
+                }, method: {
                     deliveryType: this.deliveryType,
                     deliveryTime: this.deliveryTime,
                     cost: this.cost,
