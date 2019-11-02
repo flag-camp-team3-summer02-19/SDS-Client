@@ -27,13 +27,14 @@ class DashBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loggedIn: this.props.userInfo.loggedIn,
-            userInfo: this.props.userInfo,
+            loggedIn: Boolean(this.props.cookies.get('sessionID')),
+            userInfo: this.props.userInfo.info.email,
             listData: null,
             drawerVisible: false,
             isListDataValid: false,
             filterTags:[],
             currentFilterTagName:TagNames.all,
+            reload: false,
         };
         this._isMounted = false;
         this.itemInDrawer = null;
@@ -49,22 +50,25 @@ class DashBoard extends Component {
     //TODO: only fetch data when refresh this page or redirect to this page? (this.props.history)
     componentDidMount() {
         this._isMounted = true; // this is a fix to avoid warning: Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
-
-        console.log("D:in DashBoard:Cookie ");
-        const {cookies} = this.props;
-        console.log(cookies);
-        if(cookies.get('sessionID')){
-            this.ajaxHeader = [['sessionID', cookies.get('sessionID')]];
-        } else {
-            this.ajaxHeader = [['sessionID', this.state.userInfo.info.sessionID]];
-        }
-
-        //do ajax call to fetch simple Order data from server
-
-        ajax('GET',ORDERS_ENDPOINT,null, this.onDataUpdated, this.onDataUpdateFailed,false, this.ajaxHeader,false);
+        this.loadingDataFromServer();
     }
 
+    loadingDataFromServer = () => {
+        this.setState({reload:false, listData:null});
+        const {cookies} = this.props;
+        if(cookies.get('sessionID')){
+            this.ajaxHeader = [['sessionID', cookies.get('sessionID')]];
+            this.setState({userInfo:cookies.get('email'), loggedIn:true});
+            //do ajax call to fetch simple Order data from server
+            ajax('GET',ORDERS_ENDPOINT,null, this.onDataUpdated, this.onDataUpdateFailed,false, this.ajaxHeader,false);
+        } else {
+            this.onLogout();
+        }
+    };
+
     onLogout = () => {
+        this.props.cookies.remove('sessionID',{ path: '/' });
+        this.props.cookies.remove('email',{ path: '/' });
         this.setState({loggedIn: false});
     };
 
@@ -90,7 +94,6 @@ class DashBoard extends Component {
         if(this._isMounted){
             let result = JSON.parse(resp);
             let orders = [];
-            let loggedIn = false;
             if (result.status === "OK") {
                 orders = result.ordersSummary.map(
                     (cv) => {
@@ -106,23 +109,25 @@ class DashBoard extends Component {
                         }
                     }
                 );
-                loggedIn = true;
+                this.setState({listData: orders, loggedIn: true});
+
+                //the following is temp code to add thumbnailSource in each item.
+                // let result_clone = Object.assign([],result);
+                this.listData_cache = orders;
+
+                //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
+                this.ajax_recursive_wrapper(orders, 0);
+            } else {
+                this.onLogout();
             }
-            this.setState({listData: orders, loggedIn: loggedIn});
 
-            //the following is temp code to add thumbnailSource in each item.
-            // let result_clone = Object.assign([],result);
-            this.listData_cache = orders;
-
-            //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
-            this.ajax_recursive_wrapper(orders, 0);
         }
     };
 
     onDataUpdateFailed = () => {
         console.log("ajax failed on fetching order data");
         if (this._isMounted) {
-            this.setState({listData: [], loggedIn: false});
+            this.setState({listData: [], reload: true});
         }
     };
 
@@ -271,7 +276,7 @@ class DashBoard extends Component {
     render() {
         return (
             <div>
-                {/*{this.state.loggedIn ? null : <Redirect to="/login"/>}*/}
+                {this.state.loggedIn ? null : <Redirect to="/login"/>}
                 <div id="dashboard">
                     <section id="control-panel">
                         <UserPanel userInfo={this.state.userInfo}
@@ -282,6 +287,9 @@ class DashBoard extends Component {
                             history.push('/newOrder')
                         }}> Make New Order
                         </Button>
+                        <br/>
+                        <br/>
+                        {this.state.reload?<Button onClick={this.loadingDataFromServer}>Click me to reload</Button>:null}
                     </section>
                     <section id="search-order">
                         <div className='search-bar-row'>

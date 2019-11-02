@@ -53,14 +53,6 @@ class PackageInfo extends React.Component {
         this.handlePackageInfo = this.handlePackageInfo.bind(this);
         this.mapContainer = React.createRef();
 
-        //using cookies
-        this.cookies = this.props.cookies;
-        this.sessionID = undefined;
-        if(this.cookies.get('sessionID')){
-            this.sessionID = cookies.get('sessionID');
-        } else {
-            history.push('/');
-        }
     }
 
     onChangeLength(value) {
