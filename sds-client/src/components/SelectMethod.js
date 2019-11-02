@@ -153,7 +153,7 @@ class SelectMethod extends Component {
 
                     if (result.resultCode === 3400) {
                         /* TODO: update callbacks parameter  */
-                        this.props.updateOrder(order);
+                        this.props.updateOrder(order, null, result.redirectURL);
                     } else if (result.resultCode !== 3400) {
                         alert(onErrorPaymentMessage);
                     }

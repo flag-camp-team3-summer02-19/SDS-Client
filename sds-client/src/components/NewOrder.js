@@ -7,6 +7,7 @@ import PaymentMethod from './PaymentMethod';
 
 class NewOrder extends Component {
     state = {
+        redirectURL: null,
         sessionID: null,
         userInfo: this.props.userInfo,
         order: {
@@ -31,7 +32,7 @@ class NewOrder extends Component {
     };
 
     /* this method will be called only when sub-components each on success state*/
-    updateOrder = (order, sessionID) => {
+    updateOrder = (order, sessionID, redirectURL) => {
         this.setState(prev => {
             if (prev.stepIdx + 1 < prev.stepRoutes.length) {
                 history.replace(this.props.pathname + "/"
@@ -44,6 +45,7 @@ class NewOrder extends Component {
             }
 
             return {
+                redirectURL: redirectURL,
                 sessionID: sessionID,
                 order: order,
                 stepIdx: prev.stepIdx + 1
@@ -66,7 +68,7 @@ class NewOrder extends Component {
                     <SelectMethod updateOrder={this.updateOrder} userInfo={this.props.userInfo} packageInfo={this.state.order}/>
                 </Route>
                 <Route path={this.props.pathname + "/paymentMethod"} exact>
-                    <PaymentMethod updateOrder={this.updateOrder} userInfo={this.props.userInfo} packageInfo={this.state.order}/>
+                    <PaymentMethod updateOrder={this.updateOrder} userInfo={this.props.userInfo} packageInfo={this.state.order} redirectURL={this.state.redirectURL}/>
                 </Route>
             </div>
         );
