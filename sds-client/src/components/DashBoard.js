@@ -177,10 +177,10 @@ class DashBoard extends Component {
         statusDecrease: this.statusDecrease
     };
 
-    filter_note = (searchText, item) => item.OrderNote.includes(searchText);
+    filter_note = (searchText, item) => item.OrderNote.toLowerCase().includes(searchText.toLowerCase());
     filter_trackingNum = (searchText, item) => item.OrderId.toString().toUpperCase().startsWith(searchText.toUpperCase());
-    filter_addressFrom = (searchText, item) => item.FromAddress.includes(searchText);
-    filter_addressTo = (searchText, item) => item.ToAddress.includes(searchText);
+    filter_addressFrom = (searchText, item) => item.FromAddress.toLowerCase().includes(searchText.toLowerCase());
+    filter_addressTo = (searchText, item) => item.ToAddress.toLowerCase().includes(searchText.toLowerCase());
 
     filterSearchText = (searchText, filterClass, inListData) => {
         let filteredListData;
