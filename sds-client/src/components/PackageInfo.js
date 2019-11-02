@@ -9,6 +9,7 @@ import { ajax } from '../util';
 import Geocode from "react-geocode";
 import MapHelper from "./MapHelper";
 import {GoogleMap} from "react-google-maps";
+import {withCookies} from "react-cookie";
 
 const { TextArea } = Input;
 const onErrorAddress = "Please enter valid starting / destination address";
@@ -51,6 +52,15 @@ class PackageInfo extends React.Component {
         this.onAddressChange = this.onAddressChange.bind(this);
         this.handlePackageInfo = this.handlePackageInfo.bind(this);
         this.mapContainer = React.createRef();
+
+        //using cookies
+        this.cookies = this.props.cookies;
+        this.sessionID = undefined;
+        if(this.cookies.get('sessionID')){
+            this.sessionID = cookies.get('sessionID');
+        } else {
+            history.push('/');
+        }
     }
 
     onChangeLength(value) {
@@ -218,7 +228,7 @@ class PackageInfo extends React.Component {
     }
 }
 
-export default PackageInfo;
+export default withCookies(PackageInfo);
 // path={[{lat: 37.766345, lng: -122.512029},
 // {lat: 37.752033, lng: -122.450996},
 // {lat: 37.771944, lng: -122.446142}]}

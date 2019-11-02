@@ -49,8 +49,18 @@ class DashBoard extends Component {
     //TODO: only fetch data when refresh this page or redirect to this page? (this.props.history)
     componentDidMount() {
         this._isMounted = true; // this is a fix to avoid warning: Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
+
+        console.log("D:in DashBoard:Cookie ");
+        const {cookies} = this.props;
+        console.log(cookies);
+        if(cookies.get('sessionID')){
+            this.ajaxHeader = [['sessionID', cookies.get('sessionID')]];
+        } else {
+            this.ajaxHeader = [['sessionID', this.state.userInfo.info.sessionID]];
+        }
+
         //do ajax call to fetch simple Order data from server
-        this.ajaxHeader = [['sessionID', this.state.userInfo.info.sessionID]];
+
         ajax('GET',ORDERS_ENDPOINT,null, this.onDataUpdated, this.onDataUpdateFailed,false, this.ajaxHeader,false);
     }
 
@@ -261,7 +271,7 @@ class DashBoard extends Component {
     render() {
         return (
             <div>
-                {this.state.loggedIn ? null : <Redirect to="/login"/>}
+                {/*{this.state.loggedIn ? null : <Redirect to="/login"/>}*/}
                 <div id="dashboard">
                     <section id="control-panel">
                         <UserPanel userInfo={this.state.userInfo}

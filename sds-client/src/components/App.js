@@ -19,9 +19,9 @@ class App extends React.Component {
     };
 
     updateLogInStatus = (loggedIn, values) => {
-        const {cookie} = this.props;
-        console.log('Here is cookie:');
-        console.log(cookie);
+        const {cookies} = this.props;
+        cookies.set('email', values.email, { path: '/' });
+        cookies.set('sessionID', values.sessionID, { path: '/' });
         this.setState({
             loggedIn: loggedIn,
             userInfo: values
