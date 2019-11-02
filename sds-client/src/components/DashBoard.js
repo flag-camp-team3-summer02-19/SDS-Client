@@ -21,6 +21,7 @@ import FilterTags from "./FilterTags";
 import {ajax, convertAddressToUrl} from "../util";
 import FilterSelect from "./FilterSelect";
 import { withCookies } from 'react-cookie';
+import md5 from 'md5';
 
 class DashBoard extends Component {
 
@@ -92,10 +93,13 @@ class DashBoard extends Component {
             let result = JSON.parse(resp);
             let orders = [];
             if (result.status === "OK") {
+                // let a = md5('123');
                 orders = result.ordersSummary.map(
                     (cv) => {
+                        let tmp = md5(cv.notes + cv.from);
                         return {
-                            OrderId: cv.orderId,
+                            OrderIdRaw: cv.orderId,
+                            OrderId: tmp.substr(0,8) + cv.orderId,
                             OrderNote: cv.notes,
                             FromAddress: cv.from,
                             ToAddress: cv.to,
