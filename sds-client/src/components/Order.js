@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {Divider, Row, Steps} from "antd";
+import {Col, Divider, Row, Steps} from "antd";
 import {ShipMethod, ShipStatus, ShipStatusMap} from "../Constants";
 import MapHelper from "./MapHelper";
 import loading_map from '../assets/images/loading_img.gif';
-
 
 const {Step} = Steps;
 
@@ -32,6 +31,9 @@ class Order extends Component {
                     </Row>
                     <br/>
                     <Row>
+                        <DescriptionItem title="Tracking Number" content={this.props.item.OrderId}/>
+                    </Row>
+                    <Row>
                         <DescriptionItem title="Shipping From" content={this.props.item.FromAddress}/>
                     </Row>
                     <Row>
@@ -44,6 +46,14 @@ class Order extends Component {
                         }
                     </Row>
                     <Row>
+                        <DescriptionItem title="Order Cost" content={'$'+this.props.item.Cost}/>
+                    </Row>
+                    <Row>
+                        <Col span={12}><DescriptionItem title="Ordered Time" content={new Date(this.props.item.OrderedTime).toLocaleString()}/></Col>
+                        <Col span={12} offset={0}><DescriptionItem title={this.props.item.Status===ShipStatus.Finished?"Delivered Time":"Estimation Time"} content={new Date(this.props.item.DeliveryTime).toLocaleString()}/></Col>
+
+                    </Row>
+                    <Row>
                         <DescriptionItem title="Package Details" content={this.props.item.PackageInfo}/>
                     </Row>
                     <Row>
@@ -51,7 +61,6 @@ class Order extends Component {
                     </Row>
                     <Divider/>
                     <p className='order-title-in-drawer'>Map details</p>
-                    {/*parseFloat(this.props.item.CurrentLoc.split(",")[1])*/}
                     {Object.keys(this.props.mapLoc).length!==0 ?
                         <MapHelper startAddressLat={this.props.mapLoc.curLat} startAddressLng={this.props.mapLoc.curLon}
                                    destAddressLat={this.props.mapLoc.destLat} destAddressLng={this.props.mapLoc.destLon} deliveryType={this.props.item.ShipMethod}/>

@@ -11,16 +11,21 @@
 
 export const LOGIN_ENDPOINT = "http://localhost:1234/api/idm/login";
 export const REGISTER_ENDPOINT = "http://localhost:1234/api/idm/register";
+export const LOGOUT_ENDPOINT = "http://localhost:1234/api/idm/logout";
 export const PACKAGEINFO_ENDPOINT = "http://localhost:1234/api/idm/makeNewDelivery";
 export const SELECTMETHOD_ENDPOINT = "http://localhost:1234/api/idm/makeNewDelivery";
+export const ORDERS_ENDPOINT = "http://localhost:1234/api/idm/orders";
+export const ORDER_DETAILS_ENDPOINT = "http://localhost:1234/api/idm/orderDetails";
 
-export const DEMO_GET_OK_ENDPOINT = "http://localhost:1234/api/idm/orders";
+export const DEMO_GET_OK_ENDPOINT = "https://9e919392-f843-47c2-b9b5-58d14014c11a.mock.pstmn.io/userData";
 //https://9e919392-f843-47c2-b9b5-58d14014c11a.mock.pstmn.io/userData
 
 export const ShipStatus = { OrderPlaced:0, InProgress: 1, Finished : 2};
 export const ShipStatusMap = {0: "Order Placed", 1: "In Progress", 2: "Delivered"};
-export const ShipMethod = {Mobile : 1, Drone : -1, Both : 0};
-export const ShipMethodMap = {0: 'Drone', 1: 'Both', 2: 'Auto Mobile'};
+export const TagColorMap = {'all:':'volcano', 'address:':'#108ee9', 'addressFrom:':'blue', 'addressTo:':'cyan', 'note:':'green', 'trackingNum:':'purple'};
+export const TagNames = {all:'all:', address:'address:', addressFrom:'addressFrom:', addressTo:'addressTo:', note:'note:', trackingNum:'trackingNum:'};
+export const ShipMethod = {Mobile : 1, Drone : -1, Both : 0}; // 3 for mobile, 4 for drone in updated search panel version
+export const ShipMethodMap = {4: 'Drone', 0: 'Both', 3: 'Auto Mobile'}; //can be called: ShipMethodMap[ShipMethod.Drone]
 
 export const FakeData = [
     {OrderId:'abcdefg1234',
@@ -73,7 +78,7 @@ export const FakeData = [
 
 export const MapThumbnail_prefix = "https://maps.googleapis.com/maps/api/staticmap?size=512x512&maptype=roadmap&markers=size:mid%7Ccolor:red%7C";
 export const MapThumbnail_suffix = '&key=';
-export const MapApiKey = "AIzaSyCUZbCOjk8EvMDvySVudNz-OUUE0e_N0YM";
+export const MapApiKey = "Google Map Api";
 export const GOOGLE_MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${MapApiKey}&v=3.exp&libraries=geometry,drawing,places`;
 
 //Google Map Api
