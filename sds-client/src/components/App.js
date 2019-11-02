@@ -43,7 +43,7 @@ class App extends React.Component {
 
                 <Route path="/dashboard" exact
                        render={(props) =>
-                           <DashBoard userInfo={this.state.userInfo} match={props.match}/>}
+                           <DashBoard userInfo={{info:this.state.userInfo, loggedIn:this.state.loggedIn}} match={props.match}/>}
                 />
 
                 <Route path="/newOrder">

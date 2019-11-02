@@ -1,0 +1,8 @@
+.filter-tags {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+.close-all-filters-icon {
+    margin-right: 6px;
+}

@@ -2,37 +2,59 @@ import React, {Component} from 'react';
 import Order from "./Order";
 import {Drawer} from "antd";
 import {ajax} from "../util";
+import {ORDER_DETAILS_ENDPOINT} from '../Constants';
 
 class OrderDrawer extends Component {
 
-    state = {
-        mapLoc: {},
-    };
+    constructor(props) {
+        super(props);
+        this.item = this.props.itemInDrawer;
+        this.state = {
+            mapLoc: {},
+        };
+    }
 
-    //TODO: we can use ajax call to fetch up-to-date info in the future
     onClose = () => {
         this.props.updateDrawer(null,false);
     };
 
     afterVisibleChange = (visible) => {
         if(visible) {
-            //TODO: do not need to fetch data from server if this.props.itemInDrawer.Status === ShipStatus.Finished
-            const CURRENT_LOC_ENDPOINT = "https://google.com";
             this.setState({mapLoc:{}});
-            ajax('GET', CURRENT_LOC_ENDPOINT, null,
+            ajax('GET', ORDER_DETAILS_ENDPOINT+"/"+this.props.itemInDrawer.OrderId, null,
                 (rt) => {
-                    if(rt.status === "OK") {
-                        //TODO: refine the code below based on backend implementation
-                        const mapLoc = {curLat:rt.curLat, curLon:rt.curLon, destLat:rt.destLat, destLon:rt.destLon};
+                    let result = JSON.parse(rt);
+                    if(result.status === "OK") {
+                        this.item = {
+                            OrderId: this.props.itemInDrawer.OrderId,
+                            OrderNote: result.packageInfo.notes,
+                            FromAddress: result.packageInfo.from,
+                            ToAddress: result.packageInfo.to,
+                            ShipMethod: result.method.deliveryType,
+                            Status: result.method.deliveryStatus,
+                            OrderedTime: this.props.itemInDrawer.OrderedTime,
+                            PackageInfo: result.packageInfo.length + ' x ' + result.packageInfo.width + ' x ' + result.packageInfo.height + ', ' + result.packageInfo.weight + ' lbs',
+                            DeliveryTime: result.method.deliveryTime,
+                            Cost: result.method.cost,
+                        };
+                        const mapLoc = {
+                            curLat:result.locationsLatLon.current.lat,
+                            curLon:result.locationsLatLon.current.lon,
+                            destLat:result.locationsLatLon.to.lat,
+                            destLon:result.locationsLatLon.to.lon};
+
                         this.setState({mapLoc: mapLoc});
+                    } else { // sessionID is invalid
+                        this.props.onLogout();
                     }
                 },
                 () => {
                     console.log("ajax call for map details failed on item: " + this.props.itemInDrawer.OrderId);
-                    //TODO: the follosing is just a demo, will be deleted in the final release
-                    const mapLoc = {curLat:37.720015, curLon:-122.458905, destLat:37.771944, destLon:-122.446142};
-                    this.setState({mapLoc: mapLoc});
-                })
+                    this.props.onLogout();
+                    // //TODO: the follosing is just a demo, will be deleted in the final release
+                    // const mapLoc = {curLat:37.720015, curLon:-122.458905, destLat:37.771944, destLon:-122.446142};
+                    // this.setState({mapLoc: mapLoc});
+                }, false, this.props.ajaxHeader, false)
         } else {
             //TODO: delete this line later
             this.setState({mapDetailsUrl: null})
@@ -50,10 +72,11 @@ class OrderDrawer extends Component {
                 visible={this.props.drawerVisible}
                 className='order-drawer'
             >
-                <Order item={this.props.itemInDrawer} mapLoc={this.state.mapLoc}/>
+                <Order item={this.item} mapLoc={this.state.mapLoc}/>
             </Drawer>
         );
     }
 }
 
 export default OrderDrawer;
+

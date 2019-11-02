@@ -15,6 +15,10 @@
 @import './styles/OrderList.css';
 @import "./styles/OrderDrawer.css";
 @import "./styles/MapContainer.css";
+@import "./styles/FilterTags.css";
+@import "./styles/SearchFilter.css";
+@import "./styles/MapHelper.css";
+@import "./styles/FilterSelect.css";
 
 
 body {

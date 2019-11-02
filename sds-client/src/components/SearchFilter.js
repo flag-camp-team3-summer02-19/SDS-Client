@@ -4,20 +4,20 @@ import {Dropdown, Icon, Menu} from "antd";
 class SearchFilter extends Component {
 
     orderDateIncrease = () => {
-        this.props.filterFunc.orderDateIncrease();
+        this.props.sortFunc.orderDateIncrease();
     };
     orderDateDecrease = () => {
-        this.props.filterFunc.orderDateDecrease();
+        this.props.sortFunc.orderDateDecrease();
     };
     statusIncrease = () => {
-        this.props.filterFunc.statusIncrease();
+        this.props.sortFunc.statusIncrease();
     };
     statusDecrease = () => {
-        this.props.filterFunc.statusDecrease();
+        this.props.sortFunc.statusDecrease();
     };
 
     render() {
-        const filterOptions = (
+        const sortOptions = (
             <Menu>
                 <Menu.Item key='1' onClick={this.orderDateIncrease} disabled={this.props.menuDisabled}>
                     Ordered Date <Icon type='arrow-up'/>
@@ -36,8 +36,8 @@ class SearchFilter extends Component {
 
         return (
             <div>
-                <Dropdown overlay={filterOptions} >
-                    <span> order filter<Icon type="down" /> </span>
+                <Dropdown overlay={sortOptions} >
+                    <span>sort by<Icon type="down" /> </span>
                 </Dropdown>
             </div>
         );
