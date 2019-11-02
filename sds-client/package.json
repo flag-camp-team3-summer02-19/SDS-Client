@@ -15,7 +15,7 @@
     "react-google-maps": "^9.4.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
-    "recompose": "latest",
+    "recompose": "^0.30.0",
     "spherical-geometry-js": "^2.0.0",
     "vue": "^2.6.10",
     "vue2-google-maps": "^0.10.7"

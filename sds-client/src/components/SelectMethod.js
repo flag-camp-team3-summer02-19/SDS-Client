@@ -117,8 +117,27 @@ class SelectMethod extends Component {
             ajax('POST', SELECTMETHOD_ENDPOINT, order,
                 (res) => {
                 console.log(res);
-                    let result = JSON.parse(res);
-                    this.props.updateOrder(order);
+                    // let result = JSON.parse(res);
+                    let updatedOrder = ({
+                        packageInfo: {
+                            // startAddressLat: this.latlng[1].lat,
+                            // startAddressLng: this.latlng[1].lng,
+                            // destAddressLat: this.latlng[2].lat,
+                            // destAddressLng: this.latlng[2].lng,
+                            length: this.props.packageInfo.packageInfo.length,
+                            width: this.props.packageInfo.packageInfo.width,
+                            height: this.props.packageInfo.packageInfo.height,
+                            weight: this.props.packageInfo.packageInfo.weight,
+                            from: this.props.packageInfo.packageInfo.from,
+                            to: this.props.packageInfo.packageInfo.to,
+                            notes: this.props.packageInfo.packageInfo.notes,
+                        }, method: {
+                            deliveryType: this.deliveryType,
+                            deliveryTime: this.deliveryTime,
+                            cost: this.cost,
+                        }}
+                    );
+                    this.props.updateOrder(updatedOrder);
                     // if (result.resultCode === 150) {
                     //     /* TODO: update callbacks parameter  */
                     //     this.props.updateOrder(order);
