@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Select, Input, AutoComplete, Row,Col, Icon, Menu} from 'antd';
-import {ShipMethod} from "../Constants";
+import {ShipMethod, TagNames, TagNamesMap} from "../Constants";
 import mobile from "../assets/images/auto_mobile.png";
 import drone from "../assets/images/drone.png";
 
@@ -40,7 +40,10 @@ class SearchPanel extends Component {
                 let idx = item.OrderId.indexOf(searchTextUC.toUpperCase());
                 let noteArray = item.OrderNote.split(searchText);
                 let newItem = {...item};
-                if (idx === 0 || noteArray.length > 1) {
+                let searchHitInOtherFields =
+                    item.FromAddress.toLowerCase().includes(searchText.toLowerCase()) ||
+                    item.ToAddress.toLowerCase().includes(searchText.toLowerCase());
+                if (idx === 0 || noteArray.length > 1 || searchHitInOtherFields) {
                     newItem.formattedOrderId = idx === 0 ?
                         (<span>
                             <strong>{item.OrderId.substr(0, searchText.length)}</strong>
@@ -124,12 +127,13 @@ class SearchPanel extends Component {
                 onSearch={this.onSearch}
                 onSelect={this.onSelect}
                 onFocus={this.onFocus}
-                dataSource={options}
+                dataSource={TagNamesMap[this.props.currentFilterTagName]===TagNames.all
+                            ?options:[]}
                 optionLabelProp="value"
                 defaultActiveFirstOption={false}
             >
                 <Input.Search allowClear onSearch={this.onPressEnter}
-                              placeholder="search notes here"/>
+                              placeholder={"search "+ this.props.currentFilterTagName}/>
             </AutoComplete>
         );
     }

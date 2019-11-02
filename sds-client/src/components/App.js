@@ -9,6 +9,7 @@ import LogIn from './LogIn';
 import Register from './Register';
 import DashBoard from './DashBoard';
 import NewOrder from './NewOrder';
+import { withCookies } from 'react-cookie';
 
 
 class App extends React.Component {
@@ -18,6 +19,14 @@ class App extends React.Component {
     };
 
     updateLogInStatus = (loggedIn, values) => {
+        const {cookies} = this.props;
+        if(loggedIn) {
+            cookies.set('email', values.email, { path: '/' });
+            cookies.set('sessionID', values.sessionID, { path: '/' });
+        } else {
+            cookies.remove('email', { path: '/' });
+            cookies.remove('sessionID', { path: '/' });
+        }
         this.setState({
             loggedIn: loggedIn,
             userInfo: values
@@ -43,7 +52,7 @@ class App extends React.Component {
 
                 <Route path="/dashboard" exact
                        render={(props) =>
-                           <DashBoard userInfo={{info:this.state.userInfo, loggedIn:this.state.loggedIn}} match={props.match}/>}
+                           <DashBoard userInfo={this.state.userInfo} updateLogInStatus={this.updateLogInStatus} match={props.match}/>}
                 />
 
                 <Route path="/newOrder">
@@ -58,4 +67,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default withCookies(App);

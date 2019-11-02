@@ -2,13 +2,10 @@ import React from 'react';
 import { InputNumber, DatePicker } from 'antd';
 import MapContainer from "./MapContainer";
 import { Input } from 'antd';
-import SelectMethod from "./SelectMethod";
 import {PACKAGEINFO_ENDPOINT} from "../Constants";
-import md5 from 'md5';
 import { ajax } from '../util';
-import Geocode from "react-geocode";
-import MapHelper from "./MapHelper";
-import {GoogleMap} from "react-google-maps";
+import {withCookies} from "react-cookie";
+import history from '../history';
 
 const { TextArea } = Input;
 const onErrorAddress = "Please enter valid starting / destination address";
@@ -51,6 +48,15 @@ class PackageInfo extends React.Component {
         this.onAddressChange = this.onAddressChange.bind(this);
         this.handlePackageInfo = this.handlePackageInfo.bind(this);
         this.mapContainer = React.createRef();
+
+        //using cookies
+        this.cookies = this.props.cookies;
+        //this.sessionID = undefined;
+        if(this.cookies.get('sessionID')){
+            this.sessionID = this.cookies.get('sessionID');
+        } else {
+            history.push('/');
+        }
     }
 
     onChangeLength(value) {
@@ -121,7 +127,7 @@ class PackageInfo extends React.Component {
                 }}
             );
             console.log(order);
-            let sessionId = this.props.userInfo.sessionID;
+            let sessionId = this.sessionID;
             console.log(sessionId);
             ajax('POST', PACKAGEINFO_ENDPOINT, order,
                 (res) => {
@@ -141,7 +147,7 @@ class PackageInfo extends React.Component {
                                 methods: result.methods,
                             }}
                         );
-                        this.props.updateOrder(order);
+                        this.props.updateOrder(order, sessionId);
                     }
                 },
                 /* TODO: update callbacks parameter  */
@@ -218,7 +224,7 @@ class PackageInfo extends React.Component {
     }
 }
 
-export default PackageInfo;
+export default withCookies(PackageInfo);
 // path={[{lat: 37.766345, lng: -122.512029},
 // {lat: 37.752033, lng: -122.450996},
 // {lat: 37.771944, lng: -122.446142}]}

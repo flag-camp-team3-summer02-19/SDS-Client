@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import { Route } from 'react-router-dom';
 import history from '../history';
-import PackageInfo from './PackageInfo'
-import SelectMethod from './SelectMethod'
-import PaymentMethod from './PaymentMethod'
+import PackageInfo from './PackageInfo';
+import SelectMethod from './SelectMethod';
+import PaymentMethod from './PaymentMethod';
 
 class NewOrder extends Component {
     state = {
+        sessionID: null,
         userInfo: this.props.userInfo,
         order: {
             packageInfo: {},
@@ -30,7 +31,7 @@ class NewOrder extends Component {
     };
 
     /* this method will be called only when sub-components each on success state*/
-    updateOrder = order => {
+    updateOrder = (order, sessionID) => {
         this.setState(prev => {
             if (prev.stepIdx + 1 < prev.stepRoutes.length) {
                 history.replace(this.props.pathname + "/"
@@ -43,6 +44,7 @@ class NewOrder extends Component {
             }
 
             return {
+                sessionID: sessionID,
                 order: order,
                 stepIdx: prev.stepIdx + 1
             };

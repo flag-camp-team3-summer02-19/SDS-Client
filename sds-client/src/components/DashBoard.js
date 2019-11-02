@@ -20,19 +20,21 @@ import FilterTags from "./FilterTags";
 
 import {ajax, convertAddressToUrl} from "../util";
 import FilterSelect from "./FilterSelect";
+import { withCookies } from 'react-cookie';
+import md5 from 'md5';
 
 class DashBoard extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            loggedIn: this.props.userInfo.loggedIn,
-            userInfo: this.props.userInfo,
+            userInfo: this.props.userInfo.email,
             listData: null,
             drawerVisible: false,
             isListDataValid: false,
             filterTags:[],
             currentFilterTagName:TagNames.all,
+            reload: false,
         };
         this._isMounted = false;
         this.itemInDrawer = null;
@@ -48,13 +50,24 @@ class DashBoard extends Component {
     //TODO: only fetch data when refresh this page or redirect to this page? (this.props.history)
     componentDidMount() {
         this._isMounted = true; // this is a fix to avoid warning: Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
-        //do ajax call to fetch simple Order data from server
-        this.ajaxHeader = [['sessionID', this.state.userInfo.info.sessionID]];
-        ajax('GET',ORDERS_ENDPOINT,null, this.onDataUpdated, this.onDataUpdateFailed,false, this.ajaxHeader,false);
+        this.loadingDataFromServer();
     }
 
+    loadingDataFromServer = () => {
+        this.setState({reload:false, listData:null});
+        const {cookies} = this.props;
+        if(cookies.get('sessionID')){
+            this.ajaxHeader = [['sessionID', cookies.get('sessionID')]];
+            this.setState({userInfo:cookies.get('email')});
+            //do ajax call to fetch simple Order data from server
+            ajax('GET',ORDERS_ENDPOINT,null, this.onDataUpdated, this.onDataUpdateFailed,false, this.ajaxHeader,false);
+        } else {
+            this.onLogout();
+        }
+    };
+
     onLogout = () => {
-        this.setState({loggedIn: false});
+        this.props.updateLogInStatus(false,undefined);
     };
 
     ajax_recursive_wrapper = (arr, currIdx) => {
@@ -79,12 +92,14 @@ class DashBoard extends Component {
         if(this._isMounted){
             let result = JSON.parse(resp);
             let orders = [];
-            let loggedIn = false;
             if (result.status === "OK") {
+                // let a = md5('123');
                 orders = result.ordersSummary.map(
                     (cv) => {
+                        let tmp = md5(cv.notes + cv.from);
                         return {
-                            OrderId: cv.orderId,
+                            OrderIdRaw: cv.orderId,
+                            OrderId: tmp.substr(0,8) + cv.orderId,
                             OrderNote: cv.notes,
                             FromAddress: cv.from,
                             ToAddress: cv.to,
@@ -95,23 +110,25 @@ class DashBoard extends Component {
                         }
                     }
                 );
-                loggedIn = true;
+                this.setState({listData: orders});
+
+                //the following is temp code to add thumbnailSource in each item.
+                // let result_clone = Object.assign([],result);
+                this.listData_cache = orders;
+
+                //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
+                this.ajax_recursive_wrapper(orders, 0);
+            } else {
+                this.onLogout();
             }
-            this.setState({listData: orders, loggedIn: loggedIn});
 
-            //the following is temp code to add thumbnailSource in each item.
-            // let result_clone = Object.assign([],result);
-            this.listData_cache = orders;
-
-            //This is to fetch map thumbnail from server and do re-render after all images are downloaded.
-            this.ajax_recursive_wrapper(orders, 0);
         }
     };
 
     onDataUpdateFailed = () => {
         console.log("ajax failed on fetching order data");
         if (this._isMounted) {
-            this.setState({listData: [], loggedIn: false});
+            this.setState({listData: [], reload: true});
         }
     };
 
@@ -126,13 +143,27 @@ class DashBoard extends Component {
         }
     };
 
-    //TODO: need to implement the sort by ordered date
-    //TODO: need to discuss with backend to design the format of data in date field of each order
     orderDateIncrease = () => {
-        console.log('You clicked order date increase!!');
+        this.setState(
+            (prevSt) => {
+                if (prevSt.listData) {
+                    let newListData = [...prevSt.listData];
+                    return {
+                        listData: newListData.sort((a, b) => {return a.OrderedTime - b.OrderedTime})};
+                }
+            }
+        );
     };
     orderDateDecrease = () => {
-        console.log('You clicked order date decrease!!');
+        this.setState(
+            (prevSt) => {
+                if (prevSt.listData) {
+                    let newListData = [...prevSt.listData];
+                    return {
+                        listData: newListData.sort((a, b) => {return b.OrderedTime - a.OrderedTime})};
+                }
+            }
+        );
     };
     statusIncrease = () => {
         this.setState(
@@ -164,10 +195,10 @@ class DashBoard extends Component {
         statusDecrease: this.statusDecrease
     };
 
-    filter_note = (searchText, item) => item.OrderNote.includes(searchText);
+    filter_note = (searchText, item) => item.OrderNote.toLowerCase().includes(searchText.toLowerCase());
     filter_trackingNum = (searchText, item) => item.OrderId.toString().toUpperCase().startsWith(searchText.toUpperCase());
-    filter_addressFrom = (searchText, item) => item.FromAddress.includes(searchText);
-    filter_addressTo = (searchText, item) => item.ToAddress.includes(searchText);
+    filter_addressFrom = (searchText, item) => item.FromAddress.toLowerCase().includes(searchText.toLowerCase());
+    filter_addressTo = (searchText, item) => item.ToAddress.toLowerCase().includes(searchText.toLowerCase());
 
     filterSearchText = (searchText, filterClass, inListData) => {
         let filteredListData;
@@ -259,51 +290,52 @@ class DashBoard extends Component {
 
     render() {
         return (
-            <div>
-                {this.state.loggedIn ? null : <Redirect to="/login"/>}
-                <div id="dashboard">
-                    <section id="control-panel">
-                        <UserPanel userInfo={this.state.userInfo}
-                                   loggedIn={this.state.loggedIn}
-                                   onLogout={this.onLogout}
-                                   ajaxHeader={this.ajaxHeader}/>
-                        <Button onClick={() => {
-                            history.push('/newOrder')
-                        }}> Make New Order
-                        </Button>
-                    </section>
-                    <section id="search-order">
-                        <div className='search-bar-row'>
-                            <SearchPanel listData={this.state.listData}
-                                         updateDrawer={this.updateDrawer}
-                                         onPressEnter={this.onPressEnter}
-                                         className='search-bar'/>
-                            <SearchFilter className='dropdown-filter'
-                                          sortFunc={this.sortFunc}
-                                          menuDisabled={!this.state.listData}/>
-                        </div>
-                        <div className='filter-select-tag-date-picker'>
-                            <FilterSelect onChangeFilterTag={this.onChangeFilterTag}/>
-                        </div>
-                        <FilterTags tags={this.state.filterTags}
-                                    onCloseTag={this.onCloseFilterTag}
-                                    onCloseAllTags={this.onCloseAllFilterTags}
-                        />
-                        <BackTop/>
-                        <OrderList listData={this.state.listData}
-                                   updateDrawer={this.updateDrawer}
-                                   itemInDrawer={this.itemInDrawer}
-                        />
-                        <OrderDrawer drawerVisible={this.state.drawerVisible}
-                                     itemInDrawer={this.itemInDrawer}
+            <div id="dashboard">
+                <section id="control-panel">
+                    <UserPanel userInfo={this.state.userInfo}
+                               onLogout={this.onLogout}
+                               ajaxHeader={this.ajaxHeader}/>
+                    <Button onClick={() => {
+                        history.push('/newOrder')
+                    }}> Make New Order
+                    </Button>
+                    <br/>
+                    <br/>
+                    {this.state.reload ?
+                        <Button onClick={this.loadingDataFromServer}>Click me to reload</Button> : null}
+                </section>
+                <section id="search-order">
+                    <div className='search-bar-row'>
+                        <SearchPanel listData={this.state.listData}
                                      updateDrawer={this.updateDrawer}
-                                     ajaxHeader={this.ajaxHeader}
-                                     onLogout={this.onLogout}/>
-                    </section>
-                </div>
+                                     onPressEnter={this.onPressEnter}
+                                     currentFilterTagName={this.state.currentFilterTagName}
+                                     className='search-bar'/>
+                        <SearchFilter className='dropdown-filter'
+                                      sortFunc={this.sortFunc}
+                                      menuDisabled={!this.state.listData}/>
+                    </div>
+                    <div className='filter-select-tag-date-picker'>
+                        <FilterSelect onChangeFilterTag={this.onChangeFilterTag}/>
+                    </div>
+                    <FilterTags tags={this.state.filterTags}
+                                onCloseTag={this.onCloseFilterTag}
+                                onCloseAllTags={this.onCloseAllFilterTags}
+                    />
+                    <BackTop/>
+                    <OrderList listData={this.state.listData}
+                               updateDrawer={this.updateDrawer}
+                               itemInDrawer={this.itemInDrawer}
+                    />
+                    <OrderDrawer drawerVisible={this.state.drawerVisible}
+                                 itemInDrawer={this.itemInDrawer}
+                                 updateDrawer={this.updateDrawer}
+                                 ajaxHeader={this.ajaxHeader}
+                                 onLogout={this.onLogout}/>
+                </section>
             </div>
         );
     }
 }
 
-export default DashBoard;
+export default withCookies(DashBoard);

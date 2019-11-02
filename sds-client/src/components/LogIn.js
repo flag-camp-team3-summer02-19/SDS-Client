@@ -27,6 +27,7 @@ class LogIn extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let email = values.email;
+                // let password = md5(values.password);
                 // let password = md5(email + md5(values.password));
                 let password = values.password;
                 let req = JSON.stringify({

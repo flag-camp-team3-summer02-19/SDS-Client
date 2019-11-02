@@ -9,15 +9,16 @@
     "history": "^4.10.1",
     "md5": "^2.2.1",
     "react": "^16.10.2",
+    "react-cookie": "^4.0.1",
     "react-dom": "^16.10.2",
     "react-geocode": "^0.2.0",
     "react-google-maps": "^9.4.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
+    "recompose": "latest",
     "spherical-geometry-js": "^2.0.0",
     "vue": "^2.6.10",
-    "vue2-google-maps": "^0.10.7",
-    "recompose": "latest"
+    "vue2-google-maps": "^0.10.7"
   },
   "scripts": {
     "start": "cross-env PORT=3006 react-scripts start",
@@ -39,5 +40,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }

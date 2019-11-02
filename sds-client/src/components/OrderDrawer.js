@@ -21,7 +21,7 @@ class OrderDrawer extends Component {
     afterVisibleChange = (visible) => {
         if(visible) {
             this.setState({mapLoc:{}});
-            ajax('GET', ORDER_DETAILS_ENDPOINT+"/"+this.props.itemInDrawer.OrderId, null,
+            ajax('GET', ORDER_DETAILS_ENDPOINT+"/"+this.props.itemInDrawer.OrderIdRaw, null,
                 (rt) => {
                     let result = JSON.parse(rt);
                     if(result.status === "OK") {
