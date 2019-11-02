@@ -27,8 +27,7 @@ class DashBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loggedIn: Boolean(this.props.cookies.get('sessionID')),
-            userInfo: this.props.userInfo.info.email,
+            userInfo: this.props.userInfo.email,
             listData: null,
             drawerVisible: false,
             isListDataValid: false,
@@ -58,7 +57,7 @@ class DashBoard extends Component {
         const {cookies} = this.props;
         if(cookies.get('sessionID')){
             this.ajaxHeader = [['sessionID', cookies.get('sessionID')]];
-            this.setState({userInfo:cookies.get('email'), loggedIn:true});
+            this.setState({userInfo:cookies.get('email')});
             //do ajax call to fetch simple Order data from server
             ajax('GET',ORDERS_ENDPOINT,null, this.onDataUpdated, this.onDataUpdateFailed,false, this.ajaxHeader,false);
         } else {
@@ -67,9 +66,7 @@ class DashBoard extends Component {
     };
 
     onLogout = () => {
-        this.props.cookies.remove('sessionID',{ path: '/' });
-        this.props.cookies.remove('email',{ path: '/' });
-        this.setState({loggedIn: false});
+        this.props.updateLogInStatus(false,undefined);
     };
 
     ajax_recursive_wrapper = (arr, currIdx) => {
@@ -109,7 +106,7 @@ class DashBoard extends Component {
                         }
                     }
                 );
-                this.setState({listData: orders, loggedIn: true});
+                this.setState({listData: orders});
 
                 //the following is temp code to add thumbnailSource in each item.
                 // let result_clone = Object.assign([],result);
@@ -275,51 +272,48 @@ class DashBoard extends Component {
 
     render() {
         return (
-            <div>
-                {this.state.loggedIn ? null : <Redirect to="/login"/>}
-                <div id="dashboard">
-                    <section id="control-panel">
-                        <UserPanel userInfo={this.state.userInfo}
-                                   loggedIn={this.state.loggedIn}
-                                   onLogout={this.onLogout}
-                                   ajaxHeader={this.ajaxHeader}/>
-                        <Button onClick={() => {
-                            history.push('/newOrder')
-                        }}> Make New Order
-                        </Button>
-                        <br/>
-                        <br/>
-                        {this.state.reload?<Button onClick={this.loadingDataFromServer}>Click me to reload</Button>:null}
-                    </section>
-                    <section id="search-order">
-                        <div className='search-bar-row'>
-                            <SearchPanel listData={this.state.listData}
-                                         updateDrawer={this.updateDrawer}
-                                         onPressEnter={this.onPressEnter}
-                                         className='search-bar'/>
-                            <SearchFilter className='dropdown-filter'
-                                          sortFunc={this.sortFunc}
-                                          menuDisabled={!this.state.listData}/>
-                        </div>
-                        <div className='filter-select-tag-date-picker'>
-                            <FilterSelect onChangeFilterTag={this.onChangeFilterTag}/>
-                        </div>
-                        <FilterTags tags={this.state.filterTags}
-                                    onCloseTag={this.onCloseFilterTag}
-                                    onCloseAllTags={this.onCloseAllFilterTags}
-                        />
-                        <BackTop/>
-                        <OrderList listData={this.state.listData}
-                                   updateDrawer={this.updateDrawer}
-                                   itemInDrawer={this.itemInDrawer}
-                        />
-                        <OrderDrawer drawerVisible={this.state.drawerVisible}
-                                     itemInDrawer={this.itemInDrawer}
+            <div id="dashboard">
+                <section id="control-panel">
+                    <UserPanel userInfo={this.state.userInfo}
+                               onLogout={this.onLogout}
+                               ajaxHeader={this.ajaxHeader}/>
+                    <Button onClick={() => {
+                        history.push('/newOrder')
+                    }}> Make New Order
+                    </Button>
+                    <br/>
+                    <br/>
+                    {this.state.reload ?
+                        <Button onClick={this.loadingDataFromServer}>Click me to reload</Button> : null}
+                </section>
+                <section id="search-order">
+                    <div className='search-bar-row'>
+                        <SearchPanel listData={this.state.listData}
                                      updateDrawer={this.updateDrawer}
-                                     ajaxHeader={this.ajaxHeader}
-                                     onLogout={this.onLogout}/>
-                    </section>
-                </div>
+                                     onPressEnter={this.onPressEnter}
+                                     className='search-bar'/>
+                        <SearchFilter className='dropdown-filter'
+                                      sortFunc={this.sortFunc}
+                                      menuDisabled={!this.state.listData}/>
+                    </div>
+                    <div className='filter-select-tag-date-picker'>
+                        <FilterSelect onChangeFilterTag={this.onChangeFilterTag}/>
+                    </div>
+                    <FilterTags tags={this.state.filterTags}
+                                onCloseTag={this.onCloseFilterTag}
+                                onCloseAllTags={this.onCloseAllFilterTags}
+                    />
+                    <BackTop/>
+                    <OrderList listData={this.state.listData}
+                               updateDrawer={this.updateDrawer}
+                               itemInDrawer={this.itemInDrawer}
+                    />
+                    <OrderDrawer drawerVisible={this.state.drawerVisible}
+                                 itemInDrawer={this.itemInDrawer}
+                                 updateDrawer={this.updateDrawer}
+                                 ajaxHeader={this.ajaxHeader}
+                                 onLogout={this.onLogout}/>
+                </section>
             </div>
         );
     }

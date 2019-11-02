@@ -24,9 +24,6 @@ class UserPanel extends Component {
                 <h3>Welcome: </h3>
                 <div id='user-id-UserPanel'> {this.props.userInfo?this.props.userInfo:'NoUserLongUserIDHHHHHH@abcdefg.com'} </div>
                 <a onClick={this.onClickLogout}> logout </a>
-                {/*<Link to="/login" onClick={this.onClickLogout}> logout </Link>*/}
-                {/*<Button onClick={this.onClickLogout} className="logout-button">Logout</Button>*/}
-                {/*{this.props.loggedIn ? null : <Redirect to="/login"/>}*/}
             </div>
         );
     }

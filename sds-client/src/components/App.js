@@ -20,8 +20,13 @@ class App extends React.Component {
 
     updateLogInStatus = (loggedIn, values) => {
         const {cookies} = this.props;
-        cookies.set('email', values.email, { path: '/' });
-        cookies.set('sessionID', values.sessionID, { path: '/' });
+        if(loggedIn) {
+            cookies.set('email', values.email, { path: '/' });
+            cookies.set('sessionID', values.sessionID, { path: '/' });
+        } else {
+            cookies.remove('email', { path: '/' });
+            cookies.remove('sessionID', { path: '/' });
+        }
         this.setState({
             loggedIn: loggedIn,
             userInfo: values
@@ -47,7 +52,7 @@ class App extends React.Component {
 
                 <Route path="/dashboard" exact
                        render={(props) =>
-                           <DashBoard userInfo={{info:this.state.userInfo, loggedIn:this.state.loggedIn}} match={props.match}/>}
+                           <DashBoard userInfo={this.state.userInfo} updateLogInStatus={this.updateLogInStatus} match={props.match}/>}
                 />
 
                 <Route path="/newOrder">
