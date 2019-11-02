@@ -29,62 +29,60 @@ class PaymentMethod extends Component {
            token : "1234567890",
            PayerID : "neal404",
         });
-        let paidOrder = JSON.stringify({
-            // need to modify paymentResult according to CompleteOrder callback
-            paymentResult : "payment success",
-            order: {
-                packageInfo : {
-                    length: this.props.packageInfo.packageInfo.length,
-                    width: this.props.packageInfo.packageInfo.width,
-                    height: this.props.packageInfo.packageInfo.height,
-                    weight: this.props.packageInfo.packageInfo.weight,
-                    from: this.props.packageInfo.packageInfo.from,
-                    to: this.props.packageInfo.packageInfo.to,
-                    notes: this.props.packageInfo.packageInfo.notes,
-                }, method: {
-                    deliveryType: this.deliveryType,
-                    deliveryTime: this.deliveryTime,
-                    cost: this.cost,
-                }}
-        });
-        ajax('POST', PLACEORDER_ENDPOINT, paidOrder,
-            (res) => {
-                let result = JSON.parse(res);
-                console.log(result);
-                if (result.resultCode === 3400) {
-                    /* TODO: update callbacks parameter  */
-                    console.log("hello after 3400");
-                    alert(onSuccessfulCallBackPaymentMessage);
-                    let order = ({
-                            packageInfo : {
-                                length: this.props.packageInfo.packageInfo.length,
-                                width: this.props.packageInfo.packageInfo.width,
-                                height: this.props.packageInfo.packageInfo.height,
-                                weight: this.props.packageInfo.packageInfo.weight,
-                                from: this.props.packageInfo.packageInfo.from,
-                                to: this.props.packageInfo.packageInfo.to,
-                                notes: this.props.packageInfo.packageInfo.notes,
-                            }, method: {
-                                deliveryType: this.deliveryType,
-                                deliveryTime: this.deliveryTime,
-                                cost: this.cost,
-                            }}
-                    );
-                    this.props.updateOrder(order);
-                } else if (result.resultCode != 3400) {
-                     alert(onErrorCallBackPaymentMessage);
-                }
-            },
-            /* TODO: update callbacks parameter  */
-            () => {
-                alert(onErrorCallBackPaymentMessage);
-            }, false, [["sessionID", sessionId]], true);
+        console.log(this.props.packageInfo.packageInfo.method.deliveryType);
+        // let paidOrder = JSON.stringify({
+        //         //     // need to modify paymentResult according to CompleteOrder callback
+        //         //     paymentResult : "payment success",
+        //         //
+        //         //     order : {
+        //         //         packageInfo : {
+        //         //             length: this.props.packageInfo.packageInfo.length,
+        //         //             width: this.props.packageInfo.packageInfo.width,
+        //         //             height: this.props.packageInfo.packageInfo.height,
+        //         //             weight: this.props.packageInfo.packageInfo.weight,
+        //         //             from: this.props.packageInfo.packageInfo.from,
+        //         //             to: this.props.packageInfo.packageInfo.to,
+        //         //             notes: this.props.packageInfo.packageInfo.notes,
+        //         //         }, method : {
+        //         //             deliveryType: this.props.packageInfo.packageInfo.method.deliveryType,
+        //         //             deliveryTime: this.props.packageInfo.packageInfo.method.deliveryTime,
+        //         //             cost: this.props.packageInfo.packageInfo.method.cost,
+        //         //         }}
+        //         // });
+        //         // ajax('POST', PLACEORDER_ENDPOINT, paidOrder,
+        //         //     (res) => {
+        //         //         let result = JSON.parse(res);
+        //         //         console.log(result);
+        //         //         if (result.resultCode === 3400) {
+        //         //             /* TODO: update callbacks parameter  */
+        //         //             console.log("hello after 3400");
+        //         //             alert(onSuccessfulCallBackPaymentMessage);
+        //         //             let order = ({
+        //         //                     packageInfo : {
+        //         //                         length: this.props.packageInfo.packageInfo.length,
+        //         //                         width: this.props.packageInfo.packageInfo.width,
+        //         //                         height: this.props.packageInfo.packageInfo.height,
+        //         //                         weight: this.props.packageInfo.packageInfo.weight,
+        //         //                         from: this.props.packageInfo.packageInfo.from,
+        //         //                         to: this.props.packageInfo.packageInfo.to,
+        //         //                         notes: this.props.packageInfo.packageInfo.notes,
+        //         //                     }}
+        //         //             );
+        //         //             this.props.updateOrder(order);
+        //         //         } else if (result.resultCode != 3400) {
+        //         //              alert(onErrorCallBackPaymentMessage);
+        //         //         }
+        //         //     },
+        //         //     /* TODO: update callbacks parameter  */
+        //         //     () => {
+        //         //         alert(onErrorCallBackPaymentMessage);
+        //         //     }, false, [["sessionID", sessionId]], true);
     }
     render() {
         return (
             <div id="paymentMethod">
                 <p>paymentMethod</p>
-                <button onClick={this.handlePayment.bind(this)}> Please make a payment here! </button>
+                <button onClick={this.props.updateOrder}> Please make a payment here! </button>
             </div>
         );
     }

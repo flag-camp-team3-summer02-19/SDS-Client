@@ -5,7 +5,7 @@ import {
     Divider,
     Button
 } from 'antd';
-import {ShipMethod, PACKAGEINFO_ENDPOINT, SELECTMETHOD_ENDPOINT} from '../Constants';
+import {ShipMethod, PLACEORDER_ENDPOINT, SELECTMETHOD_ENDPOINT} from '../Constants';
 import MapContainer from './MapContainer';
 import {ajax} from "../util";
 import history from "../history";
@@ -44,6 +44,7 @@ import {withCookies} from "react-cookie";
 const { Panel } = Collapse;
 const ButtonGroup = Button.Group;
 const onErrorMessage = "Please choose a delivery method!";
+const onErrorPaymentMessage = "Create payment failed."
 const onErrorCallBackMessage = "Can not connect to remote server";
 
 class SelectMethod extends Component {
@@ -101,62 +102,66 @@ class SelectMethod extends Component {
         if (this.deliveryType === ShipMethod.Both) {
             alert(onErrorMessage);
         } else {
-            let order = ({
-                packageInfo: {
-                    // startAddressLat: this.latlng[1].lat,
-                    // startAddressLng: this.latlng[1].lng,
-                    // destAddressLat: this.latlng[2].lat,
-                    // destAddressLng: this.latlng[2].lng,
-                    length: this.props.packageInfo.packageInfo.length,
-                    width: this.props.packageInfo.packageInfo.width,
-                    height: this.props.packageInfo.packageInfo.height,
-                    weight: this.props.packageInfo.packageInfo.weight,
-                    from: this.props.packageInfo.packageInfo.from,
-                    to: this.props.packageInfo.packageInfo.to,
-                    notes: this.props.packageInfo.packageInfo.notes,
-                }, method: {
-                    deliveryType: this.deliveryType,
-                    deliveryTime: this.deliveryTime,
-                    cost: this.cost,
-                }}
-            );
-            console.log(order);
+            let updatedOrder = JSON.stringify({
+                paymentResult : "payment success",
+                order : {
+                    packageInfo: {
+                        // startAddressLat: this.latlng[1].lat,
+                        // startAddressLng: this.latlng[1].lng,
+                        // destAddressLat: this.latlng[2].lat,
+                        // destAddressLng: this.latlng[2].lng,
+                        length: this.props.packageInfo.packageInfo.length,
+                        width: this.props.packageInfo.packageInfo.width,
+                        height: this.props.packageInfo.packageInfo.height,
+                        weight: this.props.packageInfo.packageInfo.weight,
+                        from: this.props.packageInfo.packageInfo.from,
+                        to: this.props.packageInfo.packageInfo.to,
+                        notes: this.props.packageInfo.packageInfo.notes,
+                    }, method: {
+                        deliveryType: this.deliveryType,
+                        deliveryTime: this.deliveryTime,
+                        cost: this.cost,
+                    }}
+            });
+            console.log(updatedOrder);
             let sessionID = this.sessionID;
             console.log(sessionID);
-            this.props.updateOrder(order);
-            // ajax('POST', SELECTMETHOD_ENDPOINT, order,
-            //     (res) => {
-            //     console.log(res);
-            //         // let result = JSON.parse(res);
-            //         let updatedOrder = ({
-            //             packageInfo: {
-            //                 // startAddressLat: this.latlng[1].lat,
-            //                 // startAddressLng: this.latlng[1].lng,
-            //                 // destAddressLat: this.latlng[2].lat,
-            //                 // destAddressLng: this.latlng[2].lng,
-            //                 length: this.props.packageInfo.packageInfo.length,
-            //                 width: this.props.packageInfo.packageInfo.width,
-            //                 height: this.props.packageInfo.packageInfo.height,
-            //                 weight: this.props.packageInfo.packageInfo.weight,
-            //                 from: this.props.packageInfo.packageInfo.from,
-            //                 to: this.props.packageInfo.packageInfo.to,
-            //                 notes: this.props.packageInfo.packageInfo.notes,
-            //             }, method: {
-            //                 deliveryType: this.deliveryType,
-            //                 deliveryTime: this.deliveryTime,
-            //                 cost: this.cost,
-            //             }}
-            //         );
-            //         this.props.updateOrder(updatedOrder);
-            //         // if (result.resultCode === 150) {
-            //         //     /* TODO: update callbacks parameter  */
-            //         //     this.props.updateOrder(order);
-            //         // }
-            //     },
-            //     /* TODO: update callbacks parameter, updated...  */
-            //     () => {
-            //         alert(onErrorCallBackMessage);
-            //     },false, [["sessionID", sessionID]], true);
+            // this.props.updateOrder(order);
+            ajax('POST', PLACEORDER_ENDPOINT, updatedOrder,
+                (res) => {
+                console.log(res);
+                    let result = JSON.parse(res);
+                    let order = ({
+                        packageInfo: {
+                            // startAddressLat: this.latlng[1].lat,
+                            // startAddressLng: this.latlng[1].lng,
+                            // destAddressLat: this.latlng[2].lat,
+                            // destAddressLng: this.latlng[2].lng,
+                            length: this.props.packageInfo.packageInfo.length,
+                            width: this.props.packageInfo.packageInfo.width,
+                            height: this.props.packageInfo.packageInfo.height,
+                            weight: this.props.packageInfo.packageInfo.weight,
+                            from: this.props.packageInfo.packageInfo.from,
+                            to: this.props.packageInfo.packageInfo.to,
+                            notes: this.props.packageInfo.packageInfo.notes,
+                        }, method: {
+                            deliveryType: this.deliveryType,
+                            deliveryTime: this.deliveryTime,
+                            cost: this.cost,
+                        }}
+                    );
+
+                    if (result.resultCode === 3400) {
+                        /* TODO: update callbacks parameter  */
+                        this.props.updateOrder(order);
+                    } else if (result.resultCode !== 3400) {
+                        alert(onErrorPaymentMessage);
+                    }
+                },
+                /* TODO: update callbacks parameter, updated...  */
+                () => {
+                    alert(onErrorCallBackMessage);
+                },false, [["sessionID", sessionID]], true);
         }
     }
 
