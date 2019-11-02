@@ -9,6 +9,7 @@ import LogIn from './LogIn';
 import Register from './Register';
 import DashBoard from './DashBoard';
 import NewOrder from './NewOrder';
+import { withCookies } from 'react-cookie';
 
 
 class App extends React.Component {
@@ -18,6 +19,9 @@ class App extends React.Component {
     };
 
     updateLogInStatus = (loggedIn, values) => {
+        const {cookie} = this.props;
+        console.log('Here is cookie:');
+        console.log(cookie);
         this.setState({
             loggedIn: loggedIn,
             userInfo: values
@@ -58,4 +62,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default withCookies(App);

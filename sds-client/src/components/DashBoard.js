@@ -20,6 +20,7 @@ import FilterTags from "./FilterTags";
 
 import {ajax, convertAddressToUrl} from "../util";
 import FilterSelect from "./FilterSelect";
+import { withCookies } from 'react-cookie';
 
 class DashBoard extends Component {
 
@@ -306,4 +307,4 @@ class DashBoard extends Component {
     }
 }
 
-export default DashBoard;
+export default withCookies(DashBoard);
