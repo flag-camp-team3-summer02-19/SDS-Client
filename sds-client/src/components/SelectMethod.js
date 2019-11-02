@@ -8,6 +8,8 @@ import {
 import {ShipMethod, PACKAGEINFO_ENDPOINT, SELECTMETHOD_ENDPOINT} from '../Constants';
 import MapContainer from './MapContainer';
 import {ajax} from "../util";
+import history from "../history";
+import {withCookies} from "react-cookie";
 
 // /* TODO: delete the fake data afterwards */
 // const packageInfo = {
@@ -71,6 +73,13 @@ class SelectMethod extends Component {
             }
         ];
         this.mapContainer = React.createRef();
+        this.cookies = this.props.cookies;
+        //this.sessionID = undefined;
+        if(this.cookies.get('sessionID')){
+            this.sessionID = this.cookies.get('sessionID');
+        } else {
+            history.push('/');
+        }
     }
     latlng;
     // 0 --- not choose yet, 1 --- mobile, -1 --- drone
@@ -92,7 +101,7 @@ class SelectMethod extends Component {
         if (this.deliveryType === ShipMethod.Both) {
             alert(onErrorMessage);
         } else {
-            let order = JSON.stringify({
+            let order = ({
                 packageInfo: {
                     // startAddressLat: this.latlng[1].lat,
                     // startAddressLng: this.latlng[1].lng,
@@ -112,41 +121,42 @@ class SelectMethod extends Component {
                 }}
             );
             console.log(order);
-            let sessionID = this.props.userInfo.sessionID;
+            let sessionID = this.sessionID;
             console.log(sessionID);
-            ajax('POST', SELECTMETHOD_ENDPOINT, order,
-                (res) => {
-                console.log(res);
-                    // let result = JSON.parse(res);
-                    let updatedOrder = ({
-                        packageInfo: {
-                            // startAddressLat: this.latlng[1].lat,
-                            // startAddressLng: this.latlng[1].lng,
-                            // destAddressLat: this.latlng[2].lat,
-                            // destAddressLng: this.latlng[2].lng,
-                            length: this.props.packageInfo.packageInfo.length,
-                            width: this.props.packageInfo.packageInfo.width,
-                            height: this.props.packageInfo.packageInfo.height,
-                            weight: this.props.packageInfo.packageInfo.weight,
-                            from: this.props.packageInfo.packageInfo.from,
-                            to: this.props.packageInfo.packageInfo.to,
-                            notes: this.props.packageInfo.packageInfo.notes,
-                        }, method: {
-                            deliveryType: this.deliveryType,
-                            deliveryTime: this.deliveryTime,
-                            cost: this.cost,
-                        }}
-                    );
-                    this.props.updateOrder(updatedOrder);
-                    // if (result.resultCode === 150) {
-                    //     /* TODO: update callbacks parameter  */
-                    //     this.props.updateOrder(order);
-                    // }
-                },
-                /* TODO: update callbacks parameter, updated...  */
-                () => {
-                    alert(onErrorCallBackMessage);
-                },false, [["sessionID", sessionID]], true);
+            this.props.updateOrder(order);
+            // ajax('POST', SELECTMETHOD_ENDPOINT, order,
+            //     (res) => {
+            //     console.log(res);
+            //         // let result = JSON.parse(res);
+            //         let updatedOrder = ({
+            //             packageInfo: {
+            //                 // startAddressLat: this.latlng[1].lat,
+            //                 // startAddressLng: this.latlng[1].lng,
+            //                 // destAddressLat: this.latlng[2].lat,
+            //                 // destAddressLng: this.latlng[2].lng,
+            //                 length: this.props.packageInfo.packageInfo.length,
+            //                 width: this.props.packageInfo.packageInfo.width,
+            //                 height: this.props.packageInfo.packageInfo.height,
+            //                 weight: this.props.packageInfo.packageInfo.weight,
+            //                 from: this.props.packageInfo.packageInfo.from,
+            //                 to: this.props.packageInfo.packageInfo.to,
+            //                 notes: this.props.packageInfo.packageInfo.notes,
+            //             }, method: {
+            //                 deliveryType: this.deliveryType,
+            //                 deliveryTime: this.deliveryTime,
+            //                 cost: this.cost,
+            //             }}
+            //         );
+            //         this.props.updateOrder(updatedOrder);
+            //         // if (result.resultCode === 150) {
+            //         //     /* TODO: update callbacks parameter  */
+            //         //     this.props.updateOrder(order);
+            //         // }
+            //     },
+            //     /* TODO: update callbacks parameter, updated...  */
+            //     () => {
+            //         alert(onErrorCallBackMessage);
+            //     },false, [["sessionID", sessionID]], true);
         }
     }
 
@@ -203,4 +213,4 @@ class SelectMethod extends Component {
     }
 }
 
-export default SelectMethod;
+export default withCookies(SelectMethod);

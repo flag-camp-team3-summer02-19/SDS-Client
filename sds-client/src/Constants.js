@@ -18,6 +18,9 @@ export const SELECTMETHOD_ENDPOINT = "http://localhost:1234/api/idm/test";
 export const ORDERS_ENDPOINT = "http://localhost:1234/api/idm/orders";
 export const ORDER_DETAILS_ENDPOINT = "http://localhost:1234/api/idm/orderDetails";
 
+export const COMPLETEORDER_ENDPOINT =  "http://localhost:1234/api/idm/orderComplete";
+export const PLACEORDER_ENDPOINT = "http://localhost:1234/api/idm/placeOrder";
+
 // export const DEMO_GET_OK_ORDERS_ENDPOINT = ;
 // export const DEMO_GET_OK_ORDER_DETAILS_ENDPOINT = ;
 export const DEMO_GET_OK_ENDPOINT = "https://9e919392-f843-47c2-b9b5-58d14014c11a.mock.pstmn.io/userData";
