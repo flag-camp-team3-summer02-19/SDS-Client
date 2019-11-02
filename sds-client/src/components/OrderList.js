@@ -39,6 +39,9 @@ class OrderList extends Component {
                             </span>,
                             <span onClick={this.showDrawer.bind(this, item)}>
                                 Tracking Number: {item.OrderId.toString().toUpperCase()}
+                            </span>,
+                            <span onClick={this.showDrawer.bind(this, item)}>
+                                Ordered Date: {new Date(item.OrderedTime).toLocaleString()}
                             </span>
                         ]}
                         extra={

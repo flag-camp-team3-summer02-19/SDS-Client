@@ -139,8 +139,6 @@ class DashBoard extends Component {
         }
     };
 
-    //TODO: need to implement the sort by ordered date
-    //TODO: need to discuss with backend to design the format of data in date field of each order
     orderDateIncrease = () => {
         this.setState(
             (prevSt) => {
