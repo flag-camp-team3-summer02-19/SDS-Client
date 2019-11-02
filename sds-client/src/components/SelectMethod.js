@@ -5,7 +5,7 @@ import {
     Divider,
     Button
 } from 'antd';
-import {ShipMethod, SELECTMETHOD_ENDPOINT} from '../Constants';
+import {ShipMethod, PACKAGEINFO_ENDPOINT, SELECTMETHOD_ENDPOINT} from '../Constants';
 import MapContainer from './MapContainer';
 import {ajax} from "../util";
 
@@ -57,6 +57,7 @@ class SelectMethod extends Component {
                 displayMethod: "drone",
                 cost: this.props.packageInfo.packageInfo.methods.fastest.cost,
                 time: "" + new Date(this.props.packageInfo.packageInfo.methods.fastest.deliveryTime),
+                date: this.props.packageInfo.packageInfo.methods.fastest.deliveryTime
             }
             ,
             {
@@ -66,6 +67,7 @@ class SelectMethod extends Component {
                 displayMethod: "mobile",
                 cost: this.props.packageInfo.packageInfo.methods.cheapest.cost,
                 time: "" + new Date(this.props.packageInfo.packageInfo.methods.cheapest.deliveryTime),
+                date: this.props.packageInfo.packageInfo.methods.cheapest.deliveryTime
             }
         ];
         this.mapContainer = React.createRef();
@@ -73,12 +75,16 @@ class SelectMethod extends Component {
     latlng;
     // 0 --- not choose yet, 1 --- mobile, -1 --- drone
     deliveryType = ShipMethod.Both;
+    deliveryTime = 0;
+    cost = 0;
 
     updateChoice = index => {
         this.latlng = this.mapContainer.current.onGeoCoding(this.props.packageInfo.packageInfo.from, this.props.packageInfo.packageInfo.to);
         console.log("inside updateChoice");
         console.log(this.latlng);
         this.deliveryType = this.deliveryMethod[index].shipMethod;
+        this.deliveryTime = this.deliveryMethod[index].date;
+        this.cost = this.deliveryMethod[index].cost;
         this.mapContainer.current.onDeliveryTypeChange(this.deliveryType);
     }
 
@@ -92,15 +98,18 @@ class SelectMethod extends Component {
                 // startAddressLng: this.latlng[1].lng,
                 // destAddressLat: this.latlng[2].lat,
                 // destAddressLng: this.latlng[2].lng,
-                length: this.props.packageInfo.packageLength,
-                width: this.props.packageInfo.packageWidth,
-                height: this.props.packageInfo.packageHeight,
-                weight: this.props.packageInfo.packageWeight,
-                    from: this.props.packageInfo.startAddress,
-                    to: this.props.packageInfo.destAddress,
-                notes: this.props.packageInfo.packageNotes,
-                    method: this.deliveryType,
-            }}
+                length: this.props.packageInfo.packageInfo.length,
+                width: this.props.packageInfo.packageInfo.width,
+                height: this.props.packageInfo.packageInfo.height,
+                weight: this.props.packageInfo.packageInfo.weight,
+                    from: this.props.packageInfo.packageInfo.from,
+                    to: this.props.packageInfo.packageInfo.to,
+                notes: this.props.packageInfo.packageInfo.notes,
+            }, method: {
+                    deliveryType: this.deliveryType,
+                    deliveryTime: this.deliveryTime,
+                    cost: this.cost,
+                }}
             );
             console.log(order);
             let sessionID = this.props.userInfo.sessionID;
