@@ -142,10 +142,26 @@ class DashBoard extends Component {
     //TODO: need to implement the sort by ordered date
     //TODO: need to discuss with backend to design the format of data in date field of each order
     orderDateIncrease = () => {
-        console.log('You clicked order date increase!!');
+        this.setState(
+            (prevSt) => {
+                if (prevSt.listData) {
+                    let newListData = [...prevSt.listData];
+                    return {
+                        listData: newListData.sort((a, b) => {return a.OrderedTime - b.OrderedTime})};
+                }
+            }
+        );
     };
     orderDateDecrease = () => {
-        console.log('You clicked order date decrease!!');
+        this.setState(
+            (prevSt) => {
+                if (prevSt.listData) {
+                    let newListData = [...prevSt.listData];
+                    return {
+                        listData: newListData.sort((a, b) => {return b.OrderedTime - a.OrderedTime})};
+                }
+            }
+        );
     };
     statusIncrease = () => {
         this.setState(
