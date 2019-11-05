@@ -96,7 +96,7 @@ class SelectMethod extends Component {
         this.deliveryTime = this.deliveryMethod[index].date;
         this.cost = this.deliveryMethod[index].cost;
         this.mapContainer.current.onDeliveryTypeChange(this.deliveryType);
-    }
+    };
 
     handleDeliveryMethod() {
         if (this.deliveryType === ShipMethod.Both) {
@@ -129,26 +129,26 @@ class SelectMethod extends Component {
             // this.props.updateOrder(order);
             ajax('POST', PLACEORDER_ENDPOINT, updatedOrder,
                 (res) => {
-                console.log(res);
+                    console.log(res);
                     let result = JSON.parse(res);
                     let order = ({
-                        packageInfo: {
-                            // startAddressLat: this.latlng[1].lat,
-                            // startAddressLng: this.latlng[1].lng,
-                            // destAddressLat: this.latlng[2].lat,
-                            // destAddressLng: this.latlng[2].lng,
-                            length: this.props.packageInfo.packageInfo.length,
-                            width: this.props.packageInfo.packageInfo.width,
-                            height: this.props.packageInfo.packageInfo.height,
-                            weight: this.props.packageInfo.packageInfo.weight,
-                            from: this.props.packageInfo.packageInfo.from,
-                            to: this.props.packageInfo.packageInfo.to,
-                            notes: this.props.packageInfo.packageInfo.notes,
-                        }, method: {
-                            deliveryType: this.deliveryType,
-                            deliveryTime: this.deliveryTime,
-                            cost: this.cost,
-                        }}
+                            packageInfo: {
+                                // startAddressLat: this.latlng[1].lat,
+                                // startAddressLng: this.latlng[1].lng,
+                                // destAddressLat: this.latlng[2].lat,
+                                // destAddressLng: this.latlng[2].lng,
+                                length: this.props.packageInfo.packageInfo.length,
+                                width: this.props.packageInfo.packageInfo.width,
+                                height: this.props.packageInfo.packageInfo.height,
+                                weight: this.props.packageInfo.packageInfo.weight,
+                                from: this.props.packageInfo.packageInfo.from,
+                                to: this.props.packageInfo.packageInfo.to,
+                                notes: this.props.packageInfo.packageInfo.notes,
+                            }, method: {
+                                deliveryType: this.deliveryType,
+                                deliveryTime: this.deliveryTime,
+                                cost: this.cost,
+                            }}
                     );
 
                     if (result.resultCode === 3400) {
@@ -219,3 +219,115 @@ class SelectMethod extends Component {
 }
 
 export default withCookies(SelectMethod);
+
+// let updatedOrder = JSON.stringify({
+//         packageInfo: {
+//             // startAddressLat: this.latlng[1].lat,
+//             // startAddressLng: this.latlng[1].lng,
+//             // destAddressLat: this.latlng[2].lat,
+//             // destAddressLng: this.latlng[2].lng,
+//             length: this.props.packageInfo.packageInfo.length,
+//             width: this.props.packageInfo.packageInfo.width,
+//             height: this.props.packageInfo.packageInfo.height,
+//             weight: this.props.packageInfo.packageInfo.weight,
+//             from: this.props.packageInfo.packageInfo.from,
+//             to: this.props.packageInfo.packageInfo.to,
+//             notes: this.props.packageInfo.packageInfo.notes,
+//         }, method: {
+//             deliveryType: this.deliveryType,
+//             deliveryTime: this.deliveryTime,
+//             cost: this.cost,
+//         }
+// });
+// console.log(updatedOrder);
+// let sessionID = this.sessionID;
+// console.log(sessionID);
+// // this.props.updateOrder(order);
+// ajax('POST', SELECTMETHOD_ENDPOINT, updatedOrder,
+//     (res) => {
+//         console.log(res);
+//         let result = res;
+//         let order = ({
+//                 packageInfo: {
+//                     // startAddressLat: this.latlng[1].lat,
+//                     // startAddressLng: this.latlng[1].lng,
+//                     // destAddressLat: this.latlng[2].lat,
+//                     // destAddressLng: this.latlng[2].lng,
+//                     length: this.props.packageInfo.packageInfo.length,
+//                     width: this.props.packageInfo.packageInfo.width,
+//                     height: this.props.packageInfo.packageInfo.height,
+//                     weight: this.props.packageInfo.packageInfo.weight,
+//                     from: this.props.packageInfo.packageInfo.from,
+//                     to: this.props.packageInfo.packageInfo.to,
+//                     notes: this.props.packageInfo.packageInfo.notes,
+//                 }, method: {
+//                     deliveryType: this.deliveryType,
+//                     deliveryTime: this.deliveryTime,
+//                     cost: this.cost,
+//                 }}
+//         );
+//
+//         if (result.resultCode === 150) {
+//             /* TODO: update callbacks parameter  */
+//             this.props.updateOrder(order, null);
+//         } else if (result.resultCode !== 150) {
+//             alert(onErrorPaymentMessage);
+//         }
+//     },
+//
+//     let updatedOrder = JSON.stringify({
+//     paymentResult : "payment success",
+//     order : {
+//         packageInfo: {
+//             // startAddressLat: this.latlng[1].lat,
+//             // startAddressLng: this.latlng[1].lng,
+//             // destAddressLat: this.latlng[2].lat,
+//             // destAddressLng: this.latlng[2].lng,
+//             length: this.props.packageInfo.packageInfo.length,
+//             width: this.props.packageInfo.packageInfo.width,
+//             height: this.props.packageInfo.packageInfo.height,
+//             weight: this.props.packageInfo.packageInfo.weight,
+//             from: this.props.packageInfo.packageInfo.from,
+//             to: this.props.packageInfo.packageInfo.to,
+//             notes: this.props.packageInfo.packageInfo.notes,
+//         }, method: {
+//             deliveryType: this.deliveryType,
+//             deliveryTime: this.deliveryTime,
+//             cost: this.cost,
+//         }}
+// });
+// console.log(updatedOrder);
+// let sessionID = this.sessionID;
+// console.log(sessionID);
+// // this.props.updateOrder(order);
+// ajax('POST', PLACEORDER_ENDPOINT, updatedOrder,
+//     (res) => {
+//         console.log(res);
+//         let result = JSON.parse(res);
+//         let order = ({
+//                 packageInfo: {
+//                     // startAddressLat: this.latlng[1].lat,
+//                     // startAddressLng: this.latlng[1].lng,
+//                     // destAddressLat: this.latlng[2].lat,
+//                     // destAddressLng: this.latlng[2].lng,
+//                     length: this.props.packageInfo.packageInfo.length,
+//                     width: this.props.packageInfo.packageInfo.width,
+//                     height: this.props.packageInfo.packageInfo.height,
+//                     weight: this.props.packageInfo.packageInfo.weight,
+//                     from: this.props.packageInfo.packageInfo.from,
+//                     to: this.props.packageInfo.packageInfo.to,
+//                     notes: this.props.packageInfo.packageInfo.notes,
+//                 }, method: {
+//                     deliveryType: this.deliveryType,
+//                     deliveryTime: this.deliveryTime,
+//                     cost: this.cost,
+//                 }}
+//         );
+//
+//         if (result.resultCode === 3400) {
+//             /* TODO: update callbacks parameter  */
+//             this.props.updateOrder(order, null, result.redirectURL);
+//         } else if (result.resultCode !== 3400) {
+//             alert(onErrorPaymentMessage);
+//         }
+//     },

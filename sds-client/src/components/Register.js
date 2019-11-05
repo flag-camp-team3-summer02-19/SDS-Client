@@ -19,7 +19,8 @@ class Register extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 let email = values.email;
-                let password = md5(email + md5(values.password));
+                // let password = md5(email + md5(values.password));
+                let password = values.password;
                 let req = JSON.stringify({
                     email : email,
                     password : Array.from(password),
